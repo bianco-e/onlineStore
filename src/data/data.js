@@ -1,5 +1,5 @@
 import ContactSvg from "../components/svg/ContactSvg";
-import PaymentSvg from "../components/svg/PaymentSvg";
+import CardSvg from "../components/svg/CardSvg";
 import ShipmentSvg from "../components/svg/ShipmentSvg";
 import InstagramSvg from "../components/svg/InstagramSvg";
 import MailSvg from "../components/svg/MailSvg";
@@ -13,7 +13,7 @@ export const services = [
   },
   {
     title: "Aceptamos todas las tarjetas",
-    SVG: PaymentSvg,
+    SVG: CardSvg,
   },
   {
     title: "¿Necesitas ayuda?",
@@ -55,38 +55,51 @@ export const categories = [
 
 export const saleProducts = [
   {
-    color: "Negro",
-    endpoint: `/productos/0001`,
+    colors: [
+      { val: "Rojo" },
+      { val: "Negro" },
+      { val: "Rojinegro" },
+      { val: "Blanco" },
+    ],
+    endpoint: "/productos/0001",
+    description: "♥AMAMOS♥ Comodín para mil conjuntos!",
+    info:
+      "Todas las prendas tienen cambio. Recordá devolverlas en perfecto estado, con etiqueta y sin uso. NO nos hacemos cargo sobre las prendas manipuladas. Para realizar el cambio contactanos al whatsapp",
     id: "0001",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
     name: "SACO INDUS",
-    offer: true,
+    payForm: {
+      card: "18 cuotas de $208,89",
+      cash: "10% de descuento pagando con Efectivo o Transferencia",
+    },
+    promo: true,
     price: 2299,
+    sizes: [{ val: "S" }, { val: "M" }, { val: "L" }, { val: "XL" }],
   },
   {
-    endpoint: "/productos/",
-    color: "Beige",
+    endpoint: "/productos/0002",
+    colors: ["Beige"],
     id: "0002",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
     name: "SACO AQUILA",
-    offer: true,
+    promo: true,
     price: 2700,
   },
   {
-    endpoint: "/productos/",
-    color: "Blanco",
+    endpoint: "/productos/0003",
+    colors: ["Blanco"],
     id: "0003",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
     name: "BABUCHA SAN VICENTE",
-    offer: true,
+    promo: true,
     price: 1900,
   },
   {
-    endpoint: "/productos/",
-    color: "Rojo",
+    endpoint: "/productos/0004",
+    colors: ["Rojo", "Blanco"],
     id: "0004",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
@@ -94,8 +107,8 @@ export const saleProducts = [
     price: 1900,
   },
   {
-    endpoint: "/productos/",
-    color: "Negro",
+    endpoint: "/productos/0005",
+    colors: ["Negro"],
     id: "0005",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
@@ -103,8 +116,8 @@ export const saleProducts = [
     price: 700,
   },
   {
-    endpoint: "/productos/",
-    color: "Negrazo",
+    endpoint: "/productos/0006",
+    colors: ["Negrazo"],
     id: "0006",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
@@ -112,8 +125,8 @@ export const saleProducts = [
     price: 2100,
   },
   {
-    endpoint: "/productos/",
-    color: "Rojizo",
+    endpoint: "/productos/0007",
+    colors: ["Rojizo"],
     id: "0007",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
@@ -121,8 +134,8 @@ export const saleProducts = [
     price: 2100,
   },
   {
-    endpoint: "/productos/",
-    color: "Rojito",
+    endpoint: "/productos/0008",
+    colors: ["Rojito"],
     id: "0008",
     img:
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",

@@ -3,6 +3,9 @@ import styled from "styled-components";
 import PageTitle from "../components/PageTitle";
 import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
+import StyledButton from "../components/StyledButton";
+import StyledInput from "../components/StyledInput";
+import WhatsappFloatButton from "../components/WhatsappFloatButton";
 import { saleProducts } from "../data/data.js";
 
 export default function Contact() {
@@ -19,12 +22,20 @@ export default function Contact() {
       </Container>
       <ContactForm>
         {contactInputs.map((ph) => {
-          return <Input key={ph} placeholder={ph} />;
+          return (
+            <StyledInput
+              key={ph}
+              onChangeFn={() => {}}
+              placeholder={ph}
+              width={"80%"}
+            />
+          );
         })}
         <TextArea placeholder="Mensaje" />
-        <SendButton onClick={() => confirmForm()}>ENVIAR</SendButton>
+        <StyledButton onClickFn={confirmForm} title="ENVIAR" />
       </ContactForm>
       <BottomBar />
+      <WhatsappFloatButton />
     </Wrapper>
   );
 }
@@ -54,29 +65,7 @@ const ContactForm = styled.section({
 const Text = styled.p({
   textAlign: "center",
 });
-const SendButton = styled.button({
-  border: "1px solid #FFA07A",
-  borderRadius: "9999px",
-  backgroundColor: "#FFA07A",
-  color: "white",
-  cursor: "pointer",
-  fontSize: "12px",
-  padding: "8px 20px",
-  transition: "background-color .6s ease",
-  transition: "all .6s ease",
-  ["&:hover"]: {
-    backgroundColor: "rgba(250, 250, 250, .7)",
-    border: "1px solid #FFA07A",
-    color: "#FFA07A",
-  },
-});
-const Input = styled.input({
-  backgroundColor: "transparent",
-  border: "1px solid #777",
-  borderRadius: "9999px",
-  padding: "8px 12px",
-  width: "80%",
-});
+
 const TextArea = styled.textarea({
   backgroundColor: "transparent",
   border: "1px solid #777",

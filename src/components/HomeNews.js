@@ -7,16 +7,17 @@ export default function HomeNews() {
   return (
     <Wrapper>
       <NameContainer>
-        <SectionName>Ofertas</SectionName>
+        <SectionName>Nuevo</SectionName>
       </NameContainer>
       <ProductsContainer>
         {saleProducts
-          .filter((prod) => prod?.offer)
+          .filter((prod) => prod?.promo)
           .slice(0, 4)
           .map((prod) => {
-            const { img, name, price } = prod;
+            const { endpoint, img, name, price } = prod;
             return (
               <ProductThumbnail
+                endpoint={endpoint}
                 key={name}
                 img={img}
                 name={name}

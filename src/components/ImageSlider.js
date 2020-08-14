@@ -1,17 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import prueba1 from "../images/prueba1.png";
-import prueba2 from "../images/prueba2.png";
-import prueba3 from "../images/prueba3.png";
 import ImageGallery from "react-image-gallery";
 
-export default function ImageSlider() {
-  const images = [
-    { original: prueba1 },
-    { original: prueba2 },
-    { original: prueba3 },
-  ];
-
+export default function ImageSlider({ images }) {
   return (
     <SlideWrapper>
       <Slider

@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import Select from "./Select";
 
 export default function SortButton({ productsToShow, setProductsToShow }) {
   const selectOptions = [
@@ -52,30 +52,10 @@ export default function SortButton({ productsToShow, setProductsToShow }) {
   };
 
   return (
-    <Select onChange={(e) => handleSelect(e)}>
-      {selectOptions.map((opt) => {
-        return (
-          <option key={opt.val} value={opt.val}>
-            {opt.val}
-          </option>
-        );
-      })}
-    </Select>
+    <Select
+      onChangeFn={handleSelect}
+      options={selectOptions}
+      pos={{ name: "absolute", bottom: "35%", right: "25px" }}
+    />
   );
 }
-
-const Select = styled.select({
-  border: "1px solid black",
-  borderRadius: "9999px",
-  backgroundColor: "transparent",
-  cursor: "pointer",
-  fontSize: "15px",
-  padding: "8px 30px",
-  position: "absolute",
-  right: "25px",
-  bottom: "35%",
-  textAlign: "center",
-  mozAppearance: "none",
-  webkitAppearance: "none",
-  appearance: "none",
-});

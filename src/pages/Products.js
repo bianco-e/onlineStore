@@ -5,6 +5,7 @@ import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
 import SortButton from "../components/SortButton";
 import ProductThumbnail from "../components/ProductThumbnail";
+import WhatsappFloatButton from "../components/WhatsappFloatButton";
 import { saleProducts } from "../data/data.js";
 
 export default function Products() {
@@ -38,6 +39,7 @@ export default function Products() {
         })}
       </ProductsWrapper>
       <BottomBar />
+      <WhatsappFloatButton />
     </Wrapper>
   );
 }

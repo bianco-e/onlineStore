@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export default function PaymentSvg(props) {
+export default function CardSvg(props) {
   return (
     <svg viewBox="0 0 512 512" {...props}>
       <path d="M76.8 358.4h153.6c4.71 0 8.533-3.823 8.533-8.533s-3.823-8.533-8.533-8.533H76.8c-4.71 0-8.533 3.823-8.533 8.533S72.09 358.4 76.8 358.4z" />

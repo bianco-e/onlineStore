@@ -18,25 +18,27 @@ export default function SideCartModal({ showModal, setShowModal }) {
   return (
     <Wrapper>
       <CloseButton onClick={() => setShowModal(!showModal)}>✗</CloseButton>
+      <Title>Carrito</Title>
       {cart.length < 1 ? (
-        <Text>Tu carrito está vacío.</Text>
+        <Title>Tu carrito está vacío.</Title>
       ) : (
         cart.map((product) => {
-          const { color, id, img, name, price } = product;
+          const { color, id, img, name, price, size } = product;
           return (
             <ProductContainer key={id}>
               <ProductImg src={img} />
               <ProductDetailsContainer>
-                <ProductName>{`${name}(${color})`}</ProductName>
-                <ProductPrice>{price}</ProductPrice>
+                <Text>{`${name} (${color}, ${size})`}</Text>
+                <Text color="#FFA07A">{`$${price.toFixed(2)}`}</Text>
               </ProductDetailsContainer>
               <RemoveButton onClick={() => removeProductFromCart(product)}>
-                <DeleteSvg width={15} />
+                <DeleteSvg width={17} />
               </RemoveButton>
             </ProductContainer>
           );
         })
       )}
+      {/* <Button>COMPRAR</Button> */}
     </Wrapper>
   );
 }
@@ -48,7 +50,7 @@ const Wrapper = styled.div({
   display: "flex",
   flexDirection: "column",
   height: "100vh",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   padding: "20px",
   position: "fixed",
   right: "0",
@@ -56,7 +58,7 @@ const Wrapper = styled.div({
   width: "335px",
   zIndex: "100",
 });
-const Text = styled.h3({});
+const Title = styled.h3({});
 const CloseButton = styled.button({
   background: "none",
   border: "0",
@@ -74,33 +76,33 @@ const CloseButton = styled.button({
 const ProductDetailsContainer = styled.div({
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
-  height: "50px",
+  justifyContent: "flex-start",
+  height: "70px",
 });
 const ProductContainer = styled.div({
-  border: "1px solid #000",
   background: "#FFF",
+  borderRadius: "10px",
   display: "flex",
+  marginBottom: "10px",
+  padding: "5px",
+  position: "relative",
   width: "100%",
 });
 const ProductImg = styled.img({
-  height: "50px",
-  width: "40px",
+  height: "70px",
+  marginRight: "10px",
+  width: "60px",
 });
-const ProductName = styled.p({
-  margin: "1px 0",
-  fontSize: "13px",
-  ["&:hover"]: {
-    color: "#777",
-  },
-});
-const ProductPrice = styled.p({
+const Text = styled.p({
+  color: (props) => props.color,
   fontSize: "14px",
+  margin: "1px 0",
 });
 const RemoveButton = styled.button({
   background: "none",
   border: "0",
+  cursor: "pointer",
   position: "absolute",
-  right: "5px",
-  top: "3px",
+  right: "1px",
+  top: "5px",
 });
