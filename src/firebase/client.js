@@ -57,7 +57,7 @@ class Firebase {
       .catch((error) => console.log(error));
   };
 
-  getAllProducts = (collection) => {
+  getAllFromACollection = (collection) => {
     return this.db
       .collection(collection)
       .get()
@@ -74,6 +74,19 @@ class Firebase {
       .doc(id)
       .get()
       .then((doc) => doc.data());
+  };
+
+  login = (username, password) => {
+    return this.db
+      .collection("accounts")
+      .get()
+      .then((snapshot) =>
+        snapshot.docs.find((doc) => {
+          const { pw, user } = doc.data();
+          return username === user && password === pw;
+        })
+      )
+      .catch((err) => console.log(err));
   };
 }
 

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import PageTitle from "../components/PageTitle";
 import StyledInput from "../components/StyledInput";
 import StyledButton from "../components/StyledButton";
 import firebase from "../firebase/client.js";
+import { useHistory } from "react-router-dom";
 
 export default function Login() {
+  const history = useHistory();
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const inputsData = [
     {
@@ -25,6 +27,14 @@ export default function Login() {
   ];
 
   const handleLogin = () => {
+    const accounts = firebase
+      .login(user, password)
+      .then((res) =>
+        res
+          ? history.push("/admin")
+          : setErrorMsg("Los datos ingresados son incorrectos")
+      )
+      .catch((err) => console.error(err));
     setPassword("");
     setUser("");
   };
@@ -32,7 +42,8 @@ export default function Login() {
   return (
     <Wrapper>
       <Container>
-        <PageTitle text="my onlinestore" />
+        <Title>Iniciar sesión</Title>
+        {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
         {inputsData.map((data) => {
           const { fn, ph, type, val } = data;
           return (
@@ -42,7 +53,7 @@ export default function Login() {
               ph={ph}
               val={val}
               type={type}
-              width="200px"
+              width="185px"
             />
           );
         })}
@@ -61,7 +72,17 @@ const Container = styled.div({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",
-  height: "70%",
+  height: "70vh",
   justifyContent: "space-between",
   width: "90%",
+});
+const ErrorMessage = styled.span({
+  backgroundColor: "pink",
+  borderRadius: "10px",
+  color: "red",
+  fontSize: "14px",
+  padding: "10px 16px",
+});
+const Title = styled.h1({
+  margin: "0",
 });
