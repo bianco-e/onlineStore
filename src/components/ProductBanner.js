@@ -4,7 +4,11 @@ import { useHistory } from "react-router-dom";
 export default function ProductBanner({ title, ga, img, endpoint }) {
   const history = useHistory();
   return (
-    <WrapperButton bgImg={img} ga={ga} onClick={() => history.push(endpoint)}>
+    <WrapperButton
+      bgImg={`url(${img})`}
+      ga={ga}
+      onClick={() => history.push(endpoint)}
+    >
       <ButtonTitle>{title}</ButtonTitle>
     </WrapperButton>
   );

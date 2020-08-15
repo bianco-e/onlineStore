@@ -27,28 +27,28 @@ export const categories = [
     endpoint: "/abrigos",
     ga: "p1",
     img:
-      "url('https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810')",
+      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
     title: "SWEATERS Y BUZOS",
   },
   {
     endpoint: "/pantalones",
     ga: "p2",
     img:
-      "url('https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810')",
+      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
     title: "PANTALONES",
   },
   {
     endpoint: "/remeras",
     ga: "p3",
     img:
-      "url('https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810')",
+      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
     title: "REMERAS",
   },
   {
     endpoint: "/blusas-camisas",
     ga: "p4",
     img:
-      "url('https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810')",
+      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
     title: "BLUSAS Y CAMISAS",
   },
 ];
