@@ -20,20 +20,13 @@ class Firebase {
     this.storageRef = app.storage().ref();
   }
 
-  addNewProduct = (callback, collection, product) => {
-    // i.e. collection could : "abrigos" if it's a clothes store
+  addNewDoc = (callback, collection, doc) => {
     return this.db
       .collection(collection)
-      .add({ ...product })
-      .then((docRef) => {
-        callback("Producto agregado", docRef.id);
-      })
-      .catch((error) => {
-        console.error("No se pudo agregar correctamente", error);
-      });
+      .add({ ...doc })
+      .then((docRef) => callback(docRef.id))
+      .catch((error) => console.error("No se pudo guardar. Error: ", error));
   };
-
-  createCategory = () => {};
 
   deleteProduct = (collection, id) => {
     return this.db
@@ -43,7 +36,14 @@ class Firebase {
       .catch((error) => alert("Error: " + error));
   };
 
-  editProduct = () => {};
+  editProduct = (collection, id, content) => {
+    return this.db
+      .collection(collection)
+      .doc(id)
+      .set({ content }, { merge: true })
+      .then(() => console.log("Documento editado"))
+      .catch((err) => console.error("Error al editar documento", err));
+  };
 
   addProductImage = (file) => {
     const storage = this.storageRef.child(`images/needs/${file.name}`);
@@ -57,7 +57,7 @@ class Firebase {
       .catch((error) => console.log(error));
   };
 
-  getAllFromACollection = (collection) => {
+  getDocsFromCollection = (collection) => {
     return this.db
       .collection(collection)
       .get()

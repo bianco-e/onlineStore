@@ -1,20 +1,49 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AdminPanel from "../components/AdminPanel";
-import NewCategory from "../components/NewCategory";
-import { categories } from "../data/data.js";
+import CategoryThumbnail from "../components/CategoryThumbnail";
 import addPhoto from "../images/photo.png";
+import firebase from "../firebase/client.js";
 
 export default function AdminCategories() {
-  const [cats, setCats] = useState([]);
+  const [categoriesFromFirebase, setCategoriesFromFirebase] = useState([]);
+  const [categoryId, setCategoryId] = useState(undefined);
+  const [categoryImg, setCategoryImg] = useState(addPhoto);
+  const [categoryName, setCategoryName] = useState("");
 
-  useEffect(() => {
-    setCats(categories);
-  }, []);
+  useEffect(
+    () =>
+      firebase.getDocsFromCollection("categories").then((categories) => {
+        setCategoriesFromFirebase(categories);
+      }),
+    []
+  );
 
-  const handleAddCat = () => {
-    setCats(cats.concat([{ img: addPhoto, title: "Agregar nombre" }]));
+  const addCategoryToFirebase = () => {
+    if (categoryName !== "") {
+      const endpoint = categoryName.toLowerCase().split(" ").join("-");
+      const cat = { endpoint, img: categoryImg, name: categoryName };
+
+      firebase.addNewDoc(setCategoryId, "categories", cat);
+      setCategoriesFromFirebase(
+        categoriesFromFirebase.concat({ ...cat, id: categoryId })
+      );
+      setCategoryName("");
+      setCategoryImg(addPhoto);
+    }
   };
+
+  const deleteCategoryFromFirebase = (id) => {
+    firebase.deleteProduct("categories", id);
+    setCategoriesFromFirebase(
+      categoriesFromFirebase.filter((cat) => cat.id !== id)
+    );
+  };
+
+  const newCategoryOnChangeFn = (val) => setCategoryName(val);
+  const editCategoryOnChangeFn = (val) => {};
+
+  const saveChanges = () => console.log(categoriesFromFirebase);
 
   return (
     <Wrapper>
@@ -22,12 +51,31 @@ export default function AdminCategories() {
       <Container>
         <Header>
           <Title>Categorías</Title>
-          <Button onClick={() => handleAddCat()}>✙ Agregar categoría</Button>
         </Header>
-        {cats.map(({ img, title }) => {
-          return <NewCategory key={title} img={img} title={title} />;
+        <Header>
+          <CategoryThumbnail
+            img={addPhoto}
+            inputOnChangeFn={newCategoryOnChangeFn}
+            inputVal={categoryName}
+          />
+          <Button onClick={() => addCategoryToFirebase()}>
+            ✙ Agregar categoría
+          </Button>
+        </Header>
+        {categoriesFromFirebase.map(({ id, img, name }) => {
+          return (
+            <CategoryThumbnail
+              draggable
+              deleteFn={deleteCategoryFromFirebase}
+              key={name}
+              id={id}
+              img={img}
+              inputOnChangeFn={editCategoryOnChangeFn}
+              inputVal={name}
+            />
+          );
         })}
-        <Button>GUARDAR</Button>
+        <Button onClick={() => saveChanges()}>GUARDAR</Button>
       </Container>
     </Wrapper>
   );
@@ -50,7 +98,7 @@ const Container = styled.div({
 const Header = styled.section({
   alignItems: "center",
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "space-evenly",
   width: "90%",
 });
 const Button = styled.button({
