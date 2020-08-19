@@ -45,8 +45,8 @@ class Firebase {
       .catch((err) => console.error("Error al editar documento", err));
   };
 
-  addProductImage = (file) => {
-    const storage = this.storageRef.child(`images/needs/${file.name}`);
+  addImage = (path, file) => {
+    const storage = this.storageRef.child(`images/${path}/${file.name}`);
     return storage
       .put(file)
       .then((snapshot) => {

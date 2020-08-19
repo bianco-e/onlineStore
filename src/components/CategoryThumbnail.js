@@ -7,16 +7,20 @@ export default function CategoryThumbnail({
   deleteFn,
   id,
   img,
-  inputOnChangeFn,
+  imgOnChangeFn,
+  inputValSetter,
   inputVal,
 }) {
   return (
     <Container draggable={draggable && "true"}>
-      {draggable && <DragTricolon>⁝</DragTricolon>}
-      <Img src={img} />
+      {draggable && <TricolonSpan>⁝</TricolonSpan>}
+      <Label>
+        <Img src={img} />
+        <ImgInput onChange={(e) => imgOnChangeFn(e)} type="file" />
+      </Label>
       <Input
         value={inputVal}
-        onChange={(e) => inputOnChangeFn(e.target.value)}
+        onChange={(e) => inputValSetter(e.target.value)}
         placeholder="Agregar nombre"
       />
       {draggable && (
@@ -41,11 +45,10 @@ const Input = styled.input({
   height: "100%",
   width: "230px",
 });
-const Img = styled.img({
-  height: "85%",
-  width: "35px",
+const ImgInput = styled.input({
+  display: "none",
 });
-const DragTricolon = styled.span({
+const TricolonSpan = styled.span({
   cursor: "grabbing",
   fontWeight: "750",
   fontSize: "18px",
@@ -55,4 +58,15 @@ const RemoveButton = styled.button({
   background: "none",
   border: "0",
   cursor: "pointer",
+});
+const Label = styled.label({
+  cursor: "pointer",
+  display: "grid",
+  height: "85%",
+  placeItems: "center",
+  width: "35px",
+});
+const Img = styled.img({
+  height: "100%",
+  width: "35px",
 });

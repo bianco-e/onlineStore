@@ -7,8 +7,10 @@ import firebase from "../firebase/client.js";
 
 export default function AdminCategories() {
   const [categoriesFromFirebase, setCategoriesFromFirebase] = useState([]);
+  const [newCategory, setNewCategory] = useState(undefined);
   const [categoryId, setCategoryId] = useState(undefined);
   const [categoryImg, setCategoryImg] = useState(addPhoto);
+  const [loadedFile, setLoadedFile] = useState(undefined);
   const [categoryName, setCategoryName] = useState("");
 
   useEffect(
@@ -19,15 +21,28 @@ export default function AdminCategories() {
     []
   );
 
+  useEffect(
+    () =>
+      categoryId &&
+      setCategoriesFromFirebase(
+        categoriesFromFirebase.concat({ ...newCategory, id: categoryId })
+      ),
+    [categoryId]
+  );
+
   const addCategoryToFirebase = () => {
-    if (categoryName !== "") {
+    if (categoryName !== "" && categoryImg !== addPhoto) {
       const endpoint = categoryName.toLowerCase().split(" ").join("-");
       const cat = { endpoint, img: categoryImg, name: categoryName };
+      setNewCategory(cat);
 
-      firebase.addNewDoc(setCategoryId, "categories", cat);
-      setCategoriesFromFirebase(
-        categoriesFromFirebase.concat({ ...cat, id: categoryId })
-      );
+      firebase.addImage("categories", loadedFile).then((imgUrl) => {
+        firebase.addNewDoc(setCategoryId, "categories", {
+          ...cat,
+          img: imgUrl,
+        });
+      });
+
       setCategoryName("");
       setCategoryImg(addPhoto);
     }
@@ -40,8 +55,11 @@ export default function AdminCategories() {
     );
   };
 
-  const newCategoryOnChangeFn = (val) => setCategoryName(val);
-  const editCategoryOnChangeFn = (val) => {};
+  const newImgOnClickFn = (e) => {
+    setLoadedFile(e.target.files[0]);
+    const url = URL.createObjectURL(e.target.files[0]);
+    setCategoryImg(url);
+  };
 
   const saveChanges = () => console.log(categoriesFromFirebase);
 
@@ -54,10 +72,13 @@ export default function AdminCategories() {
         </Header>
         <Header>
           <CategoryThumbnail
-            img={addPhoto}
-            inputOnChangeFn={newCategoryOnChangeFn}
+            img={categoryImg}
+            inputValSetter={setCategoryName}
             inputVal={categoryName}
+            imgOnChangeFn={newImgOnClickFn}
           />
+        </Header>
+        <Header>
           <Button onClick={() => addCategoryToFirebase()}>
             ✙ Agregar categoría
           </Button>
@@ -67,10 +88,9 @@ export default function AdminCategories() {
             <CategoryThumbnail
               draggable
               deleteFn={deleteCategoryFromFirebase}
-              key={name}
+              key={id}
               id={id}
               img={img}
-              inputOnChangeFn={editCategoryOnChangeFn}
               inputVal={name}
             />
           );
@@ -108,6 +128,7 @@ const Button = styled.button({
   color: "white",
   cursor: "pointer",
   fontSize: "11px",
+  marginBottom: "15px",
   padding: "8px 20px",
   transition: "background-color .6s ease",
   transition: "all .6s ease",

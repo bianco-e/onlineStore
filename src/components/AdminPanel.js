@@ -22,13 +22,17 @@ export default function AdminPanel() {
     return arr.map(({ endpoint, Logo, title }) => {
       if (!endpoint) {
         return (
-          <PanelTitle>
+          <PanelTitle key={title}>
             <Logo width={25} height={70} />
             {title}
           </PanelTitle>
         );
       }
-      return <Button onClick={() => history.push(endpoint)}>{title}</Button>;
+      return (
+        <Button key={title} onClick={() => history.push(endpoint)}>
+          {title}
+        </Button>
+      );
     });
   };
 
