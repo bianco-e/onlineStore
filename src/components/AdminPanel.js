@@ -8,7 +8,7 @@ export default function AdminPanel() {
   const history = useHistory();
   const buttons = [
     { endpoint: "/admin", title: "Inicio" },
-    { endpoint: "/admin/", title: "Estadísticas" },
+    { endpoint: "/admin/estadisticas", title: "Estadísticas" },
     { endpoint: undefined, Logo: WrenchSvg, title: "Administrar" },
     { endpoint: "/admin/categorias", title: "Categorías" },
     { endpoint: "/admin/productos", title: "Productos" },
@@ -54,7 +54,7 @@ const Wrapper = styled.div({
   width: "195px",
 });
 const Title = styled.h3({
-  margin: "14px 0",
+  margin: "64px 0 14px 0",
 });
 const PanelTitle = styled.div({
   alignItems: "center",

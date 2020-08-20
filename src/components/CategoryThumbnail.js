@@ -10,9 +10,13 @@ export default function CategoryThumbnail({
   imgOnChangeFn,
   inputValSetter,
   inputVal,
+  setDraggedVal,
 }) {
   return (
-    <Container draggable={draggable && "true"}>
+    <Container
+      draggable={draggable && "true"}
+      onDragStart={() => setDraggedVal(inputVal)}
+    >
       {draggable && <TricolonSpan>⁝</TricolonSpan>}
       <Label>
         <Img src={img} />

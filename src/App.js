@@ -6,8 +6,12 @@ import BuyingProduct from "./pages/BuyingProduct";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
-import AdminCategories from "./pages/AdminCategories";
-import AdminProducts from "./pages/AdminProducts";
+import AdminCategories from "./components/AdminCategories";
+import AdminClients from "./components/AdminClients";
+import AdminDesign from "./components/AdminDesign";
+import AdminProducts from "./components/AdminProducts";
+import AdminSales from "./components/AdminSales";
+import AdminStadistics from "./components/AdminStadistics";
 
 import { BrowserRouter, Route } from "react-router-dom";
 import { CartContextProvider } from "./context/CartContext";
@@ -26,12 +30,32 @@ export default function App() {
           <Route
             exact
             path="/admin/categorias"
-            render={() => <AdminCategories />}
+            render={() => <Admin Child={AdminCategories} />}
           />
           <Route
             exact
             path="/admin/productos"
-            render={() => <AdminProducts />}
+            render={() => <Admin Child={AdminProducts} />}
+          />
+          <Route
+            exact
+            path="/admin/clientes"
+            render={() => <Admin Child={AdminClients} />}
+          />
+          <Route
+            exact
+            path="/admin/ventas"
+            render={() => <Admin Child={AdminSales} />}
+          />
+          <Route
+            exact
+            path="/admin/estadisticas"
+            render={() => <Admin Child={AdminStadistics} />}
+          />
+          <Route
+            exact
+            path="/admin/diseño"
+            render={() => <Admin Child={AdminDesign} />}
           />
         </BrowserRouter>
       </CartContextProvider>
