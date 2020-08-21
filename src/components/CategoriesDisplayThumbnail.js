@@ -1,25 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
-const createArr = (arr, num) => {
-  do {
-    arr.push({ num });
-    num--;
-  } while (num > 0);
+const createArr = (arr, n) => {
+  let counter = 1;
+  while (n >= counter) {
+    arr.push({ ga: `p${counter}` });
+    counter++;
+  }
   return arr;
 };
 
-export default function CategoriesDisplayThumbnail({ draggedVal, n }) {
-  const [array, setArray] = useState([]);
-  useEffect(() => setArray(createArr([], n)), [n]);
+export default function CategoriesDisplayThumbnail({
+  categoriesOrder,
+  draggedVal,
+  n,
+  setCategoriesOrder,
+}) {
+  useEffect(() => setCategoriesOrder(createArr([], n)), [n]);
 
   const handleDrop = (e) => {
-    const divID = e.target.id;
-    const elementToChange = array.find((el) => el.num == divID);
+    const elementToChange = categoriesOrder.find((el) => el.ga == e.target.id);
     const newElement = { ...elementToChange, content: draggedVal };
-    const idx = array.indexOf(elementToChange);
-    array.splice(idx, 1, newElement);
-    setArray([...array]);
+    const idx = categoriesOrder.indexOf(elementToChange);
+
+    const existingElement = categoriesOrder.find(
+      (el) => el.content == draggedVal
+    );
+    if (existingElement) {
+      const idx = categoriesOrder.indexOf(existingElement);
+      categoriesOrder.splice(idx, 1, {
+        ...existingElement,
+        content: elementToChange.content,
+      });
+    }
+    categoriesOrder.splice(idx, 1, newElement);
+    setCategoriesOrder([...categoriesOrder]);
   };
 
   const options = [
@@ -58,18 +73,19 @@ export default function CategoriesDisplayThumbnail({ draggedVal, n }) {
   return (
     <>
       <Title>Banner de inicio</Title>
-      <Wrapper grid={options[n - 1]}>
-        {array.map((pos, i) => (
-          <Div
-            ga={`p${i + 1}`}
-            id={pos.num}
-            key={pos.num}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e)}
-          >
-            {pos.content}
-          </Div>
-        ))}
+      <Wrapper
+        grid={options[n - 1]}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => handleDrop(e)}
+      >
+        {categoriesOrder.map((pos) => {
+          const { ga, content } = pos;
+          return (
+            <Div ga={ga} id={ga} key={ga}>
+              {content}
+            </Div>
+          );
+        })}
       </Wrapper>
     </>
   );

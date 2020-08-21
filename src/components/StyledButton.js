@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
+import StyleContext from "../context/StyleContext";
+
 export default function StyledButton({ onClickFn, title }) {
-  return <Button onClick={() => onClickFn()}>{title}</Button>;
+  const { style } = useContext(StyleContext);
+  const { primaryColor } = style;
+  return (
+    <Button onClick={() => onClickFn()} primary={primaryColor}>
+      {title}
+    </Button>
+  );
 }
 
 const Button = styled.button({
-  border: "1px solid #FFA07A",
-  borderRadius: "9999px",
-  backgroundColor: "#FFA07A",
+  border: (props) => `1px solid ${props.primary}`,
+  borderRadius: "10px",
+  backgroundColor: (props) => props.primary,
   color: "white",
   cursor: "pointer",
   fontSize: "12px",
@@ -17,7 +25,7 @@ const Button = styled.button({
   transition: "all .6s ease",
   ["&:hover"]: {
     backgroundColor: "rgba(250, 250, 250, .7)",
-    border: "1px solid #FFA07A",
-    color: "#FFA07A",
+    border: (props) => `1px solid ${props.primary}`,
+    color: (props) => props.primary,
   },
 });

@@ -1,30 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { contact, sections } from "../data/data.js";
 
-import Button from "./Button";
+import StyleContext from "../context/StyleContext";
 
 export default function BottomBar() {
   const history = useHistory();
+  const { style } = useContext(StyleContext);
+  const { storeName, storeLogo, primaryColor, secondaryColor } = style;
   return (
-    <Wrapper>
-      <Container>
+    <Wrapper secondary={secondaryColor}>
+      <Container primary={primaryColor}>
         {sections.map((sec) => {
           const { endpoint, name } = sec;
           return (
-            <LinkButton key={name} onClick={() => history.push(endpoint)}>
+            <LinkButton
+              key={name}
+              onClick={() => history.push(endpoint)}
+              secondary={secondaryColor}
+            >
               {name}
             </LinkButton>
           );
         })}
       </Container>
-      <Container>
+      <Container primary={primaryColor}>
         {contact.map((via) => {
           const { link, SVG, width } = via;
           return (
             <Link key={link} href={link} target="blank">
-              <via.SVG width={width} />
+              <SVG width={width} />
             </Link>
           );
         })}
@@ -41,12 +47,12 @@ const Wrapper = styled.div({
   position: "absolute",
   width: "100%",
   ["&:first-child"]: {
-    borderBottom: "1px solid #777",
+    borderBottom: (props) => `1px solid ${props.secondary}`,
   },
 });
 const Container = styled.section({
   alignItems: "center",
-  backgroundColor: "#FFA07A",
+  backgroundColor: (props) => props.primary,
   display: "flex",
   justifyContent: "space-around",
   padding: "10px 0",
@@ -59,7 +65,7 @@ const LinkButton = styled.button({
   cursor: "pointer",
   transition: "color .4s ease",
   ["&:hover"]: {
-    color: "#777",
+    color: (props) => props.secondary,
   },
 });
 const Link = styled.a({});

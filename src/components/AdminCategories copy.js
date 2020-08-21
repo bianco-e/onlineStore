@@ -11,7 +11,6 @@ import StyleContext from "../context/StyleContext";
 
 export default function AdminCategories() {
   const [categoriesFromFirebase, setCategoriesFromFirebase] = useState([]);
-  const [categoriesOrder, setCategoriesOrder] = useState([]);
   const [newCategory, setNewCategory] = useState(undefined);
   const [categoryId, setCategoryId] = useState(undefined);
   const [categoryImg, setCategoryImg] = useState(addPhoto);
@@ -106,10 +105,9 @@ export default function AdminCategories() {
       })}
       {categoriesFromFirebase.length > 0 && (
         <CategoriesDisplayThumbnail
-          n={categoriesFromFirebase.length}
-          categoriesOrder={categoriesOrder}
+          categoriesFromFirebase={categoriesFromFirebase}
           draggedVal={draggedVal}
-          setCategoriesOrder={setCategoriesOrder}
+          setCategoriesFromFirebase={setCategoriesFromFirebase}
         />
       )}
       <Button onClick={() => saveChanges()} primary={primaryColor}>

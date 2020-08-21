@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import DeleteSvg from "./svg/DeleteSvg";
+import SettableImageThumbnail from "./SettableImageThumbnail";
 
 export default function CategoryThumbnail({
+  addCategoryToList,
   draggable,
   deleteFn,
   id,
@@ -18,14 +20,12 @@ export default function CategoryThumbnail({
       onDragStart={() => setDraggedVal(inputVal)}
     >
       {draggable && <TricolonSpan>⁝</TricolonSpan>}
-      <Label>
-        <Img src={img} />
-        <ImgInput onChange={(e) => imgOnChangeFn(e)} type="file" />
-      </Label>
+      <SettableImageThumbnail src={img} onChangeFn={(e) => imgOnChangeFn(e)} />
       <Input
-        value={inputVal}
+        onBlur={() => addCategoryToList()}
         onChange={(e) => inputValSetter(e.target.value)}
         placeholder="Agregar nombre"
+        value={inputVal}
       />
       {draggable && (
         <RemoveButton onClick={() => deleteFn(id)}>
@@ -49,9 +49,6 @@ const Input = styled.input({
   height: "100%",
   width: "230px",
 });
-const ImgInput = styled.input({
-  display: "none",
-});
 const TricolonSpan = styled.span({
   cursor: "grabbing",
   fontWeight: "750",
@@ -62,15 +59,4 @@ const RemoveButton = styled.button({
   background: "none",
   border: "0",
   cursor: "pointer",
-});
-const Label = styled.label({
-  cursor: "pointer",
-  display: "grid",
-  height: "85%",
-  placeItems: "center",
-  width: "35px",
-});
-const Img = styled.img({
-  height: "100%",
-  width: "35px",
 });

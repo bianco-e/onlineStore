@@ -24,7 +24,7 @@ class Firebase {
     return this.db
       .collection(collection)
       .add({ ...doc })
-      .then((docRef) => callback(docRef.id))
+      .then((docRef) => callback && callback(docRef.id))
       .catch((error) => console.error("No se pudo guardar. Error: ", error));
   };
 
@@ -36,7 +36,7 @@ class Firebase {
       .catch((error) => alert("Error: " + error));
   };
 
-  editProduct = (collection, id, content) => {
+  editDoc = (collection, id, content) => {
     return this.db
       .collection(collection)
       .doc(id)

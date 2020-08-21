@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
+import StyleContext from "../context/StyleContext";
+
 export default function ProductThumbnail({ endpoint, img, name, price }) {
   const history = useHistory();
+  const { style } = useContext(StyleContext);
+  const { primaryColor, secondaryColor } = style;
+
   const handleClick = (e) => {
     e.stopPropagation();
   };
+
   return (
     <WrapperButton
       onClick={() => {
@@ -14,9 +20,11 @@ export default function ProductThumbnail({ endpoint, img, name, price }) {
       }}
     >
       <Image src={img} />
-      <Button onClick={(e) => handleClick(e)}>🛍</Button>
-      <Name>{name}</Name>
-      <Price>{`$${price.toFixed(2)}`}</Price>
+      <Button onClick={(e) => handleClick(e)} primary={primaryColor}>
+        🛍
+      </Button>
+      <Name secondary={secondaryColor}>{name}</Name>
+      <Price primary={primaryColor}>{`$${price.toFixed(2)}`}</Price>
     </WrapperButton>
   );
 }
@@ -36,7 +44,7 @@ const WrapperButton = styled.button({
   width: "30%",
 });
 const Button = styled.button({
-  backgroundColor: "#FFA07A",
+  backgroundColor: (props) => props.primary,
   border: "0",
   borderRadius: "50%",
   bottom: "30%",
@@ -44,7 +52,7 @@ const Button = styled.button({
   padding: "10px",
   position: "absolute",
   width: "40px",
-  transition: "box-shadow .3s ease",
+  transition: "all .3s ease",
   ["&:hover"]: {
     boxShadow: "0 0 6px rgba(0, 0, 0, .5)",
   },
@@ -54,11 +62,11 @@ const Image = styled.img({
 });
 const Name = styled.h5({
   color: "black",
-  transition: "color .4s ease",
+  transition: "all .4s ease",
   ["&:hover"]: {
-    color: "#777",
+    color: (props) => props.secondary,
   },
 });
 const Price = styled.p({
-  color: "#FFA07A",
+  color: (props) => props.primary,
 });

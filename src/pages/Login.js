@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import StyledInput from "../components/StyledInput";
 import StyledButton from "../components/StyledButton";
+import ErrorMessage from "../components/ErrorMessage";
+
 import firebase from "../firebase/client.js";
 import { useHistory } from "react-router-dom";
 
@@ -27,7 +29,7 @@ export default function Login() {
   ];
 
   const handleLogin = () => {
-    const accounts = firebase
+    firebase
       .login(user, password)
       .then((res) =>
         res
@@ -43,7 +45,7 @@ export default function Login() {
     <Wrapper>
       <Container>
         <Title>Iniciar sesión</Title>
-        {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
+        {errorMsg && <ErrorMessage msg={errorMsg} />}
         {inputsData.map((data) => {
           const { fn, ph, type, val } = data;
           return (
@@ -75,13 +77,6 @@ const Container = styled.div({
   height: "70vh",
   justifyContent: "space-between",
   width: "90%",
-});
-const ErrorMessage = styled.span({
-  backgroundColor: "pink",
-  borderRadius: "10px",
-  color: "red",
-  fontSize: "14px",
-  padding: "10px 16px",
 });
 const Title = styled.h1({
   margin: "0",

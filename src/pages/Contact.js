@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+
 import PageTitle from "../components/PageTitle";
 import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
 import StyledButton from "../components/StyledButton";
 import StyledInput from "../components/StyledInput";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
-import { saleProducts } from "../data/data.js";
+
+import { contactInputs } from "../data/data.js";
+
+import StyleContext from "../context/StyleContext";
 
 export default function Contact() {
-  const contactInputs = ["Nombre", "Email", "Teléfono"];
+  const { style } = useContext(StyleContext);
+  const { secondaryColor } = style;
 
   const confirmForm = () => {};
 
@@ -31,7 +36,7 @@ export default function Contact() {
             />
           );
         })}
-        <TextArea placeholder="Mensaje" />
+        <TextArea placeholder="Mensaje" secondary={secondaryColor} />
         <StyledButton onClickFn={confirmForm} title="ENVIAR" />
       </ContactForm>
       <BottomBar />
@@ -65,10 +70,9 @@ const ContactForm = styled.section({
 const Text = styled.p({
   textAlign: "center",
 });
-
 const TextArea = styled.textarea({
   backgroundColor: "transparent",
-  border: "1px solid #777",
+  border: (props) => `1px solid ${props.secondary}`,
   borderRadius: "15px",
   fontFamily: "ubuntu",
   maxHeight: "80px",

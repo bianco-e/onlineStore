@@ -1,35 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import BrushSvg from "./svg/BrushSvg";
-import WrenchSvg from "./svg/WrenchSvg";
+
+import { buttons } from "../data/data.js";
+import StyleContext from "../context/StyleContext";
 
 export default function AdminPanel() {
   const history = useHistory();
-  const buttons = [
-    { endpoint: "/admin", title: "Inicio" },
-    { endpoint: "/admin/estadisticas", title: "Estadísticas" },
-    { endpoint: undefined, Logo: WrenchSvg, title: "Administrar" },
-    { endpoint: "/admin/categorias", title: "Categorías" },
-    { endpoint: "/admin/productos", title: "Productos" },
-    { endpoint: "/admin/clientes", title: "Clientes" },
-    { endpoint: "/admin/ventas", title: "Ventas" },
-    { endpoint: undefined, Logo: BrushSvg, title: "Personalizar" },
-    { endpoint: "/admin/diseño", title: "Diseño" },
-  ];
+  const { style } = useContext(StyleContext);
+  const { storeName, primaryColor, secondaryColor } = style;
 
   const renderPanelSections = (arr) => {
     return arr.map(({ endpoint, Logo, title }) => {
       if (!endpoint) {
         return (
-          <PanelTitle key={title}>
+          <PanelTitle key={title} secondary={secondaryColor}>
             <Logo width={25} height={70} />
             {title}
           </PanelTitle>
         );
       }
       return (
-        <Button key={title} onClick={() => history.push(endpoint)}>
+        <Button
+          key={title}
+          onClick={() => history.push(endpoint)}
+          primary={primaryColor}
+        >
           {title}
         </Button>
       );
@@ -37,15 +33,15 @@ export default function AdminPanel() {
   };
 
   return (
-    <Wrapper>
-      <Title>ONLINE STORE</Title>
+    <Wrapper primary={primaryColor}>
+      <Title>{storeName}</Title>
       {renderPanelSections(buttons)}
     </Wrapper>
   );
 }
 const Wrapper = styled.div({
   alignItems: "flex-start",
-  boxShadow: "inset -5px 0 20px #FFA07A",
+  boxShadow: (props) => `inset -5px 0 20px ${props.primary}`,
   display: "flex",
   flexDirection: "column",
   height: "100vh",
@@ -54,11 +50,11 @@ const Wrapper = styled.div({
   width: "195px",
 });
 const Title = styled.h3({
-  margin: "64px 0 14px 0",
+  margin: "50px 0 14px 0",
 });
 const PanelTitle = styled.div({
   alignItems: "center",
-  color: "#777",
+  color: (props) => props.secondary,
   display: "flex",
   fontWeight: "800",
 });
@@ -71,6 +67,6 @@ const Button = styled.button({
   padding: "8px 0 0 25px",
   transition: "color .4s ease",
   ["&:hover"]: {
-    color: "#FFA07A",
+    color: (props) => props.primary,
   },
 });

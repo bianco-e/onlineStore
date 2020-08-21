@@ -4,6 +4,54 @@ import ShipmentSvg from "../components/svg/ShipmentSvg";
 import InstagramSvg from "../components/svg/InstagramSvg";
 import MailSvg from "../components/svg/MailSvg";
 import WhatsappSvg from "../components/svg/WhatsappSvg";
+import BrushSvg from "../components/svg/BrushSvg";
+import WrenchSvg from "../components/svg/WrenchSvg";
+
+export const buttons = [
+  { endpoint: "/admin", title: "Inicio" },
+  { Logo: WrenchSvg, title: "Administrar" },
+  { endpoint: "/admin/categorias", title: "Categorías" },
+  { endpoint: "/admin/productos", title: "Productos" },
+  { endpoint: "/admin/clientes", title: "Clientes" },
+  { endpoint: "/admin/ventas", title: "Ventas" },
+  { Logo: BrushSvg, title: "Personalizar" },
+  { endpoint: "/admin/configuracion", title: "Configuración" },
+];
+
+export const contactInputs = ["Nombre", "Email", "Teléfono"];
+
+export const contact = [
+  {
+    link: "https://instagram.com",
+    SVG: InstagramSvg,
+    width: 25,
+  },
+  {
+    link: "https://wa.me/111111",
+    SVG: WhatsappSvg,
+    width: 25,
+  },
+  {
+    link: "https://gmail.com",
+    SVG: MailSvg,
+    width: 50,
+  },
+];
+
+export const sections = [
+  {
+    endpoint: "/",
+    name: "Inicio",
+  },
+  {
+    endpoint: "/productos",
+    name: "Productos",
+  },
+  {
+    endpoint: "/contacto",
+    name: "Contacto",
+  },
+];
 
 export const services = [
   {
@@ -141,38 +189,5 @@ export const saleProducts = [
       "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
     name: "PANTALÓN SAN MIGUEL",
     price: 2100,
-  },
-];
-
-export const sections = [
-  {
-    endpoint: "/",
-    name: "Inicio",
-  },
-  {
-    endpoint: "/productos",
-    name: "Productos",
-  },
-  {
-    endpoint: "/contacto",
-    name: "Contacto",
-  },
-];
-
-export const contact = [
-  {
-    link: "https://instagram.com",
-    SVG: InstagramSvg,
-    width: 25,
-  },
-  {
-    link: "https://wa.me/111111",
-    SVG: WhatsappSvg,
-    width: 25,
-  },
-  {
-    link: "https://gmail.com",
-    SVG: MailSvg,
-    width: 50,
   },
 ];

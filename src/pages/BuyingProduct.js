@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import CartContext from "../context/CartContext";
+
 import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
 import ImageSlider from "../components/ImageSlider";
@@ -12,10 +12,16 @@ import CardSvg from "../components/svg/CardSvg";
 
 import { saleProducts } from "../data/data.js";
 
+import CartContext from "../context/CartContext";
+import StyleContext from "../context/StyleContext";
+
 export default function BuyingProduct() {
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
   const { addProductToCart } = useContext(CartContext);
+  const { style } = useContext(StyleContext);
+  const { primaryColor } = style;
+
   let { id } = useParams();
   const { colors, img, name, payForm, price, sizes } = saleProducts[0];
 
@@ -38,8 +44,10 @@ export default function BuyingProduct() {
         <ImageSlider images={[{ original: img }]} />
 
         <DetailsWrapper>
-          <Title>{name}</Title>
-          <Title color={"#FFA07A"} fSize="15px">{`$${price.toFixed(2)}`}</Title>
+          <Text>{name}</Text>
+          <Text primary={primaryColor} fSize="15px">{`$${price.toFixed(
+            2
+          )}`}</Text>
           <PayFormsContainer>
             <CardSvg width={20} />
             <DetailsText>{payForm.card}</DetailsText>
@@ -79,8 +87,8 @@ const DetailsWrapper = styled.div({
   justifyContent: "space-between",
   height: "380px",
 });
-const Title = styled.h2({
-  color: (props) => props.color,
+const Text = styled.h2({
+  color: (props) => props.primary,
   fontSize: (props) => props.fSize,
 });
 const PayFormsContainer = styled.div({

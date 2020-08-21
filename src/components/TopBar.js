@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import prueba1 from "../images/prueba1.png";
@@ -7,10 +7,14 @@ import Button from "./Button";
 import SearchAndMenu from "./SearchAndMenu";
 import SideCartModal from "./SideCartModal";
 
+import StyleContext from "../context/StyleContext";
+
 export default function TopBar() {
   const [showCartModal, setShowCartModal] = useState(false);
+  const { style } = useContext(StyleContext);
+  const { storeLogo, primaryColor } = style;
   return (
-    <Wrapper>
+    <Wrapper primary={primaryColor}>
       {showCartModal && (
         <SideCartModal
           showModal={showCartModal}
@@ -22,7 +26,7 @@ export default function TopBar() {
       </Container>
       <Container>
         <Link href="/#">
-          <Image src={prueba1} />
+          <Image src={storeLogo} />
         </Link>
       </Container>
       <Container>
@@ -34,7 +38,7 @@ export default function TopBar() {
 
 const Wrapper = styled.div({
   alignItems: "center",
-  backgroundColor: "#FFA07A",
+  backgroundColor: (props) => props.primary,
   display: "flex",
   justifyContent: "space-between",
   padding: "5px 0",

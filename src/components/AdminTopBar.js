@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
+import StyleContext from "../context/StyleContext";
+
 export default function AdminTopBar() {
   const history = useHistory();
+  const { style } = useContext(StyleContext);
+  const { primaryColor, secondaryColor } = style;
   return (
-    <Wrapper>
-      <Button onClick={() => history.push("/")}>Cerrar sesión</Button>
+    <Wrapper primary={primaryColor}>
+      <Button onClick={() => history.push("/")} secondary={secondaryColor}>
+        Cerrar sesión
+      </Button>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div({
   alignItems: "center",
-  backgroundColor: "#FFA07A",
+  backgroundColor: (props) => props.primary,
   display: "flex",
   justifyContent: "flex-end",
   right: "0",
@@ -32,6 +38,6 @@ const Button = styled.button({
   padding: "8px",
   transition: "color .4s ease",
   ["&:hover"]: {
-    color: "#777",
+    color: (props) => props.secondary,
   },
 });
