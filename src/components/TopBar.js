@@ -1,8 +1,5 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-
-import prueba1 from "../images/prueba1.png";
-
 import Button from "./Button";
 import SearchAndMenu from "./SearchAndMenu";
 import SideCartModal from "./SideCartModal";

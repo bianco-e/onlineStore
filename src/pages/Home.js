@@ -9,20 +9,11 @@ import HomeNews from "../components/HomeNews";
 import BottomBar from "../components/BottomBar";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
 
-import prueba1 from "../images/prueba1.png";
-import prueba2 from "../images/prueba2.png";
-import prueba3 from "../images/prueba3.png";
-
 export default function Home() {
-  const sliderImages = [
-    { original: prueba1 },
-    { original: prueba2 },
-    { original: prueba3 },
-  ];
   return (
     <Wrapper>
       <TopBar />
-      <ImageSlider images={sliderImages} />
+      <ImageSlider />
       <PageTitle text="Bienvenid@s" />
       <Services />
       <HomeBanners />

@@ -4,10 +4,8 @@ import DeleteSvg from "./svg/DeleteSvg";
 import SettableImageThumbnail from "./SettableImageThumbnail";
 
 export default function CategoryThumbnail({
-  addCategoryToList,
   draggable,
   deleteFn,
-  id,
   img,
   imgOnChangeFn,
   inputValSetter,
@@ -19,16 +17,19 @@ export default function CategoryThumbnail({
       draggable={draggable && "true"}
       onDragStart={() => setDraggedVal(inputVal)}
     >
-      {draggable && <TricolonSpan>⁝</TricolonSpan>}
+      {draggable && (
+        <TricolonSpan title="Arrastrá la categoría hasta el recuadro del banner que elijas">
+          ⁝
+        </TricolonSpan>
+      )}
       <SettableImageThumbnail src={img} onChangeFn={(e) => imgOnChangeFn(e)} />
       <Input
-        onBlur={() => addCategoryToList()}
         onChange={(e) => inputValSetter(e.target.value)}
         placeholder="Agregar nombre"
         value={inputVal}
       />
       {draggable && (
-        <RemoveButton onClick={() => deleteFn(id)}>
+        <RemoveButton onClick={() => deleteFn(inputVal)}>
           <DeleteSvg width={17} />
         </RemoveButton>
       )}

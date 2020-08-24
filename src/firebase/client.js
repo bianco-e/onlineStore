@@ -36,12 +36,12 @@ class Firebase {
       .catch((error) => alert("Error: " + error));
   };
 
-  editDoc = (collection, id, content) => {
+  editDoc = (callback, collection, id, content) => {
     return this.db
       .collection(collection)
       .doc(id)
-      .set({ content }, { merge: true })
-      .then(() => console.log("Documento editado"))
+      .set(content, { merge: true })
+      .then(() => callback && callback("Cambios guardados correctamente"))
       .catch((err) => console.error("Error al editar documento", err));
   };
 

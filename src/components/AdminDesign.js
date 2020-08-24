@@ -22,7 +22,7 @@ export default function AdminDesign() {
   const saveChanges = () => {
     const id = "stylesheet";
     firebase.addImage("logo", loadedFile).then((imgUrl) => {
-      firebase.editDoc("style", id, {
+      firebase.editDoc(false, "style", id, {
         ...style,
         storeLogo: imgUrl,
       });

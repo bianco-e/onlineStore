@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import StyledInput from "../components/StyledInput";
 import StyledButton from "../components/StyledButton";
-import ErrorMessage from "../components/ErrorMessage";
+import FeedbackMessage from "../components/FeedbackMessage";
 
 import firebase from "../firebase/client.js";
 import { useHistory } from "react-router-dom";
@@ -45,7 +45,7 @@ export default function Login() {
     <Wrapper>
       <Container>
         <Title>Iniciar sesión</Title>
-        {errorMsg && <ErrorMessage msg={errorMsg} />}
+        {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
         {inputsData.map((data) => {
           const { fn, ph, type, val } = data;
           return (

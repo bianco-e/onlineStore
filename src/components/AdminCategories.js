@@ -1,120 +1,123 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CategoryThumbnail from "./CategoryThumbnail";
 import CategoriesDisplayThumbnail from "./CategoriesDisplayThumbnail";
-import ErrorMessage from "../components/ErrorMessage";
+import FeedbackMessage from "../components/FeedbackMessage";
+import StyledButton from "../components/StyledButton";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
 
-import StyleContext from "../context/StyleContext";
-
 export default function AdminCategories() {
-  const [categoriesFromFirebase, setCategoriesFromFirebase] = useState([]);
-  const [categoriesOrder, setCategoriesOrder] = useState([]);
-  const [newCategory, setNewCategory] = useState(undefined);
-  const [categoryId, setCategoryId] = useState(undefined);
-  const [categoryImg, setCategoryImg] = useState(addPhoto);
-  const [loadedFile, setLoadedFile] = useState(undefined);
+  const [deletedCategories, setDeletedCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
+  const [categoryImg, setCategoryImg] = useState({ pvw: addPhoto });
   const [categoryName, setCategoryName] = useState("");
   const [draggedVal, setDraggedVal] = useState(undefined);
   const [errorMsg, setErrorMsg] = useState(undefined);
+  const [feedbackMsg, setFeedbackMsg] = useState(undefined);
 
-  const { style } = useContext(StyleContext);
-  const { primaryColor } = style;
+  useEffect(() => {
+    firebase.getDocsFromCollection("categories").then((categories) => {
+      setAllCategories(categories[0].categories);
+    });
+  }, []);
 
-  useEffect(
-    () =>
-      firebase.getDocsFromCollection("categories").then((categories) => {
-        setCategoriesFromFirebase(categories);
-      }),
-    []
-  );
-
-  useEffect(
-    () =>
-      categoryId &&
-      setCategoriesFromFirebase(
-        categoriesFromFirebase.concat({ ...newCategory, id: categoryId })
-      ),
-    [categoryId]
-  );
-
-  const addCategoryToFirebase = () => {
-    if (categoryName !== "" && categoryImg !== addPhoto) {
+  const addEmptyCategory = () => {
+    if (categoryName && categoryImg !== addPhoto) {
+      errorMsg && setErrorMsg(undefined);
+      const ga = `p${allCategories.length + 1}`;
       const endpoint = categoryName.toLowerCase().split(" ").join("-");
-      const cat = { endpoint, img: categoryImg, name: categoryName };
-      setNewCategory(cat);
+      const cat = { endpoint, ga, img: categoryImg, name: categoryName };
 
-      firebase.addImage("categories", loadedFile).then((imgUrl) => {
-        firebase.addNewDoc(setCategoryId, "categories", {
-          ...cat,
-          img: imgUrl,
-        });
-      });
+      setAllCategories(allCategories.concat(cat));
 
       setCategoryName("");
-      setCategoryImg(addPhoto);
+      setCategoryImg({ pvw: addPhoto });
     } else setErrorMsg("La categoría debe tener imágen y nombre");
   };
 
-  const deleteCategoryFromFirebase = (id) => {
-    firebase.deleteProduct("categories", id);
-    setCategoriesFromFirebase(
-      categoriesFromFirebase.filter((cat) => cat.id !== id)
-    );
+  const deleteCategory = (name) => {
+    const lastGa = `p${allCategories.length}`;
+    const categoryToDelete = allCategories.find((cat) => cat.name == name);
+    const greatestGaCategory = allCategories.find((cat) => cat.ga == lastGa);
+
+    setDeletedCategories([...deletedCategories, categoryToDelete]);
+
+    if (categoryToDelete == greatestGaCategory) {
+      setAllCategories(
+        allCategories.filter((cat) => cat.name !== categoryToDelete.name)
+      );
+    } else {
+      const newCategories = allCategories
+        .filter((cat) => cat.ga !== greatestGaCategory.ga)
+        .filter((cat) => cat.name !== categoryToDelete.name)
+        .concat({
+          ...greatestGaCategory,
+          ga: categoryToDelete.ga,
+        });
+      setAllCategories(newCategories);
+    }
   };
 
   const newImgOnClickFn = (e) => {
-    setLoadedFile(e.target.files[0]);
     const url = URL.createObjectURL(e.target.files[0]);
-    setCategoryImg(url);
+    setCategoryImg({ pvw: url, file: e.target.files[0] });
   };
 
   const saveChanges = () => {
-    if (categoriesOrder.every((category) => category.content)) {
-      const id = "categoriesorder";
-      firebase.editDoc("categoriesOrder", categoriesOrder);
-    }
+    const mappedArr = allCategories.map((cat) => {
+      return cat.img.file
+        ? firebase.addImage("categories", cat.img.file).then((imgUrl) => {
+            return { ...cat, img: imgUrl };
+          })
+        : cat;
+    });
+
+    Promise.all(mappedArr).then((solvedArr) => {
+      setAllCategories(solvedArr);
+      firebase.editDoc(setFeedbackMsg, "categories", "categories", {
+        categories: solvedArr,
+      });
+    });
   };
 
   return (
     <Container>
       <Title>Categorías</Title>
-      <CategoryThumbnail
-        img={categoryImg}
-        inputValSetter={setCategoryName}
-        inputVal={categoryName}
-        imgOnChangeFn={newImgOnClickFn}
-      />
-      <Button onClick={() => addCategoryToFirebase()} primary={primaryColor}>
-        ✙ Agregar categoría
-      </Button>
-      {errorMsg && <ErrorMessage msg={errorMsg} />}
-      {categoriesFromFirebase.map(({ id, img, name }) => {
+      <Wrapper>
+        <CategoryThumbnail
+          img={categoryImg.pvw}
+          inputValSetter={setCategoryName}
+          inputVal={categoryName}
+          imgOnChangeFn={newImgOnClickFn}
+        />
+        <StyledButton title="✙" onClickFn={() => addEmptyCategory()} />
+      </Wrapper>
+      {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
+      {allCategories.map(({ img, name }) => {
         return (
           <CategoryThumbnail
             draggable
-            deleteFn={deleteCategoryFromFirebase}
-            key={id}
-            id={id}
-            img={img}
+            deleteFn={deleteCategory}
+            key={name}
+            img={img.pvw || img}
+            imgOnChangeFn={() => {}}
             inputVal={name}
+            inputValSetter={() => {}}
             setDraggedVal={setDraggedVal}
           />
         );
       })}
-      {categoriesFromFirebase.length > 0 && (
+      {allCategories.length > 0 && (
         <CategoriesDisplayThumbnail
-          n={categoriesFromFirebase.length}
-          categoriesOrder={categoriesOrder}
+          allCategories={allCategories}
           draggedVal={draggedVal}
-          setCategoriesOrder={setCategoriesOrder}
+          setAllCategories={setAllCategories}
         />
       )}
-      <Button onClick={() => saveChanges()} primary={primaryColor}>
-        GUARDAR
-      </Button>
+      {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
+      <StyledButton title="GUARDAR CAMBIOS" onClickFn={() => saveChanges()} />
     </Container>
   );
 }
@@ -128,20 +131,9 @@ const Container = styled.div({
   minHeight: "100vh",
   width: "80%",
 });
-const Title = styled.h2({});
-const Button = styled.button({
-  border: (props) => `1px solid ${props.primary}`,
-  borderRadius: "10px",
-  backgroundColor: (props) => props.primary,
-  color: "white",
-  cursor: "pointer",
-  fontSize: "11px",
-  marginBottom: "15px",
-  padding: "8px 20px",
-  transition: "all .6s ease",
-  ["&:hover"]: {
-    backgroundColor: "rgba(250, 250, 250, .7)",
-    border: (props) => `1px solid ${props.primary}`,
-    color: (props) => props.primary,
-  },
+const Wrapper = styled.div({
+  display: "flex",
+  justifyContent: "space-between",
+  width: "345px",
 });
+const Title = styled.h2({});

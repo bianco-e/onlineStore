@@ -23,12 +23,12 @@ export default function AdminConfig() {
     const id = "stylesheet";
     loadedFile
       ? firebase.addImage("logo", loadedFile).then((imgUrl) => {
-          firebase.editDoc("style", id, {
+          firebase.editDoc(false, "style", id, {
             ...style,
             storeLogo: imgUrl,
           });
         })
-      : firebase.editDoc("style", id, style);
+      : firebase.editDoc(false, "style", id, style);
   };
 
   class Config {

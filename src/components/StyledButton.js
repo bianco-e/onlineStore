@@ -19,9 +19,9 @@ const Button = styled.button({
   backgroundColor: (props) => props.primary,
   color: "white",
   cursor: "pointer",
-  fontSize: "12px",
+  fontSize: "11px",
+  marginBottom: "15px",
   padding: "8px 20px",
-  transition: "background-color .6s ease",
   transition: "all .6s ease",
   ["&:hover"]: {
     backgroundColor: "rgba(250, 250, 250, .7)",
