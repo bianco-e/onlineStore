@@ -1,21 +1,29 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import GridLoader from "react-spinners/GridLoader";
+
 import StyleContext from "../context/StyleContext";
 import SettableImageThumbnail from "./SettableImageThumbnail";
 import StyledButton from "./StyledButton";
+import StyledInput from "./StyledInput";
+import FeedbackMessage from "./FeedbackMessage";
+import FormOption from "./FormOption";
+
+import { Config } from "../data/data.js";
 import firebase from "../firebase/client.js";
 
 export default function AdminConfig() {
   const { style, setStyle } = useContext(StyleContext);
   const [loadedFile, setLoadedFile] = useState(undefined);
+  const [feedbackMsg, setFeedbackMsg] = useState(undefined);
   const { storeName, storeLogo, primaryColor, secondaryColor } = style;
 
   const setValue = (e, property) =>
     setStyle({ ...style, [property]: e.target.value });
 
-  const newImgOnClickFn = (e) => {
-    setLoadedFile(e.target.files[0]);
-    const url = URL.createObjectURL(e.target.files[0]);
+  const newImgOnClickFn = (file) => {
+    setLoadedFile(file);
+    const url = URL.createObjectURL(file);
     setStyle({ ...style, storeLogo: url });
   };
 
@@ -23,28 +31,21 @@ export default function AdminConfig() {
     const id = "stylesheet";
     loadedFile
       ? firebase.addImage("logo", loadedFile).then((imgUrl) => {
-          firebase.editDoc(false, "style", id, {
+          firebase.editDoc(setFeedbackMsg, "style", id, {
             ...style,
             storeLogo: imgUrl,
           });
         })
-      : firebase.editDoc(false, "style", id, style);
+      : firebase.editDoc(setFeedbackMsg, "style", id, style);
   };
 
-  class Config {
-    constructor(text, element) {
-      this.text = text;
-      this.element = element;
-    }
-  }
-
-  const getInputFrom = (title) => {
+  const makeInputFrom = (title) => {
     const propertyName = title.toLowerCase();
     const input = (
-      <Input
-        type="text"
-        value={style[propertyName]}
-        onChange={(e) => setValue(e, propertyName)}
+      <StyledInput
+        val={style[propertyName]}
+        onChangeFn={(e) => setValue(e, propertyName)}
+        width="180px"
       />
     );
     return new Config(title, input);
@@ -54,10 +55,10 @@ export default function AdminConfig() {
     new Config(
       "Nombre de la tienda",
       (
-        <Input
-          type="text"
-          value={storeName}
-          onChange={(e) => setValue(e, "storeName")}
+        <StyledInput
+          onChangeFn={(e) => setValue(e, "storeName")}
+          val={storeName}
+          width="180px"
         />
       )
     ),
@@ -66,7 +67,7 @@ export default function AdminConfig() {
       (
         <SettableImageThumbnail
           src={storeLogo}
-          onChangeFn={(e) => newImgOnClickFn(e)}
+          onChangeFn={(e) => newImgOnClickFn(e.target.files[0])}
         />
       )
     ),
@@ -90,24 +91,34 @@ export default function AdminConfig() {
         />
       )
     ),
-    getInputFrom("Instagram"),
-    getInputFrom("Facebook"),
-    getInputFrom("Email"),
-    getInputFrom("Whatsapp"),
+    makeInputFrom("Instagram"),
+    makeInputFrom("Facebook"),
+    makeInputFrom("Email"),
+    makeInputFrom("Whatsapp"),
   ];
 
   return (
     <Container>
       <Title>Configuración</Title>
-      {configs.map((option) => {
-        return (
-          <OptionBox>
-            <OptionText>{option.text}</OptionText>
-            {option.element}
-          </OptionBox>
-        );
-      })}
-      <StyledButton title="GUARDAR CAMBIOS" onClickFn={() => saveChanges()} />
+
+      {!style.primaryColor ? (
+        <GridLoader />
+      ) : (
+        <>
+          {configs.map(({ text, element }) => {
+            return (
+              <FormOption key={text} text={text}>
+                {element}
+              </FormOption>
+            );
+          })}
+          {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
+          <StyledButton
+            title="GUARDAR CAMBIOS"
+            onClickFn={() => saveChanges()}
+          />
+        </>
+      )}
     </Container>
   );
 }
@@ -122,20 +133,6 @@ const Container = styled.div({
   width: "80%",
 });
 const Title = styled.h2({});
-const OptionBox = styled.section({
-  alignItems: "center",
-  display: "flex",
-  justifyContent: "space-between",
-  width: "55%",
-});
-const OptionText = styled.h4({});
-const Input = styled.input({
-  border: "0",
-  borderBottom: "1px solid black",
-  fontSize: "15px",
-  textAlign: "right",
-  width: "160px",
-});
 const ColorInput = styled.input({
   background: "none",
   border: "0",

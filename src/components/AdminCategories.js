@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import GridLoader from "react-spinners/GridLoader";
+
 import CategoryThumbnail from "./CategoryThumbnail";
 import CategoriesDisplayThumbnail from "./CategoriesDisplayThumbnail";
 import FeedbackMessage from "../components/FeedbackMessage";
@@ -9,8 +11,7 @@ import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
 
 export default function AdminCategories() {
-  const [deletedCategories, setDeletedCategories] = useState([]);
-  const [allCategories, setAllCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState(undefined);
   const [categoryImg, setCategoryImg] = useState({ pvw: addPhoto });
   const [categoryName, setCategoryName] = useState("");
   const [draggedVal, setDraggedVal] = useState(undefined);
@@ -23,8 +24,14 @@ export default function AdminCategories() {
     });
   }, []);
 
-  const addEmptyCategory = () => {
-    if (categoryName && categoryImg !== addPhoto) {
+  const addCategory = () => {
+    if (
+      categoryName &&
+      categoryImg !== addPhoto &&
+      !allCategories.find(
+        (cat) => cat.name.toLowerCase() == categoryName.toLowerCase()
+      )
+    ) {
       errorMsg && setErrorMsg(undefined);
       const ga = `p${allCategories.length + 1}`;
       const endpoint = categoryName.toLowerCase().split(" ").join("-");
@@ -34,15 +41,16 @@ export default function AdminCategories() {
 
       setCategoryName("");
       setCategoryImg({ pvw: addPhoto });
-    } else setErrorMsg("La categoría debe tener imágen y nombre");
+    } else
+      setErrorMsg(
+        "La categoría debe tener imágen y nombre. Los nombres no pueden repetirse"
+      );
   };
 
   const deleteCategory = (name) => {
     const lastGa = `p${allCategories.length}`;
     const categoryToDelete = allCategories.find((cat) => cat.name == name);
     const greatestGaCategory = allCategories.find((cat) => cat.ga == lastGa);
-
-    setDeletedCategories([...deletedCategories, categoryToDelete]);
 
     if (categoryToDelete == greatestGaCategory) {
       setAllCategories(
@@ -60,9 +68,15 @@ export default function AdminCategories() {
     }
   };
 
-  const newImgOnClickFn = (e) => {
-    const url = URL.createObjectURL(e.target.files[0]);
-    setCategoryImg({ pvw: url, file: e.target.files[0] });
+  const editCategoryName = (e) => {};
+
+  const editImgOnClickFn = (file) => {};
+
+  const newCategoryName = (e) => setCategoryName(e.target.value);
+
+  const newImgOnClickFn = (file) => {
+    const url = URL.createObjectURL(file);
+    setCategoryImg({ pvw: url, file });
   };
 
   const saveChanges = () => {
@@ -73,7 +87,6 @@ export default function AdminCategories() {
           })
         : cat;
     });
-
     Promise.all(mappedArr).then((solvedArr) => {
       setAllCategories(solvedArr);
       firebase.editDoc(setFeedbackMsg, "categories", "categories", {
@@ -85,39 +98,48 @@ export default function AdminCategories() {
   return (
     <Container>
       <Title>Categorías</Title>
-      <Wrapper>
-        <CategoryThumbnail
-          img={categoryImg.pvw}
-          inputValSetter={setCategoryName}
-          inputVal={categoryName}
-          imgOnChangeFn={newImgOnClickFn}
-        />
-        <StyledButton title="✙" onClickFn={() => addEmptyCategory()} />
-      </Wrapper>
-      {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
-      {allCategories.map(({ img, name }) => {
-        return (
-          <CategoryThumbnail
-            draggable
-            deleteFn={deleteCategory}
-            key={name}
-            img={img.pvw || img}
-            imgOnChangeFn={() => {}}
-            inputVal={name}
-            inputValSetter={() => {}}
-            setDraggedVal={setDraggedVal}
+      {!allCategories ? (
+        <GridLoader />
+      ) : (
+        <>
+          <Wrapper>
+            <CategoryThumbnail
+              img={categoryImg.pvw}
+              inputOnChangeFn={newCategoryName}
+              inputVal={categoryName}
+              imgOnChangeFn={newImgOnClickFn}
+            />
+            <StyledButton title="✙" onClickFn={() => addCategory()} />
+          </Wrapper>
+          {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
+          {allCategories.map(({ img, name }) => {
+            return (
+              <CategoryThumbnail
+                draggable
+                deleteFn={deleteCategory}
+                key={name}
+                img={img.pvw || img}
+                imgOnChangeFn={editImgOnClickFn}
+                inputVal={name}
+                inputOnChangeFn={editCategoryName}
+                setDraggedVal={setDraggedVal}
+              />
+            );
+          })}
+          {allCategories.length > 0 && (
+            <CategoriesDisplayThumbnail
+              allCategories={allCategories}
+              draggedVal={draggedVal}
+              setAllCategories={setAllCategories}
+            />
+          )}
+          {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
+          <StyledButton
+            title="GUARDAR CAMBIOS"
+            onClickFn={() => saveChanges()}
           />
-        );
-      })}
-      {allCategories.length > 0 && (
-        <CategoriesDisplayThumbnail
-          allCategories={allCategories}
-          draggedVal={draggedVal}
-          setAllCategories={setAllCategories}
-        />
+        </>
       )}
-      {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
-      <StyledButton title="GUARDAR CAMBIOS" onClickFn={() => saveChanges()} />
     </Container>
   );
 }

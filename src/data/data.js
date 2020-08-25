@@ -18,6 +18,14 @@ export const buttons = [
   { endpoint: "/admin/configuracion", title: "Configuración" },
 ];
 
+export class Config {
+  constructor(text, element, ph) {
+    this.text = text;
+    this.element = element;
+    this.ph = ph;
+  }
+}
+
 export const contactInputs = ["Nombre", "Email", "Teléfono"];
 
 export const contact = [

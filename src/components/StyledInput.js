@@ -23,5 +23,6 @@ const Input = styled.input({
   border: (props) => `1px solid ${props.secondary}`,
   borderRadius: "9999px",
   padding: "8px 12px",
+  textAlign: "center",
   width: (props) => props.width,
 });

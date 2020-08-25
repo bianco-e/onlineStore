@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
-export default function Select({ options, onChangeFn, pos }) {
+import StyleContext from "../context/StyleContext";
+
+export default function Select({ options, onChangeFn, pos, width }) {
+  const { style } = useContext(StyleContext);
+  const { secondaryColor } = style;
+
   return (
     <SelectButton
       onChange={(e) => onChangeFn(e)}
       position={pos?.name}
       bottom={pos?.bottom}
       right={pos?.right}
+      secondary={secondaryColor}
+      width={width ? width : undefined}
     >
       {options.map((opt) => {
         return (
@@ -21,7 +28,7 @@ export default function Select({ options, onChangeFn, pos }) {
 }
 
 const SelectButton = styled.select({
-  border: "1px solid black",
+  border: (props) => `1px solid ${props.secondary}`,
   borderRadius: "9999px",
   backgroundColor: "transparent",
   cursor: "pointer",
@@ -31,6 +38,7 @@ const SelectButton = styled.select({
   right: (props) => props.right,
   bottom: (props) => props.bottom,
   textAlign: "center",
+  width: (props) => props.width,
   mozAppearance: "none",
   webkitAppearance: "none",
   appearance: "none",

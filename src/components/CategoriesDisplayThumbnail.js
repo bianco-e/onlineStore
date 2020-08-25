@@ -14,15 +14,18 @@ export default function CategoriesDisplayThumbnail({
 
   const handleDrop = (e) => {
     const target = allCategories.find((cat) => cat.ga == e.target.id);
-    const existingElement = allCategories.find((cat) => cat.name == draggedVal);
-    const existingElIdx = allCategories.indexOf(existingElement);
-    const targetIdx = allCategories.indexOf(target);
-    allCategories.splice(existingElIdx, 1, {
-      ...existingElement,
-      ga: target.ga,
-    });
-    allCategories.splice(targetIdx, 1, { ...target, ga: existingElement.ga });
-    setAllCategories([...allCategories]);
+    const draggedElement = allCategories.find((cat) => cat.name == draggedVal);
+    if (target.name != draggedElement.name) {
+      const editedCategories = allCategories
+        .filter((cat) => cat.ga != e.target.id)
+        .filter((cat) => cat.name != draggedVal)
+        .concat({
+          ...draggedElement,
+          ga: target.ga,
+        })
+        .concat({ ...target, ga: draggedElement.ga });
+      setAllCategories(editedCategories);
+    }
   };
 
   const options = [
@@ -49,6 +52,14 @@ export default function CategoriesDisplayThumbnail({
     {
       gta: "'p1 p2 p3' 'p6 p4 p5'",
       gtc: "1.3fr 0.85fr 0.85fr",
+    },
+    {
+      gta: "'p1 p1 p2 p3' 'p4 p5 p6 p7'",
+      gtc: "repeat(4, 1fr)",
+    },
+    {
+      gta: "'p1 p2 p3 p4' 'p5 p6 p7 p8'",
+      gtc: "repeat(4, 1fr)",
     },
   ];
 

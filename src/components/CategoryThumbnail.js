@@ -8,7 +8,7 @@ export default function CategoryThumbnail({
   deleteFn,
   img,
   imgOnChangeFn,
-  inputValSetter,
+  inputOnChangeFn,
   inputVal,
   setDraggedVal,
 }) {
@@ -22,9 +22,12 @@ export default function CategoryThumbnail({
           ⁝
         </TricolonSpan>
       )}
-      <SettableImageThumbnail src={img} onChangeFn={(e) => imgOnChangeFn(e)} />
+      <SettableImageThumbnail
+        src={img}
+        onChangeFn={(e) => imgOnChangeFn(e.target.files[0])}
+      />
       <Input
-        onChange={(e) => inputValSetter(e.target.value)}
+        onChange={(e) => inputOnChangeFn(e, inputVal)}
         placeholder="Agregar nombre"
         value={inputVal}
       />

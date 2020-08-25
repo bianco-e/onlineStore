@@ -1,11 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function SettableImageThumbnail({ onChangeFn, src }) {
+export default function SettableImageThumbnail({ onChangeFn, src, multiple }) {
   return (
     <Label>
       <Img src={src} />
-      <ImgInput onChange={(e) => onChangeFn(e)} type="file" />
+      {multiple ? (
+        <ImgInput multiple onChange={(e) => onChangeFn(e)} type="file" />
+      ) : (
+        <ImgInput onChange={(e) => onChangeFn(e)} type="file" />
+      )}
     </Label>
   );
 }
