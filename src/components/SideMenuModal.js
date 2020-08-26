@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { sections } from "../data/data.js";
 import { useHistory } from "react-router-dom";
+import CloseButton from "./CloseButton";
 
 export default function SideMenuModal({ showModal, setShowModal }) {
   useEffect(() => {
@@ -15,7 +16,7 @@ export default function SideMenuModal({ showModal, setShowModal }) {
   const history = useHistory();
   return (
     <Wrapper>
-      <CloseButton onClick={() => setShowModal(!showModal)}>✗</CloseButton>
+      <CloseButton onClickFn={() => setShowModal(!showModal)} corner="right" />
       {sections.map((sec, i) => {
         const { endpoint, name } = sec;
         return (
@@ -76,19 +77,5 @@ const LoginButton = styled.button({
   width: "100%",
   ["&:hover"]: {
     color: "#000",
-  },
-});
-const CloseButton = styled.button({
-  background: "none",
-  border: "0",
-  color: "#000",
-  cursor: "pointer",
-  fontSize: "22px",
-  position: "absolute",
-  right: "20px",
-  top: "20px",
-  transition: "color .4s ease",
-  ["&:hover"]: {
-    color: "#777",
   },
 });

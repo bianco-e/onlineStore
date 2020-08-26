@@ -9,19 +9,25 @@ import MultipleChoice from "./MultipleChoice";
 import FeedbackMessage from "./FeedbackMessage";
 import ColorsCards from "./ColorsCards";
 import SettableImageThumbnail from "./SettableImageThumbnail";
+import CloseButton from "./CloseButton";
 
 import addPhoto from "../images/photo.png";
-
-import { Config } from "../data/data.js";
 import firebase from "../firebase/client.js";
 
-export default function NewProductForm({ newProduct, setNewProduct, trigger }) {
+export default function NewProductForm({
+  getProducts,
+  newProduct,
+  setDocId,
+  setNewProduct,
+  trigger,
+}) {
   const [categoriesNames, setCategoriesNames] = useState([]);
   const [errorMsg, setErrorMsg] = useState(undefined);
   const [feedbackMsg, setFeedbackMsg] = useState(undefined);
+  const [images, setImages] = useState([{ pvw: addPhoto }]);
 
-  const [stock, setStock] = useState({});
-  const [colors, setColors] = useState([]);
+  const [stock, setStock] = useState({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+  const [colores, setColores] = useState([]);
 
   useEffect(() => {
     firebase.getDocsFromCollection("categories").then((categs) => {
@@ -38,36 +44,60 @@ export default function NewProductForm({ newProduct, setNewProduct, trigger }) {
   const setValue = (e, property) =>
     setNewProduct({ ...newProduct, [property]: e.target.value });
 
-  const makeInputFrom = (title, ph) => {
-    const propertyName = title.split(" ")[0].toLowerCase();
-    const input = (
-      <StyledInput
-        onChangeFn={(e) => setValue(e, propertyName)}
-        val={newProduct[propertyName]}
-        ph={ph}
-        width="180px"
-      />
-    );
-    return new Config(title, input);
+  const handleAddImage = (e) => {
+    if (e.target.files.length < 4) {
+      const files = Array.from(e.target.files);
+      const settedFiles = files.map((file) => {
+        return {
+          pvw: URL.createObjectURL(file),
+          file,
+        };
+      });
+      setImages(settedFiles);
+    } else setErrorMsg("El máximo de imágenes es 3");
   };
-  // botón para destacar producto en home (máx 3 o 5)
-  // Acciones: copiar link, editar, eliminar
 
   const inputsData = [
     {
       text: "Imágenes del producto",
+      element: images.map((img) => {
+        return (
+          <SettableImageThumbnail
+            multiple
+            src={img.pvw}
+            onChangeFn={(e) => handleAddImage(e)}
+          />
+        );
+      }),
+    },
+    {
+      text: "Nombre del producto",
       element: (
-        <SettableImageThumbnail multiple src={addPhoto} onChangeFn={() => {}} />
+        <StyledInput
+          onChangeFn={(e) => setValue(e, "name")}
+          val={newProduct["name"]}
+          ph="Ej: Remera de algodón"
+          width="180px"
+        />
       ),
     },
-    makeInputFrom("Nombre del producto", "Ej: Remera de algodón"),
-    makeInputFrom("Precio", "Ej: 1200"),
+    {
+      text: "Precio",
+      element: (
+        <StyledInput
+          onChangeFn={(e) => setValue(e, "price")}
+          val={newProduct["price"]}
+          ph="Ej: 1200"
+          width="180px"
+        />
+      ),
+    },
     {
       text: "Categoría",
       element: (
         <Select
           options={categoriesNames}
-          onChangeFn={(e) => setValue(e, "categoria")}
+          onChangeFn={(e) => setValue(e, "category")}
           width="200px"
         />
       ),
@@ -87,34 +117,57 @@ export default function NewProductForm({ newProduct, setNewProduct, trigger }) {
       element: (
         <>
           <StyledInput
-            onChangeFn={(e) => setValue(e, "colores")}
-            val={newProduct["colores"]}
+            onChangeFn={(e) => setValue(e, "colors")}
+            val={newProduct["colors"]}
             ph="Ej: Rojo"
             width="180px"
           />
           <StyledButton
             title="+"
             onClickFn={() => {
-              setColors([...colors, newProduct.colores]);
-              setNewProduct({ ...newProduct, colores: "" });
+              setColores([...colores, newProduct.colors]);
+              setNewProduct({ ...newProduct, colors: "" });
             }}
           />
         </>
       ),
     },
   ];
-
   const handleAddProduct = () => {
-    if (newProduct.nombre && newProduct.precio) {
-      console.log({ ...newProduct, stock, colores: colors });
+    setErrorMsg(undefined);
+    setFeedbackMsg(undefined);
+    if (
+      newProduct.name &&
+      newProduct.price &&
+      newProduct.category != "-" &&
+      images.length &&
+      Object.keys(stock).length &&
+      colores.length
+    ) {
+      const imagesToUpload = images.map((img) => {
+        return firebase.addImage("products", img.file).then((imgUrl) => {
+          return imgUrl;
+        });
+      });
+      Promise.all(imagesToUpload).then((uploadedImages) => {
+        firebase.addNewDoc(false, "products", {
+          ...newProduct,
+          price: parseFloat(newProduct.price),
+          imgs: uploadedImages,
+          stock,
+          colors: colores,
+        });
+      });
       setNewProduct({});
       setFeedbackMsg("Producto agregado correctamente");
-      // trigger();
+      trigger();
+      getProducts();
     } else setErrorMsg("Todos los campos deben estar completos");
   };
 
   return (
     <Wrapper>
+      <CloseButton onClickFn={() => trigger()} corner="right" />
       <Title>Nuevo producto</Title>
       {inputsData.map(({ text, element }) => {
         return (
@@ -123,7 +176,9 @@ export default function NewProductForm({ newProduct, setNewProduct, trigger }) {
           </FormOption>
         );
       })}
-      {colors && <ColorsCards colors={colors} setColors={setColors} />}
+      {colores && (
+        <ColorsCards button colors={colores} setColors={setColores} />
+      )}
       {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
       {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
       <StyledButton
@@ -140,6 +195,7 @@ const Wrapper = styled.div({
   flexDirection: "column",
   justifyContent: "space-around",
   minHeight: "500px",
+  position: "relative",
   width: "100%",
 });
 const Title = styled.h3({

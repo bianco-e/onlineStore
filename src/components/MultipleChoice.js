@@ -13,7 +13,7 @@ export default function MultipleChoice({ options, stock, setStock }) {
             <StyledInput
               onChangeFn={(e) => setStock({ ...stock, [opt]: e.target.value })}
               type="number"
-              val={stock[opt.toLowerCase()]}
+              val={stock[opt]}
               width="35px"
             />
           </>

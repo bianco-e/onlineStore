@@ -8,11 +8,12 @@ export default function StyledInput({ ph, val, onChangeFn, type, width }) {
   const { secondaryColor } = style;
   return (
     <Input
-      placeholder={ph}
-      value={val}
+      min="0"
       onChange={(e) => onChangeFn(e)}
+      placeholder={ph}
       secondary={secondaryColor}
       type={type || "text"}
+      value={val}
       width={width}
     />
   );

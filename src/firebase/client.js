@@ -28,7 +28,7 @@ class Firebase {
       .catch((error) => console.error("No se pudo guardar. Error: ", error));
   };
 
-  deleteProduct = (collection, id) => {
+  deleteDoc = (collection, id) => {
     return this.db
       .collection(collection)
       .doc(id)

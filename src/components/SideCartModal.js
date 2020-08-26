@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import CartContext from "../context/CartContext";
-import DeleteSvg from "./svg/DeleteSvg";
+import CloseButton from "./CloseButton";
+import DeleteButton from "./DeleteButton";
 
 export default function SideCartModal({ showModal, setShowModal }) {
   const { cart, removeProductFromCart } = useContext(CartContext);
@@ -17,7 +18,7 @@ export default function SideCartModal({ showModal, setShowModal }) {
 
   return (
     <Wrapper>
-      <CloseButton onClick={() => setShowModal(!showModal)}>✗</CloseButton>
+      <CloseButton onClickFn={() => setShowModal(!showModal)} corner="left" />
       <Title>Carrito</Title>
       {cart.length < 1 ? (
         <Title>Tu carrito está vacío.</Title>
@@ -31,9 +32,7 @@ export default function SideCartModal({ showModal, setShowModal }) {
                 <Text>{`${name} (${color}, ${size})`}</Text>
                 <Text color="#FFA07A">{`$${price.toFixed(2)}`}</Text>
               </ProductDetailsContainer>
-              <RemoveButton onClick={() => removeProductFromCart(product)}>
-                <DeleteSvg width={17} />
-              </RemoveButton>
+              <DeleteButton onClickFn={() => removeProductFromCart(product)} />
             </ProductContainer>
           );
         })
@@ -59,20 +58,6 @@ const Wrapper = styled.div({
   zIndex: "100",
 });
 const Title = styled.h3({});
-const CloseButton = styled.button({
-  background: "none",
-  border: "0",
-  color: "#000",
-  cursor: "pointer",
-  fontSize: "22px",
-  position: "absolute",
-  left: "20px",
-  top: "20px",
-  transition: "color .4s ease",
-  ["&:hover"]: {
-    color: "#777",
-  },
-});
 const ProductDetailsContainer = styled.div({
   display: "flex",
   flexDirection: "column",
@@ -97,12 +82,4 @@ const Text = styled.p({
   color: (props) => props.color,
   fontSize: "14px",
   margin: "1px 0",
-});
-const RemoveButton = styled.button({
-  background: "none",
-  border: "0",
-  cursor: "pointer",
-  position: "absolute",
-  right: "1px",
-  top: "5px",
 });

@@ -1,17 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ColorsCards({ setColors, colors }) {
+export default function ColorsCards({ button, setColors, colors }) {
   return (
     <Container>
       {colors.map((col) => (
         <Card key={col}>
           {col}
-          <CloseButton
-            onClick={() => setColors(colors.filter((color) => color != col))}
-          >
-            x
-          </CloseButton>
+          {button && (
+            <CloseButton
+              onClick={() => setColors(colors.filter((color) => color != col))}
+            >
+              x
+            </CloseButton>
+          )}
         </Card>
       ))}
     </Container>
