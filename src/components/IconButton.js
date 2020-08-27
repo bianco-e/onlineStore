@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import DeleteSvg from "./svg/DeleteSvg";
+import EditSvg from "./svg/EditSvg";
 
-export default function DeleteButton({ onClickFn }) {
+export default function IconButton({ edit, onClickFn }) {
   return (
-    <Button onClick={() => onClickFn()}>
-      <DeleteSvg width={18} />
+    <Button right={edit ? "26px" : "1px"} onClick={() => onClickFn()}>
+      {edit ? <EditSvg /> : <DeleteSvg width={18} />}
     </Button>
   );
 }
@@ -15,6 +16,6 @@ const Button = styled.button({
   border: "0",
   cursor: "pointer",
   position: "absolute",
-  right: "1px",
+  right: (props) => props.right,
   top: "3px",
 });

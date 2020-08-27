@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import CartContext from "../context/CartContext";
 import CloseButton from "./CloseButton";
-import DeleteButton from "./DeleteButton";
+import IconButton from "./IconButton";
 
 export default function SideCartModal({ showModal, setShowModal }) {
   const { cart, removeProductFromCart } = useContext(CartContext);
@@ -32,7 +32,7 @@ export default function SideCartModal({ showModal, setShowModal }) {
                 <Text>{`${name} (${color}, ${size})`}</Text>
                 <Text color="#FFA07A">{`$${price.toFixed(2)}`}</Text>
               </ProductDetailsContainer>
-              <DeleteButton onClickFn={() => removeProductFromCart(product)} />
+              <IconButton onClickFn={() => removeProductFromCart(product)} />
             </ProductContainer>
           );
         })

@@ -6,17 +6,16 @@ import NewProductForm from "./NewProductForm";
 import StyledButton from "./StyledButton";
 import AllProductsViewer from "./AllProductsViewer";
 
+import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
 
 export default function AdminProducts() {
   const [allProducts, setAllProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({});
-  const [docId, setDocId] = useState(undefined);
   const [showProductForm, setShowProductForm] = useState(false);
-
-  useEffect(() => {
-    docId && console.log(docId);
-  }, [docId]);
+  const [images, setImages] = useState([{ pvw: addPhoto }]);
+  const [stock, setStock] = useState({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+  const [colores, setColores] = useState([]);
 
   const getProducts = () => {
     firebase
@@ -35,6 +34,20 @@ export default function AdminProducts() {
     getProducts();
   };
 
+  const editProduct = (product) => {
+    const { category, colors, id, imgs, name, price, stock } = product;
+    setAllProducts(allProducts.filter((prod) => prod.id != id));
+    setShowProductForm(true);
+    setColores(colors);
+    setStock(stock);
+    setNewProduct(product);
+    const mappedImages = imgs.map((img) => {
+      return { pvw: img };
+    });
+    setImages(mappedImages);
+    console.log(product);
+  };
+
   return (
     <Container>
       <Title>Productos</Title>
@@ -50,20 +63,25 @@ export default function AdminProducts() {
           ) : (
             <NewProductForm
               getProducts={getProducts}
+              images={images}
+              setImages={setImages}
+              stock={stock}
+              setStock={setStock}
+              colores={colores}
+              setColores={setColores}
               newProduct={newProduct}
-              setDocId={setDocId}
               setNewProduct={setNewProduct}
               trigger={triggerShowForm}
             />
           )}
 
           <AllProductsViewer
+            editProduct={editProduct}
             deleteProduct={deleteProduct}
             products={allProducts}
           />
           {
-            // botón para destacar producto en home (máx 3 o 5)
-            // Acciones: copiar link, editar, eliminar
+            // Acciones: copiar link
           }
         </>
       )}

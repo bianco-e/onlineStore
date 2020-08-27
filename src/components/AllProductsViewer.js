@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import DeleteButton from "./DeleteButton";
+import IconButton from "./IconButton";
 import ColorsCards from "./ColorsCards";
+import StarButton from "./StarButton";
 
 const tHeaders = [" ", "Producto", "Stock", "Precio", " "];
 
@@ -13,7 +14,11 @@ const showStock = (stock) => {
   return string;
 };
 
-export default function AllProductsViewer({ deleteProduct, products }) {
+export default function AllProductsViewer({
+  deleteProduct,
+  editProduct,
+  products,
+}) {
   return (
     <Table>
       <THead>
@@ -25,7 +30,16 @@ export default function AllProductsViewer({ deleteProduct, products }) {
       </THead>
       <TBody>
         {products.map((product, idx) => {
-          const { name, category, imgs, id, colors, stock, price } = product;
+          const {
+            category,
+            colors,
+            id,
+            imgs,
+            name,
+            price,
+            promo,
+            stock,
+          } = product;
           return (
             <TR bgColor={idx % 2 == 0 ? "#FFF" : "#FFBA9F"} key={id}>
               <TD width="5%"></TD>
@@ -44,7 +58,9 @@ export default function AllProductsViewer({ deleteProduct, products }) {
               <TD width="25%">{showStock(stock)}</TD>
               <TD width="15%">{`$${price.toFixed(2)}`}</TD>
               <TD width="10%">
-                <DeleteButton onClickFn={() => deleteProduct(id)} />
+                <StarButton color={promo} onClickFn={() => {}} />
+                <IconButton edit onClickFn={() => editProduct(product)} />
+                <IconButton onClickFn={() => deleteProduct(id)} />
               </TD>
             </TR>
           );

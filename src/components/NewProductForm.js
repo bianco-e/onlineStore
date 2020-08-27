@@ -11,23 +11,23 @@ import ColorsCards from "./ColorsCards";
 import SettableImageThumbnail from "./SettableImageThumbnail";
 import CloseButton from "./CloseButton";
 
-import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
 
 export default function NewProductForm({
   getProducts,
+  images,
+  setImages,
+  stock,
+  setStock,
+  colores,
+  setColores,
   newProduct,
-  setDocId,
   setNewProduct,
   trigger,
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
   const [errorMsg, setErrorMsg] = useState(undefined);
   const [feedbackMsg, setFeedbackMsg] = useState(undefined);
-  const [images, setImages] = useState([{ pvw: addPhoto }]);
-
-  const [stock, setStock] = useState({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
-  const [colores, setColores] = useState([]);
 
   useEffect(() => {
     firebase.getDocsFromCollection("categories").then((categs) => {
@@ -141,28 +141,55 @@ export default function NewProductForm({
       newProduct.price &&
       newProduct.category != "-" &&
       images.length &&
-      Object.keys(stock).length &&
       colores.length
     ) {
-      const imagesToUpload = images.map((img) => {
-        return firebase.addImage("products", img.file).then((imgUrl) => {
-          return imgUrl;
+      if (images.some((img) => img.file)) {
+        const imagesToUpload = images.map((img) => {
+          return firebase.addImage("products", img.file).then((imgUrl) => {
+            return imgUrl;
+          });
         });
-      });
-      Promise.all(imagesToUpload).then((uploadedImages) => {
-        firebase.addNewDoc(false, "products", {
+        if (!newProduct.id) {
+          Promise.all(imagesToUpload).then((uploadedImages) => {
+            firebase.addNewDoc(false, "products", {
+              ...newProduct,
+              price: parseFloat(newProduct.price),
+              imgs: uploadedImages,
+              stock,
+              colors: colores,
+            });
+          });
+        } else {
+          Promise.all(imagesToUpload).then((uploadedImages) => {
+            firebase.editDoc(false, "products", newProduct.id, {
+              ...newProduct,
+              price: parseFloat(newProduct.price),
+              imgs: uploadedImages,
+              stock,
+              colors: colores,
+            });
+          });
+        }
+      } else {
+        const imagesToUpload = images.map((img) => img.pvw);
+        firebase.editDoc(false, "products", newProduct.id, {
           ...newProduct,
           price: parseFloat(newProduct.price),
-          imgs: uploadedImages,
+          imgs: imagesToUpload,
           stock,
           colors: colores,
         });
-      });
+      }
       setNewProduct({});
       setFeedbackMsg("Producto agregado correctamente");
       trigger();
       getProducts();
     } else setErrorMsg("Todos los campos deben estar completos");
+  };
+
+  const handleEditProduct = (id, newProduct) => {
+    /* firebase.editDoc(false, "products", id, newProduct);
+    getProducts(); */
   };
 
   return (
