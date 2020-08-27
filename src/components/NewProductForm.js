@@ -10,7 +10,9 @@ import FeedbackMessage from "./FeedbackMessage";
 import ColorsCards from "./ColorsCards";
 import SettableImageThumbnail from "./SettableImageThumbnail";
 import CloseButton from "./CloseButton";
+import StarButton from "./StarButton";
 
+import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
 
 export default function NewProductForm({
@@ -23,6 +25,8 @@ export default function NewProductForm({
   setColores,
   newProduct,
   setNewProduct,
+  promProduct,
+  setPromProduct,
   trigger,
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
@@ -133,6 +137,7 @@ export default function NewProductForm({
       ),
     },
   ];
+
   const handleAddProduct = () => {
     setErrorMsg(undefined);
     setFeedbackMsg(undefined);
@@ -155,6 +160,7 @@ export default function NewProductForm({
               ...newProduct,
               price: parseFloat(newProduct.price),
               imgs: uploadedImages,
+              prom: promProduct,
               stock,
               colors: colores,
             });
@@ -165,6 +171,7 @@ export default function NewProductForm({
               ...newProduct,
               price: parseFloat(newProduct.price),
               imgs: uploadedImages,
+              prom: promProduct,
               stock,
               colors: colores,
             });
@@ -176,20 +183,19 @@ export default function NewProductForm({
           ...newProduct,
           price: parseFloat(newProduct.price),
           imgs: imagesToUpload,
+          prom: promProduct,
           stock,
           colors: colores,
         });
       }
       setNewProduct({});
+      setImages({ pvw: addPhoto });
+      setColores([]);
+      setStock({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
       setFeedbackMsg("Producto agregado correctamente");
       trigger();
       getProducts();
     } else setErrorMsg("Todos los campos deben estar completos");
-  };
-
-  const handleEditProduct = (id, newProduct) => {
-    /* firebase.editDoc(false, "products", id, newProduct);
-    getProducts(); */
   };
 
   return (
@@ -206,6 +212,7 @@ export default function NewProductForm({
       {colores && (
         <ColorsCards button colors={colores} setColors={setColores} />
       )}
+      <StarButton button onClickFn={() => setPromProduct(!promProduct)} />
       {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
       {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
       <StyledButton

@@ -5,7 +5,7 @@ export default function ColorsCards({ button, setColors, colors }) {
   return (
     <Container>
       {colors.map((col) => (
-        <Card key={col}>
+        <Card pdg={button ? "3px 20px 3px 5px" : "3px 5px"} key={col}>
           {col}
           {button && (
             <CloseButton
@@ -25,8 +25,7 @@ const Card = styled.span({
   borderRadius: "5px",
   fontSize: "12px",
   margin: "0 2px",
-  padding: "3px 5px",
-  paddingRight: "20px",
+  padding: (props) => props.pdg,
   position: "relative",
 });
 const CloseButton = styled.button({

@@ -2,7 +2,7 @@ import React from "react";
 import Select from "./Select";
 
 export default function SortButton({ productsToShow, setProductsToShow }) {
-  const selectOptions = [
+  const sortOptions = [
     { val: "Ordenar", fn: () => {} },
     {
       val: "Precio: Mayor a menor",
@@ -36,16 +36,10 @@ export default function SortButton({ productsToShow, setProductsToShow }) {
           )
         ),
     },
-    {
-      val: "Más reciente primero",
-      fn: () => {
-        // CUANDO TENGA LA DATE DE SUBIDA EN UNA PROPIEDAD COMPARAR CON ESO
-      },
-    },
   ];
 
   const handleSelect = (e) => {
-    const selectedOption = selectOptions.find(
+    const selectedOption = sortOptions.find(
       (opt) => opt.val === e.target.value
     );
     return selectedOption.fn();
@@ -54,7 +48,7 @@ export default function SortButton({ productsToShow, setProductsToShow }) {
   return (
     <Select
       onChangeFn={handleSelect}
-      options={selectOptions}
+      options={sortOptions}
       pos={{ name: "absolute", bottom: "35%", right: "25px" }}
     />
   );

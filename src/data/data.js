@@ -18,6 +18,41 @@ export const buttons = [
   { endpoint: "/admin/configuracion", title: "Configuración" },
 ];
 
+export const gridOptions = [
+  {
+    gta: "'p1 p1' 'p1 p1'",
+    gtc: "repeat(2, 1fr)",
+  },
+  {
+    gta: "'p1 p2' 'p1 p2'",
+    gtc: "repeat(2, 1fr)",
+  },
+  {
+    gta: "'p1 p2' 'p1 p3'",
+    gtc: "repeat(2, 1fr)",
+  },
+  {
+    gta: "'p1 p2 p3' 'p1 p4 p4'",
+    gtc: "1.3fr 0.85fr 0.85fr",
+  },
+  {
+    gta: "'p1 p2 p3' 'p1 p4 p5'",
+    gtc: "1.3fr 0.85fr 0.85fr",
+  },
+  {
+    gta: "'p1 p2 p3' 'p6 p4 p5'",
+    gtc: "1.3fr 0.85fr 0.85fr",
+  },
+  {
+    gta: "'p1 p1 p2 p3' 'p4 p5 p6 p7'",
+    gtc: "repeat(4, 1fr)",
+  },
+  {
+    gta: "'p1 p2 p3 p4' 'p5 p6 p7 p8'",
+    gtc: "repeat(4, 1fr)",
+  },
+];
+
 export class Config {
   constructor(text, element, ph) {
     this.text = text;
@@ -75,127 +110,5 @@ export const services = [
     title: "¿Necesitas ayuda?",
     desc: "¡Escribinos!",
     SVG: ContactSvg,
-  },
-];
-
-export const categories = [
-  {
-    endpoint: "/abrigos",
-    ga: "p1",
-    img:
-      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
-    title: "SWEATERS Y BUZOS",
-  },
-  {
-    endpoint: "/pantalones",
-    ga: "p2",
-    img:
-      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
-    title: "PANTALONES",
-  },
-  {
-    endpoint: "/remeras",
-    ga: "p3",
-    img:
-      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
-    title: "REMERAS",
-  },
-  {
-    endpoint: "/blusas-camisas",
-    ga: "p4",
-    img:
-      "https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg?x=810",
-    title: "BLUSAS Y CAMISAS",
-  },
-];
-
-export const saleProducts = [
-  {
-    colors: [
-      { val: "Rojo" },
-      { val: "Negro" },
-      { val: "Rojinegro" },
-      { val: "Blanco" },
-    ],
-    endpoint: "/productos/0001",
-    description: "♥AMAMOS♥ Comodín para mil conjuntos!",
-    info:
-      "Todas las prendas tienen cambio. Recordá devolverlas en perfecto estado, con etiqueta y sin uso. NO nos hacemos cargo sobre las prendas manipuladas. Para realizar el cambio contactanos al whatsapp",
-    id: "0001",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "SACO INDUS",
-    payForm: {
-      card: "18 cuotas de $208,89",
-      cash: "10% de descuento pagando con Efectivo o Transferencia",
-    },
-    promo: true,
-    price: 2299,
-    sizes: [{ val: "S" }, { val: "M" }, { val: "L" }, { val: "XL" }],
-  },
-  {
-    endpoint: "/productos/0002",
-    colors: ["Beige"],
-    id: "0002",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "SACO AQUILA",
-    promo: true,
-    price: 2700,
-  },
-  {
-    endpoint: "/productos/0003",
-    colors: ["Blanco"],
-    id: "0003",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "BABUCHA SAN VICENTE",
-    promo: true,
-    price: 1900,
-  },
-  {
-    endpoint: "/productos/0004",
-    colors: ["Rojo", "Blanco"],
-    id: "0004",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "BABUCHA SAN VICENTE",
-    price: 1900,
-  },
-  {
-    endpoint: "/productos/0005",
-    colors: ["Negro"],
-    id: "0005",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "REMERA SAN JORGE",
-    price: 700,
-  },
-  {
-    endpoint: "/productos/0006",
-    colors: ["Negrazo"],
-    id: "0006",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "PANTALÓN SAN MIGUEL",
-    price: 2100,
-  },
-  {
-    endpoint: "/productos/0007",
-    colors: ["Rojizo"],
-    id: "0007",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "PANTALÓN SAN MIGUEL",
-    price: 2100,
-  },
-  {
-    endpoint: "/productos/0008",
-    colors: ["Rojito"],
-    id: "0008",
-    img:
-      "https://www.instyle.es/medio/2019/01/29/vaqueros-topshop-tobilleros_609f65e7_1200x1800.jpg",
-    name: "PANTALÓN SAN MIGUEL",
-    price: 2100,
   },
 ];

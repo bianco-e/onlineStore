@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { gridOptions } from "../data/data.js";
 
 export default function CategoriesDisplayThumbnail({
   allCategories,
@@ -28,46 +29,11 @@ export default function CategoriesDisplayThumbnail({
     }
   };
 
-  const options = [
-    {
-      gta: "'p1 p1' 'p1 p1'",
-      gtc: "repeat(2, 1fr)",
-    },
-    {
-      gta: "'p1 p2' 'p1 p2'",
-      gtc: "repeat(2, 1fr)",
-    },
-    {
-      gta: "'p1 p2' 'p1 p3'",
-      gtc: "repeat(2, 1fr)",
-    },
-    {
-      gta: "'p1 p2 p3' 'p1 p4 p4'",
-      gtc: "1.3fr 0.85fr 0.85fr",
-    },
-    {
-      gta: "'p1 p2 p3' 'p1 p4 p5'",
-      gtc: "1.3fr 0.85fr 0.85fr",
-    },
-    {
-      gta: "'p1 p2 p3' 'p6 p4 p5'",
-      gtc: "1.3fr 0.85fr 0.85fr",
-    },
-    {
-      gta: "'p1 p1 p2 p3' 'p4 p5 p6 p7'",
-      gtc: "repeat(4, 1fr)",
-    },
-    {
-      gta: "'p1 p2 p3 p4' 'p5 p6 p7 p8'",
-      gtc: "repeat(4, 1fr)",
-    },
-  ];
-
   return (
     <>
       <Title>Banner de inicio</Title>
       <Wrapper
-        grid={options[n - 1]}
+        grid={gridOptions[n - 1]}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e)}
       >

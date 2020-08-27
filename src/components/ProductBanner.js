@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-export default function ProductBanner({ title, ga, img, endpoint }) {
+export default function ProductBanner({ name, ga, img, endpoint }) {
   const history = useHistory();
   return (
     <WrapperButton
@@ -9,7 +9,7 @@ export default function ProductBanner({ title, ga, img, endpoint }) {
       ga={ga}
       onClick={() => history.push(endpoint)}
     >
-      <ButtonTitle>{title}</ButtonTitle>
+      <ButtonTitle>{name}</ButtonTitle>
     </WrapperButton>
   );
 }

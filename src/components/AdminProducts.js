@@ -15,6 +15,7 @@ export default function AdminProducts() {
   const [showProductForm, setShowProductForm] = useState(false);
   const [images, setImages] = useState([{ pvw: addPhoto }]);
   const [stock, setStock] = useState({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+  const [promProduct, setPromProduct] = useState(false);
   const [colores, setColores] = useState([]);
 
   const getProducts = () => {
@@ -35,17 +36,17 @@ export default function AdminProducts() {
   };
 
   const editProduct = (product) => {
-    const { category, colors, id, imgs, name, price, stock } = product;
+    const { colors, id, imgs, stock, prom } = product;
     setAllProducts(allProducts.filter((prod) => prod.id != id));
     setShowProductForm(true);
     setColores(colors);
+    setPromProduct(prom);
     setStock(stock);
     setNewProduct(product);
     const mappedImages = imgs.map((img) => {
       return { pvw: img };
     });
     setImages(mappedImages);
-    console.log(product);
   };
 
   return (
@@ -71,6 +72,8 @@ export default function AdminProducts() {
               setColores={setColores}
               newProduct={newProduct}
               setNewProduct={setNewProduct}
+              promProduct={promProduct}
+              setPromProduct={setPromProduct}
               trigger={triggerShowForm}
             />
           )}
@@ -80,9 +83,6 @@ export default function AdminProducts() {
             deleteProduct={deleteProduct}
             products={allProducts}
           />
-          {
-            // Acciones: copiar link
-          }
         </>
       )}
     </Container>

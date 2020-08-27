@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ImageSlider from "../components/ImageSlider";
 import TopBar from "../components/TopBar";
@@ -9,7 +9,22 @@ import HomeNews from "../components/HomeNews";
 import BottomBar from "../components/BottomBar";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
 
+import StyleContext from "../context/StyleContext";
+import firebase from "../firebase/client.js";
+
 export default function Home() {
+  const [categories, setCategories] = useState(undefined);
+  const [products, setProducts] = useState(undefined);
+  const { style } = useContext(StyleContext);
+  const { homeTitle } = style;
+
+  useEffect(() => {
+    firebase
+      .getDocsFromCollection("categories")
+      .then((cats) => setCategories(cats[0].categories));
+    firebase.getPromotedProducts().then((prods) => setProducts(prods));
+  }, []);
+
   const images = [
     {
       original:
@@ -26,10 +41,10 @@ export default function Home() {
     <Wrapper>
       <TopBar />
       <ImageSlider images={images} />
-      <PageTitle text="Bienvenid@s" />
+      <PageTitle text={homeTitle} />
       <Services />
-      <HomeBanners />
-      <HomeNews />
+      {categories && <HomeBanners categories={categories} />}
+      {products && <HomeNews products={products} />}
       <BottomBar />
       <WhatsappFloatButton />
     </Wrapper>

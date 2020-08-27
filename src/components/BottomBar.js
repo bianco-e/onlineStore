@@ -8,7 +8,7 @@ import StyleContext from "../context/StyleContext";
 export default function BottomBar() {
   const history = useHistory();
   const { style } = useContext(StyleContext);
-  const { storeName, storeLogo, primaryColor, secondaryColor } = style;
+  const { primaryColor, secondaryColor } = style;
   return (
     <Wrapper secondary={secondaryColor}>
       <Container primary={primaryColor}>

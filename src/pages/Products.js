@@ -6,13 +6,16 @@ import TopBar from "../components/TopBar";
 import SortButton from "../components/SortButton";
 import ProductThumbnail from "../components/ProductThumbnail";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
-import { saleProducts } from "../data/data.js";
+
+import firebase from "../firebase/client.js";
 
 export default function Products() {
   const [productsToShow, setProductsToShow] = useState([]);
 
   useEffect(() => {
-    setProductsToShow(saleProducts);
+    firebase
+      .getDocsFromCollection("products")
+      .then((prods) => setProductsToShow(prods));
   }, []);
 
   return (
@@ -27,14 +30,9 @@ export default function Products() {
       </Container>
       <ProductsWrapper>
         {productsToShow.map((prod) => {
-          const { endpoint, img, name, price } = prod;
+          const { id, imgs, name, price } = prod;
           return (
-            <ProductThumbnail
-              endpoint={endpoint}
-              img={img}
-              name={name}
-              price={price}
-            />
+            <ProductThumbnail id={id} img={imgs[0]} name={name} price={price} />
           );
         })}
       </ProductsWrapper>

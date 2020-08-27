@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ProductBanner from "./ProductBanner";
-import { categories } from "../data/data.js";
+import { gridOptions } from "../data/data.js";
 
-export default function HomeBanners() {
+export default function HomeBanners({ categories }) {
+  const [n, setN] = useState(categories.length - 1);
+
   return (
-    <Wrapper>
-      {categories.map((cat) => {
-        const { endpoint, ga, img, title } = cat;
+    <Wrapper grid={gridOptions[n]}>
+      {categories.map((category) => {
+        const { endpoint, ga, img, name } = category;
         return (
           <ProductBanner
             endpoint={endpoint}
             ga={ga}
             img={img}
-            key={title}
-            title={title}
+            key={name}
+            name={name}
           />
         );
       })}
@@ -24,10 +26,10 @@ export default function HomeBanners() {
 
 const Wrapper = styled.div({
   display: "grid",
-  gridTemplateAreas: "'p1 p3 p4' 'p1 p2 p2'",
-  gridTemplateRows: "repeat(2, 1fr)",
   gridGap: "20px",
-  gridTemplateColumns: "1.3fr 0.85fr 0.85fr",
+  gridTemplateAreas: (props) => props.grid.gta,
+  gridTemplateColumns: (props) => props.grid.gtc,
+  gridTemplateRows: "repeat(2, 1fr)",
   height: "450px",
   padding: "20px 0",
   width: "90%",

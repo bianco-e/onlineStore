@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import StyleContext from "../context/StyleContext";
 
-export default function ProductThumbnail({ endpoint, img, name, price }) {
+export default function ProductThumbnail({ id, img, name, price }) {
   const history = useHistory();
   const { style } = useContext(StyleContext);
   const { primaryColor, secondaryColor } = style;
@@ -16,7 +16,7 @@ export default function ProductThumbnail({ endpoint, img, name, price }) {
   return (
     <WrapperButton
       onClick={() => {
-        history.push(endpoint);
+        history.push(`/productos/${id}`);
       }}
     >
       <Image src={img} />
@@ -60,8 +60,9 @@ const Button = styled.button({
 const Image = styled.img({
   width: "100%",
 });
-const Name = styled.h5({
+const Name = styled.h4({
   color: "black",
+  margin: "5px 0",
   transition: "all .4s ease",
   ["&:hover"]: {
     color: (props) => props.secondary,
@@ -69,4 +70,5 @@ const Name = styled.h5({
 });
 const Price = styled.p({
   color: (props) => props.primary,
+  fontSize: "14px",
 });

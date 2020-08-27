@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import StarSvg from "./svg/StarSvg";
 
-export default function StarButton({ onClickFn }) {
+export default function StarButton({ button, color, onClickFn }) {
   const [starColor, setStarColor] = useState("#DDD");
+
+  useEffect(() => {
+    color ? setStarColor("yellow") : setStarColor("#DDD");
+  }, [color]);
 
   const handleClick = () => {
     onClickFn();
@@ -11,9 +15,15 @@ export default function StarButton({ onClickFn }) {
   };
 
   return (
-    <Button onClick={() => handleClick()}>
-      <StarSvg fill={starColor} />
-    </Button>
+    <>
+      {button ? (
+        <Button onClick={() => handleClick()}>
+          <StarSvg fill={starColor} />
+        </Button>
+      ) : (
+        <StarSvg fill={starColor} />
+      )}
+    </>
   );
 }
 
@@ -21,7 +31,4 @@ const Button = styled.button({
   background: "none",
   border: "0",
   cursor: "pointer",
-  position: "absolute",
-  right: "51px",
-  top: "3px",
 });

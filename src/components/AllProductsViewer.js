@@ -2,16 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import IconButton from "./IconButton";
 import ColorsCards from "./ColorsCards";
+import StockCards from "./StockCards";
 import StarButton from "./StarButton";
 
 const tHeaders = [" ", "Producto", "Stock", "Precio", " "];
 
-const showStock = (stock) => {
-  var string = "";
-  for (let prop in stock) {
-    string += ` ${!stock[prop] ? 0 : stock[prop]} ${prop} |`;
-  }
-  return string;
+const copyProductLink = (id) => {
+  // replace localhost:3000 with actual name
+  const link = `https://localhost:3000/productos/${id}`;
+  navigator.clipboard.writeText(link).then(() => {});
 };
 
 export default function AllProductsViewer({
@@ -37,28 +36,41 @@ export default function AllProductsViewer({
             imgs,
             name,
             price,
-            promo,
+            prom,
             stock,
           } = product;
           return (
             <TR bgColor={idx % 2 == 0 ? "#FFF" : "#FFBA9F"} key={id}>
-              <TD width="5%"></TD>
-              <TD width="45%">
-                {imgs.map((img) => (
-                  <ImgThumbnail src={img} />
-                ))}
-                <Text color="#777" fSize="8px">
-                  {category}
-                </Text>
-                <Text color={idx % 2 == 0 ? "#FFBA9F" : "#FFF"} fSize="12px">
-                  {name}
-                </Text>
-                <ColorsCards colors={colors} />
+              <TD width="5%">
+                <StarButton color={prom} />
               </TD>
-              <TD width="25%">{showStock(stock)}</TD>
+              <TD width="45%">
+                <ProductContainer>
+                  <ThumbnailsContainer>
+                    {imgs.map((img) => (
+                      <ImgThumbnail src={img} />
+                    ))}
+                  </ThumbnailsContainer>
+                  <DetailsContainer>
+                    <Text color="#777" fSize="10px">
+                      {category}
+                    </Text>
+                    <Text
+                      color={idx % 2 == 0 ? "#FFBA9F" : "#FFF"}
+                      fSize="15px"
+                    >
+                      {name}
+                    </Text>
+                    <ColorsCards colors={colors} />
+                  </DetailsContainer>
+                </ProductContainer>
+              </TD>
+              <TD width="23%">
+                <StockCards stock={stock} />
+              </TD>
               <TD width="15%">{`$${price.toFixed(2)}`}</TD>
-              <TD width="10%">
-                <StarButton color={promo} onClickFn={() => {}} />
+              <TD width="12%">
+                <IconButton link onClickFn={() => copyProductLink(id)} />
                 <IconButton edit onClickFn={() => editProduct(product)} />
                 <IconButton onClickFn={() => deleteProduct(id)} />
               </TD>
@@ -72,6 +84,7 @@ export default function AllProductsViewer({
 
 const Table = styled.table({
   border: "1px solid #EEE",
+  borderCollapse: "collapse",
   borderRadius: "10px",
   width: "100%",
 });
@@ -81,15 +94,35 @@ const TR = styled.tr({
   backgroundColor: (props) => props.bgColor,
 });
 const TD = styled.td({
+  padding: "5px 0",
   position: "relative",
   textAlign: "center",
   width: (props) => props.width,
 });
+const ThumbnailsContainer = styled.div({
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "space-between",
+  paddingRight: "40px",
+  width: "110px",
+});
 const ImgThumbnail = styled.img({
-  height: "25px",
-  width: "25px",
+  height: "35px",
+  width: "30px",
 });
 const Text = styled.p({
   color: (props) => props.color,
   fontSize: (props) => props.fSize,
+  margin: "0 0 2px 0",
+});
+const ProductContainer = styled.div({
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "flex-start",
+});
+const DetailsContainer = styled.div({
+  alignItems: "flex-start",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-start",
 });

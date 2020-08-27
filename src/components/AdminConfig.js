@@ -16,7 +16,13 @@ export default function AdminConfig() {
   const { style, setStyle } = useContext(StyleContext);
   const [loadedFile, setLoadedFile] = useState(undefined);
   const [feedbackMsg, setFeedbackMsg] = useState(undefined);
-  const { storeName, storeLogo, primaryColor, secondaryColor } = style;
+  const {
+    homeTitle,
+    storeName,
+    storeLogo,
+    primaryColor,
+    secondaryColor,
+  } = style;
 
   const setValue = (e, property) =>
     setStyle({ ...style, [property]: e.target.value });
@@ -63,6 +69,16 @@ export default function AdminConfig() {
       )
     ),
     new Config(
+      "Título de Home",
+      (
+        <StyledInput
+          onChangeFn={(e) => setValue(e, "homeTitle")}
+          val={homeTitle}
+          width="180px"
+        />
+      )
+    ),
+    new Config(
       "Logo de la tienda",
       (
         <SettableImageThumbnail
@@ -71,6 +87,15 @@ export default function AdminConfig() {
         />
       )
     ),
+    /*  new Config(
+      "Imágenes slider Home",
+      (
+        <SettableImageThumbnail
+          src={storeLogo}
+          onChangeFn={(e) => newImgOnClickFn(e.target.files[0])}
+        />
+      )
+    ), */
     new Config(
       "Color primario",
       (

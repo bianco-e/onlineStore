@@ -1,6 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import GridLoader from "react-spinners/GridLoader";
 
 import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
@@ -10,24 +11,28 @@ import StyledButton from "../components/StyledButton";
 import CashSvg from "../components/svg/CashSvg";
 import CardSvg from "../components/svg/CardSvg";
 
-import { saleProducts } from "../data/data.js";
-
 import CartContext from "../context/CartContext";
 import StyleContext from "../context/StyleContext";
+import firebase from "../firebase/client";
 
 export default function BuyingProduct() {
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
+  const [product, setProduct] = useState(undefined);
   const { addProductToCart } = useContext(CartContext);
   const { style } = useContext(StyleContext);
   const { primaryColor } = style;
 
   let { id } = useParams();
-  const { colors, img, name, payForm, price, sizes } = saleProducts[0];
+
+  useEffect(() => {
+    firebase.getProductByID(id).then((prod) => setProduct(prod));
+  }, []);
 
   const handleAddToCartButton = () => {
-    const product = { color, id, img, name, price, size };
-    addProductToCart(product);
+    if (color && size) {
+      addProductToCart({ ...product, color, size, img: product.imgs[0] });
+    }
   };
 
   const selectColor = (e) => {
@@ -41,28 +46,52 @@ export default function BuyingProduct() {
     <Wrapper>
       <TopBar />
       <Container>
-        <ImageSlider images={[{ original: img }]} />
-
-        <DetailsWrapper>
-          <Text>{name}</Text>
-          <Text primary={primaryColor} fSize="15px">{`$${price.toFixed(
-            2
-          )}`}</Text>
-          <PayFormsContainer>
-            <CardSvg width={20} />
-            <DetailsText>{payForm.card}</DetailsText>
-          </PayFormsContainer>
-          <PayFormsContainer>
-            <CashSvg width={29} />
-            <DetailsText>{payForm.cash}</DetailsText>
-          </PayFormsContainer>
-          <Select options={colors} onChangeFn={selectColor} />
-          <Select options={sizes} onChangeFn={selectSize} />
-          <StyledButton
-            onClickFn={() => handleAddToCartButton()}
-            title="AGREGAR AL CARRITO"
-          />
-        </DetailsWrapper>
+        {!product ? (
+          <GridLoader />
+        ) : (
+          <>
+            <ImageSlider
+              images={product.imgs.map((img) => {
+                return { original: img };
+              })}
+            />
+            <DetailsWrapper>
+              <Text>{product.name}</Text>
+              <Text
+                primary={primaryColor}
+                fSize="15px"
+              >{`$${product.price.toFixed(2)}`}</Text>
+              <PayFormsContainer>
+                <CardSvg width={20} />
+                <DetailsText>{`3 cuotas sin interés de $${(
+                  product.price / 3
+                ).toFixed(2)}`}</DetailsText>
+              </PayFormsContainer>
+              <PayFormsContainer>
+                <CashSvg width={22} />
+                <DetailsText>{`En efectivo 10% de descuento`}</DetailsText>
+              </PayFormsContainer>
+              <Select
+                options={product.colors.map((color) => {
+                  return { val: color };
+                })}
+                onChangeFn={selectColor}
+              />
+              <Select
+                options={Object.keys(product.stock)
+                  .filter((k) => product.stock[k] != 0)
+                  .map((s) => {
+                    return { val: s };
+                  })}
+                onChangeFn={selectSize}
+              />
+              <StyledButton
+                onClickFn={() => handleAddToCartButton()}
+                title="AGREGAR AL CARRITO"
+              />
+            </DetailsWrapper>
+          </>
+        )}
       </Container>
       <BottomBar />
     </Wrapper>

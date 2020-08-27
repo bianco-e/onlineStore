@@ -21,6 +21,6 @@ export default function ImageSlider({ images }) {
 const SlideWrapper = styled.section({
   display: "flex",
   alignItems: "center",
+  height: "400px",
   justifyContent: "center",
-  height: "450px",
 });

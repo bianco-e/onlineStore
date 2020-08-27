@@ -27,7 +27,7 @@ export default function AdminCategories() {
   const addCategory = () => {
     if (
       categoryName &&
-      categoryImg !== addPhoto &&
+      categoryImg.pvw !== addPhoto &&
       !allCategories.find(
         (cat) => cat.name.toLowerCase() == categoryName.toLowerCase()
       )

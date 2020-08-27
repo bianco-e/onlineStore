@@ -68,12 +68,25 @@ class Firebase {
       );
   };
 
-  getProductByID = (collection, id) => {
+  getProductByID = (id) => {
     return this.db
-      .collection(collection)
+      .collection("products")
       .doc(id)
       .get()
       .then((doc) => doc.data());
+  };
+
+  getPromotedProducts = () => {
+    return this.db
+      .collection("products")
+      .where("prom", "==", true)
+      .limit(3)
+      .get()
+      .then((snapshot) =>
+        snapshot.docs.map((product) => {
+          return { id: product.id, ...product.data() };
+        })
+      );
   };
 
   login = (username, password) => {

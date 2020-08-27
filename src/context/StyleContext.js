@@ -8,7 +8,7 @@ export const StyleContextProvider = ({ children }) => {
   useEffect(() => {
     firebase
       .getDocsFromCollection("style")
-      .then((stylesheet) => setStyle(stylesheet[0].content));
+      .then((stylesheet) => setStyle(stylesheet[0]));
   }, []);
 
   return (

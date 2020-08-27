@@ -1,30 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import ProductThumbnail from "./ProductThumbnail";
-import { saleProducts } from "../data/data.js";
 
-export default function HomeNews() {
+export default function HomeNews({ products }) {
   return (
     <Wrapper>
       <NameContainer>
         <SectionName>Nuevo</SectionName>
       </NameContainer>
       <ProductsContainer>
-        {saleProducts
-          .filter((prod) => prod?.promo)
-          .slice(0, 4)
-          .map((prod) => {
-            const { endpoint, img, name, price } = prod;
-            return (
-              <ProductThumbnail
-                endpoint={endpoint}
-                key={name}
-                img={img}
-                name={name}
-                price={price}
-              />
-            );
-          })}
+        {products.map((prod) => {
+          const { id, imgs, name, price } = prod;
+          return (
+            <ProductThumbnail
+              id={id}
+              key={name}
+              img={imgs[0]}
+              name={name}
+              price={price}
+            />
+          );
+        })}
       </ProductsContainer>
     </Wrapper>
   );
