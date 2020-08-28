@@ -7,8 +7,8 @@ export const StyleContextProvider = ({ children }) => {
   const [style, setStyle] = useState({});
   useEffect(() => {
     firebase
-      .getDocsFromCollection("style")
-      .then((stylesheet) => setStyle(stylesheet[0]));
+      .getDocByID("stylesheet", "style")
+      .then((stylesheet) => setStyle(stylesheet));
   }, []);
 
   return (

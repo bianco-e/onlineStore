@@ -101,13 +101,14 @@ class Firebase {
       );
   };
 
-  login = (username, password) => {
+  login = (username, password, callback) => {
     return this.db
       .collection("accounts")
       .get()
       .then((snapshot) =>
         snapshot.docs.find((doc) => {
           const { pw, user } = doc.data();
+          callback();
           return username === user && password === pw;
         })
       )

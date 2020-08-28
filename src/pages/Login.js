@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import StyledInput from "../components/StyledInput";
 import StyledButton from "../components/StyledButton";
@@ -6,12 +6,15 @@ import FeedbackMessage from "../components/FeedbackMessage";
 
 import firebase from "../firebase/client.js";
 import { useHistory } from "react-router-dom";
+import AdminContext from "../context/AdminContext";
 
 export default function Login() {
   const history = useHistory();
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+
+  const { login } = useContext(AdminContext);
 
   const inputsData = [
     {
@@ -30,12 +33,12 @@ export default function Login() {
 
   const handleLogin = () => {
     firebase
-      .login(user, password)
-      .then((res) =>
-        res
-          ? history.push("/admin")
-          : setErrorMsg("Los datos ingresados son incorrectos")
-      )
+      .login(user, password, login)
+      .then((res) => {
+        if (res) {
+          history.push("/admin");
+        } else setErrorMsg("Los datos ingresados son incorrectos");
+      })
       .catch((err) => console.error(err));
     setPassword("");
     setUser("");
@@ -43,24 +46,31 @@ export default function Login() {
 
   return (
     <Wrapper>
-      <Container>
-        <Title>Iniciar sesión</Title>
-        {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
-        {inputsData.map((data) => {
-          const { fn, ph, type, val } = data;
-          return (
-            <StyledInput
-              key={ph}
-              onChangeFn={fn}
-              ph={ph}
-              val={val}
-              type={type}
-              width="185px"
-            />
-          );
-        })}
-        <StyledButton onClickFn={() => handleLogin()} title="INICIAR SESIÓN" />
-      </Container>
+      {!login ? (
+        "spinner"
+      ) : (
+        <Container>
+          <Title>Iniciar sesión</Title>
+          {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
+          {inputsData.map((data) => {
+            const { fn, ph, type, val } = data;
+            return (
+              <StyledInput
+                key={ph}
+                onChangeFn={fn}
+                ph={ph}
+                val={val}
+                type={type}
+                width="185px"
+              />
+            );
+          })}
+          <StyledButton
+            onClickFn={() => handleLogin()}
+            title="INICIAR SESIÓN"
+          />
+        </Container>
+      )}
     </Wrapper>
   );
 }

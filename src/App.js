@@ -11,10 +11,12 @@ import AdminClients from "./components/AdminClients";
 import AdminConfig from "./components/AdminConfig";
 import AdminProducts from "./components/AdminProducts";
 import AdminSales from "./components/AdminSales";
+import PrivateRoute from "./components/PrivateRoute";
 
 import { BrowserRouter, Route } from "react-router-dom";
 import { CartContextProvider } from "./context/CartContext";
 import { StyleContextProvider } from "./context/StyleContext";
+import { AdminContextProvider } from "./context/AdminContext";
 
 export default function App() {
   return (
@@ -35,33 +37,35 @@ export default function App() {
               path="/categoria/:endpoint"
               render={() => <Products />}
             />
-            <Route exact path="/login" render={() => <Login />} />
-            <Route exact path="/admin" render={() => <Admin />} />
-            <Route
-              exact
-              path="/admin/categorias"
-              render={() => <Admin Child={AdminCategories} />}
-            />
-            <Route
-              exact
-              path="/admin/configuracion"
-              render={() => <Admin Child={AdminConfig} />}
-            />
-            <Route
-              exact
-              path="/admin/productos"
-              render={() => <Admin Child={AdminProducts} />}
-            />
-            <Route
-              exact
-              path="/admin/clientes"
-              render={() => <Admin Child={AdminClients} />}
-            />
-            <Route
-              exact
-              path="/admin/ventas"
-              render={() => <Admin Child={AdminSales} />}
-            />
+            <AdminContextProvider>
+              <Route exact path="/login" render={() => <Login />} />
+              <PrivateRoute exact path="/admin" render={() => <Admin />} />
+              <PrivateRoute
+                exact
+                path="/admin/categorias"
+                render={() => <Admin Child={AdminCategories} />}
+              />
+              <PrivateRoute
+                exact
+                path="/admin/configuracion"
+                render={() => <Admin Child={AdminConfig} />}
+              />
+              <PrivateRoute
+                exact
+                path="/admin/productos"
+                render={() => <Admin Child={AdminProducts} />}
+              />
+              <PrivateRoute
+                exact
+                path="/admin/clientes"
+                render={() => <Admin Child={AdminClients} />}
+              />
+              <PrivateRoute
+                exact
+                path="/admin/ventas"
+                render={() => <Admin Child={AdminSales} />}
+              />
+            </AdminContextProvider>
           </BrowserRouter>
         </CartContextProvider>
       </StyleContextProvider>

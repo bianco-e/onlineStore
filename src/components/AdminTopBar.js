@@ -3,14 +3,23 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import StyleContext from "../context/StyleContext";
+import AdminContext from "../context/AdminContext";
 
 export default function AdminTopBar() {
   const history = useHistory();
   const { style } = useContext(StyleContext);
   const { primaryColor, secondaryColor } = style;
+  const { logout } = useContext(AdminContext);
+
   return (
     <Wrapper primary={primaryColor}>
-      <Button onClick={() => history.push("/")} secondary={secondaryColor}>
+      <Button
+        onClick={() => {
+          history.push("/");
+          logout();
+        }}
+        secondary={secondaryColor}
+      >
         Cerrar sesión
       </Button>
     </Wrapper>
