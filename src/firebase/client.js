@@ -76,6 +76,18 @@ class Firebase {
       .then((doc) => doc.data());
   };
 
+  getProductsByCategory = (category) => {
+    return this.db
+      .collection("products")
+      .where("category", "==", category)
+      .get()
+      .then((snapshot) =>
+        snapshot.docs.map((product) => {
+          return { id: product.id, ...product.data() };
+        })
+      );
+  };
+
   getPromotedProducts = () => {
     return this.db
       .collection("products")

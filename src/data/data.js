@@ -1,9 +1,6 @@
 import ContactSvg from "../components/svg/ContactSvg";
 import CardSvg from "../components/svg/CardSvg";
 import ShipmentSvg from "../components/svg/ShipmentSvg";
-import InstagramSvg from "../components/svg/InstagramSvg";
-import MailSvg from "../components/svg/MailSvg";
-import WhatsappSvg from "../components/svg/WhatsappSvg";
 import BrushSvg from "../components/svg/BrushSvg";
 import WrenchSvg from "../components/svg/WrenchSvg";
 
@@ -62,24 +59,6 @@ export class Config {
 }
 
 export const contactInputs = ["Nombre", "Email", "Teléfono"];
-
-export const contact = [
-  {
-    link: "https://instagram.com",
-    SVG: InstagramSvg,
-    width: 25,
-  },
-  {
-    link: "https://wa.me/111111",
-    SVG: WhatsappSvg,
-    width: 25,
-  },
-  {
-    link: "https://gmail.com",
-    SVG: MailSvg,
-    width: 50,
-  },
-];
 
 export const sections = [
   {

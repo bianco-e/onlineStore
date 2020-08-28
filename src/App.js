@@ -30,6 +30,11 @@ export default function App() {
               path="/productos/:id"
               render={() => <BuyingProduct />}
             />
+            <Route
+              exact
+              path="/categoria/:endpoint"
+              render={() => <Products />}
+            />
             <Route exact path="/login" render={() => <Login />} />
             <Route exact path="/admin" render={() => <Admin />} />
             <Route

@@ -45,11 +45,5 @@ export default function SortButton({ productsToShow, setProductsToShow }) {
     return selectedOption.fn();
   };
 
-  return (
-    <Select
-      onChangeFn={handleSelect}
-      options={sortOptions}
-      pos={{ name: "absolute", bottom: "35%", right: "25px" }}
-    />
-  );
+  return <Select onChangeFn={handleSelect} options={sortOptions} />;
 }

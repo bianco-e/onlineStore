@@ -1,9 +1,9 @@
 import * as React from "react";
 
-export default function MailSvg(props) {
+export default function EmailSvg(props) {
   return (
     <svg
-      width={24}
+      width={50}
       height={24}
       viewBox="0 0 24 24"
       fill="none"

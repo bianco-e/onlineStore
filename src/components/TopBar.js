@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import SearchAndMenu from "./SearchAndMenu";
@@ -10,8 +10,12 @@ export default function TopBar() {
   const [showCartModal, setShowCartModal] = useState(false);
   const { style } = useContext(StyleContext);
   const { storeLogo, primaryColor } = style;
+  const navRef = useRef();
+
+  console.log(navRef.current);
+
   return (
-    <Wrapper primary={primaryColor}>
+    <Wrapper primary={primaryColor} ref={navRef}>
       {showCartModal && (
         <SideCartModal
           showModal={showCartModal}

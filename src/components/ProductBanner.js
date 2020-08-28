@@ -7,7 +7,7 @@ export default function ProductBanner({ name, ga, img, endpoint }) {
     <WrapperButton
       bgImg={`url(${img})`}
       ga={ga}
-      onClick={() => history.push(endpoint)}
+      onClick={() => history.push(`/categoria/${endpoint}`)}
     >
       <ButtonTitle>{name}</ButtonTitle>
     </WrapperButton>

@@ -1,14 +1,33 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { contact, sections } from "../data/data.js";
+import InstagramSvg from "../components/svg/InstagramSvg";
+import EmailSvg from "../components/svg/EmailSvg";
+import WhatsappSvg from "../components/svg/WhatsappSvg";
+import { sections } from "../data/data.js";
 
 import StyleContext from "../context/StyleContext";
 
 export default function BottomBar() {
   const history = useHistory();
   const { style } = useContext(StyleContext);
-  const { primaryColor, secondaryColor } = style;
+  const { instagram, whatsapp, email, primaryColor, secondaryColor } = style;
+
+  const contactData = [
+    {
+      link: instagram,
+      SVG: InstagramSvg,
+    },
+    {
+      link: whatsapp,
+      SVG: WhatsappSvg,
+    },
+    {
+      link: email,
+      SVG: EmailSvg,
+    },
+  ];
+
   return (
     <Wrapper secondary={secondaryColor}>
       <Container primary={primaryColor}>
@@ -26,14 +45,15 @@ export default function BottomBar() {
         })}
       </Container>
       <Container primary={primaryColor}>
-        {contact.map((via) => {
-          const { link, SVG, width } = via;
-          return (
-            <Link key={link} href={link} target="blank">
-              <SVG width={width} />
-            </Link>
-          );
-        })}
+        {style &&
+          contactData.map((via) => {
+            const { link, SVG } = via;
+            return (
+              <Link key={link} href={link} target="blank">
+                <SVG />
+              </Link>
+            );
+          })}
       </Container>
     </Wrapper>
   );

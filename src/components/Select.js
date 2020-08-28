@@ -3,16 +3,13 @@ import styled from "styled-components";
 
 import StyleContext from "../context/StyleContext";
 
-export default function Select({ options, onChangeFn, pos, width }) {
+export default function Select({ options, onChangeFn, width }) {
   const { style } = useContext(StyleContext);
   const { secondaryColor } = style;
 
   return (
     <SelectButton
       onChange={(e) => onChangeFn(e)}
-      position={pos?.name}
-      bottom={pos?.bottom}
-      right={pos?.right}
       secondary={secondaryColor}
       width={width ? width : undefined}
     >
@@ -34,9 +31,6 @@ const SelectButton = styled.select({
   cursor: "pointer",
   fontSize: "15px",
   padding: "8px 30px",
-  position: (props) => props.position || "relative",
-  right: (props) => props.right,
-  bottom: (props) => props.bottom,
   textAlign: "center",
   width: (props) => props.width,
   mozAppearance: "none",
