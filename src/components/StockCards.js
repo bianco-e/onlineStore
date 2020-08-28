@@ -2,12 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 export default function StockCards({ stock }) {
+  const colors = {
+    out: "rgba(152, 0, 11, .5)",
+    low: "rgba(247, 129, 40, .5)",
+    ok: "#EEE",
+  };
+
   return (
     <Container>
       {Object.entries(stock).map(([key, value]) => {
         return (
           <Card
-            bgColor={value == 0 ? "rgba(152, 0, 11, .5)" : "#EEE"}
+            bgColor={
+              value < 1 ? colors.out : value < 3 ? colors.low : colors.ok
+            }
             key={key}
           >{`${value} ${key}`}</Card>
         );

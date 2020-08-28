@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import GridLoader from "react-spinners/GridLoader";
 
+import LoadingSpinner from "../components/LoadingSpinner";
 import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
 import ImageSlider from "../components/ImageSlider";
@@ -26,11 +26,11 @@ export default function BuyingProduct() {
   let { id } = useParams();
 
   useEffect(() => {
-    firebase.getProductByID(id).then((prod) => setProduct(prod));
+    firebase.getDocByID(id, "products").then((prod) => setProduct(prod));
   }, []);
 
   const handleAddToCartButton = () => {
-    if (color && size) {
+    if (color && color != "Color" && size && size != "Color") {
       addProductToCart({ ...product, color, size, img: product.imgs[0] });
     }
   };
@@ -44,17 +44,18 @@ export default function BuyingProduct() {
 
   return (
     <Wrapper>
-      <TopBar />
-      <Container>
-        {!product ? (
-          <GridLoader />
-        ) : (
-          <>
+      {!product ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <TopBar />
+          <Container>
             <ImageSlider
               images={product.imgs.map((img) => {
                 return { original: img };
               })}
             />
+
             <DetailsWrapper>
               <Text>{product.name}</Text>
               <Text
@@ -72,17 +73,21 @@ export default function BuyingProduct() {
                 <DetailsText>{`En efectivo 10% de descuento`}</DetailsText>
               </PayFormsContainer>
               <Select
-                options={product.colors.map((color) => {
-                  return { val: color };
-                })}
+                options={[{ val: "Color" }].concat(
+                  product.colors.map((color) => {
+                    return { val: color };
+                  })
+                )}
                 onChangeFn={selectColor}
               />
               <Select
-                options={Object.keys(product.stock)
-                  .filter((k) => product.stock[k] != 0)
-                  .map((s) => {
-                    return { val: s };
-                  })}
+                options={[{ val: "Talle" }].concat(
+                  Object.keys(product.stock)
+                    .filter((k) => product.stock[k] != 0)
+                    .map((s) => {
+                      return { val: s };
+                    })
+                )}
                 onChangeFn={selectSize}
               />
               <StyledButton
@@ -90,10 +95,10 @@ export default function BuyingProduct() {
                 title="AGREGAR AL CARRITO"
               />
             </DetailsWrapper>
-          </>
-        )}
-      </Container>
-      <BottomBar />
+          </Container>
+          <BottomBar />
+        </>
+      )}
     </Wrapper>
   );
 }

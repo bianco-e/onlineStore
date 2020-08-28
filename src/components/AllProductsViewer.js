@@ -85,7 +85,6 @@ export default function AllProductsViewer({
 const Table = styled.table({
   border: "1px solid #EEE",
   borderCollapse: "collapse",
-  borderRadius: "10px",
   width: "100%",
 });
 const THead = styled.thead({});

@@ -1,8 +1,9 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import SearchAndMenu from "./SearchAndMenu";
 import SideCartModal from "./SideCartModal";
+import { useHistory } from "react-router-dom";
 
 import StyleContext from "../context/StyleContext";
 
@@ -10,12 +11,11 @@ export default function TopBar() {
   const [showCartModal, setShowCartModal] = useState(false);
   const { style } = useContext(StyleContext);
   const { storeLogo, primaryColor } = style;
-  const navRef = useRef();
 
-  console.log(navRef.current);
+  const history = useHistory();
 
   return (
-    <Wrapper primary={primaryColor} ref={navRef}>
+    <Wrapper primary={primaryColor}>
       {showCartModal && (
         <SideCartModal
           showModal={showCartModal}
@@ -26,9 +26,9 @@ export default function TopBar() {
         <SearchAndMenu />
       </Container>
       <Container>
-        <Link href="/#">
+        <Button fn={() => history.push("/#")}>
           <Image src={storeLogo} />
-        </Link>
+        </Button>
       </Container>
       <Container>
         <Button fn={() => setShowCartModal(!showCartModal)}>🛍</Button>
@@ -59,4 +59,3 @@ const Container = styled.div({
   justifyContent: "center",
   width: "33%",
 });
-const Link = styled.a({});

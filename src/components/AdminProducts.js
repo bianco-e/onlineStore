@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import GridLoader from "react-spinners/GridLoader";
 
+import LoadingSpinner from "../components/LoadingSpinner";
 import NewProductForm from "./NewProductForm";
 import StyledButton from "./StyledButton";
 import AllProductsViewer from "./AllProductsViewer";
@@ -52,8 +52,8 @@ export default function AdminProducts() {
   return (
     <Container>
       <Title>Productos</Title>
-      {!allProducts ? (
-        <GridLoader />
+      {!allProducts.length ? (
+        <LoadingSpinner />
       ) : (
         <>
           {!showProductForm ? (

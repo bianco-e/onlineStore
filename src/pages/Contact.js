@@ -28,12 +28,7 @@ export default function Contact() {
       <ContactForm>
         {contactInputs.map((ph) => {
           return (
-            <StyledInput
-              key={ph}
-              onChangeFn={() => {}}
-              placeholder={ph}
-              width={"80%"}
-            />
+            <StyledInput key={ph} onChangeFn={() => {}} ph={ph} width={"30%"} />
           );
         })}
         <TextArea placeholder="Mensaje" secondary={secondaryColor} />
@@ -80,4 +75,5 @@ const TextArea = styled.textarea({
   minHeight: "80px",
   minWidth: "80%",
   padding: "5px 12px",
+  textAlign: "center",
 });

@@ -68,9 +68,9 @@ class Firebase {
       );
   };
 
-  getProductByID = (id) => {
+  getDocByID = (id, collection) => {
     return this.db
-      .collection("products")
+      .collection(collection)
       .doc(id)
       .get()
       .then((doc) => doc.data());

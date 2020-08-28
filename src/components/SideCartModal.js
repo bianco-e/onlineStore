@@ -1,11 +1,13 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import CartContext from "../context/CartContext";
+import StyledButton from "./StyledButton";
 import CloseButton from "./CloseButton";
 import IconButton from "./IconButton";
 
 export default function SideCartModal({ showModal, setShowModal }) {
   const { cart, removeProductFromCart } = useContext(CartContext);
+  const [total, setTotal] = useState("");
 
   useEffect(() => {
     showModal && document.addEventListener("click", handleModal);
@@ -13,6 +15,13 @@ export default function SideCartModal({ showModal, setShowModal }) {
       document.removeEventListener("click", handleModal);
     };
   }, [showModal]);
+
+  useEffect(() => {
+    cart.length &&
+      setTotal(
+        cart.map((item) => item.price).reduce((acc, current) => acc + current)
+      );
+  }, [cart]);
 
   const handleModal = () => setShowModal(!showModal);
 
@@ -23,21 +32,31 @@ export default function SideCartModal({ showModal, setShowModal }) {
       {cart.length < 1 ? (
         <Title>Tu carrito está vacío.</Title>
       ) : (
-        cart.map((product) => {
-          const { color, id, img, name, price, size } = product;
-          return (
-            <ProductContainer key={id}>
-              <ProductImg src={img} />
-              <ProductDetailsContainer>
-                <Text>{`${name} (${color}, ${size})`}</Text>
-                <Text color="#FFA07A">{`$${price.toFixed(2)}`}</Text>
-              </ProductDetailsContainer>
-              <IconButton onClickFn={() => removeProductFromCart(product)} />
-            </ProductContainer>
-          );
-        })
+        <>
+          {cart.map((product) => {
+            const { color, id, img, name, price, size } = product;
+            return (
+              <ProductContainer key={id}>
+                <ProductImg src={img} />
+                <ProductDetailsContainer>
+                  <Text>{`${name} (${color}, ${size})`}</Text>
+                  <Text color="#FFA07A">{`$${price.toFixed(2)}`}</Text>
+                </ProductDetailsContainer>
+                <IconButton onClickFn={() => removeProductFromCart(product)} />
+              </ProductContainer>
+            );
+          })}
+          <Divisor />
+          <Text color="#EEE" fWeight="bold">
+            {`Total:   ${total}`}
+          </Text>
+          <StyledButton
+            inverted
+            onClickFn={() => {}}
+            title="Confirmar compra"
+          />
+        </>
       )}
-      {/* <Button>COMPRAR</Button> */}
     </Wrapper>
   );
 }
@@ -81,5 +100,10 @@ const ProductImg = styled.img({
 const Text = styled.p({
   color: (props) => props.color,
   fontSize: "14px",
+  fontWeight: (props) => props.fWeight,
   margin: "1px 0",
+});
+const Divisor = styled.hr({
+  border: "1px solid #EEE",
+  width: "100%",
 });

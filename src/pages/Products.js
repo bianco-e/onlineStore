@@ -9,6 +9,7 @@ import SortButton from "../components/SortButton";
 import FilterButton from "../components/FilterButton";
 import ProductThumbnail from "../components/ProductThumbnail";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 import firebase from "../firebase/client.js";
 
@@ -19,8 +20,8 @@ export default function Products() {
   let { endpoint } = useParams();
 
   useEffect(() => {
-    firebase.getDocsFromCollection("categories").then((categs) => {
-      const names = categs[0].categories.map((cat) => cat.name);
+    firebase.getDocByID("categories", "categories").then((categs) => {
+      const names = categs.categories.map((cat) => cat.name);
       setCategoriesNames(names);
       if (endpoint) {
         const category = names.find(
@@ -43,29 +44,41 @@ export default function Products() {
 
   return (
     <Wrapper>
-      <TopBar />
-      <Container margin="150px 0 0 0">
-        <PageTitle text="Productos" />
-      </Container>
-      <Container margin="10px 0">
-        <FilterButton
-          categoriesNames={categoriesNames}
-          filterByCategory={filterByCategory}
-        />
-        <SortButton
-          productsToShow={productsToShow}
-          setProductsToShow={setProductsToShow}
-        />
-      </Container>
-      <ProductsWrapper>
-        {productsToShow.map((prod) => {
-          const { id, imgs, name, price } = prod;
-          return (
-            <ProductThumbnail id={id} img={imgs[0]} name={name} price={price} />
-          );
-        })}
-      </ProductsWrapper>
-      <BottomBar />
+      {!productsToShow.length ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {" "}
+          <TopBar />
+          <Container margin="150px 0 0 0">
+            <PageTitle text="Productos" />
+          </Container>
+          <Container margin="10px 0">
+            <FilterButton
+              categoriesNames={categoriesNames}
+              filterByCategory={filterByCategory}
+            />
+            <SortButton
+              productsToShow={productsToShow}
+              setProductsToShow={setProductsToShow}
+            />
+          </Container>
+          <ProductsWrapper>
+            {productsToShow.map((prod) => {
+              const { id, imgs, name, price } = prod;
+              return (
+                <ProductThumbnail
+                  id={id}
+                  img={imgs[0]}
+                  name={name}
+                  price={price}
+                />
+              );
+            })}
+          </ProductsWrapper>
+          <BottomBar />
+        </>
+      )}
       <WhatsappFloatButton />
     </Wrapper>
   );

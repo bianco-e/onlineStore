@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import GridLoader from "react-spinners/GridLoader";
 
+import LoadingSpinner from "../components/LoadingSpinner";
 import CategoryThumbnail from "./CategoryThumbnail";
 import CategoriesDisplayThumbnail from "./CategoriesDisplayThumbnail";
 import FeedbackMessage from "../components/FeedbackMessage";
@@ -99,7 +99,7 @@ export default function AdminCategories() {
     <Container>
       <Title>Categorías</Title>
       {!allCategories ? (
-        <GridLoader />
+        <LoadingSpinner />
       ) : (
         <>
           <Wrapper>

@@ -3,11 +3,14 @@ import styled from "styled-components";
 
 import StyleContext from "../context/StyleContext";
 
-export default function StyledButton({ onClickFn, title }) {
+export default function StyledButton({ inverted, onClickFn, title }) {
   const { style } = useContext(StyleContext);
-  const { primaryColor } = style;
+  const { primaryColor, secondaryColor } = style;
   return (
-    <Button onClick={() => onClickFn()} primary={primaryColor}>
+    <Button
+      onClick={() => onClickFn()}
+      primary={inverted ? secondaryColor : primaryColor}
+    >
       {title}
     </Button>
   );

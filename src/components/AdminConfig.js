@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import GridLoader from "react-spinners/GridLoader";
 
+import LoadingSpinner from "../components/LoadingSpinner";
 import StyleContext from "../context/StyleContext";
 import SettableImageThumbnail from "./SettableImageThumbnail";
 import StyledButton from "./StyledButton";
@@ -87,15 +87,6 @@ export default function AdminConfig() {
         />
       )
     ),
-    /*  new Config(
-      "Imágenes slider Home",
-      (
-        <SettableImageThumbnail
-          src={storeLogo}
-          onChangeFn={(e) => newImgOnClickFn(e.target.files[0])}
-        />
-      )
-    ), */
     new Config(
       "Color primario",
       (
@@ -126,8 +117,8 @@ export default function AdminConfig() {
     <Container>
       <Title>Configuración</Title>
 
-      {!style.primaryColor ? (
-        <GridLoader />
+      {!style.storeLogo ? (
+        <LoadingSpinner />
       ) : (
         <>
           {configs.map(({ text, element }) => {

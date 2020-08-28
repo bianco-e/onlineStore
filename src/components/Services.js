@@ -22,6 +22,7 @@ const Wrapper = styled.section({
   alignItems: "flex-start",
   display: "flex",
   justifyContent: "space-between",
+  margin: "30px 0",
   width: "85%",
 });
 const ServiceCard = styled.div({
