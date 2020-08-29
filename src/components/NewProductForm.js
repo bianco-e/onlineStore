@@ -27,6 +27,7 @@ export default function NewProductForm({
   setNewProduct,
   promProduct,
   setPromProduct,
+  returnEditingProductToList,
   trigger,
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
@@ -198,9 +199,14 @@ export default function NewProductForm({
     } else setErrorMsg("Todos los campos deben estar completos");
   };
 
+  const handleClose = () => {
+    trigger();
+    returnEditingProductToList();
+  };
+
   return (
     <Wrapper>
-      <CloseButton onClickFn={() => trigger()} corner="right" />
+      <CloseButton onClickFn={() => handleClose()} corner="right" />
       <Title>Nuevo producto</Title>
       {inputsData.map(({ text, element }) => {
         return (

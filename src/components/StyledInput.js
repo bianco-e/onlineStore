@@ -3,13 +3,17 @@ import styled from "styled-components";
 
 import StyleContext from "../context/StyleContext";
 
-export default function StyledInput({ ph, val, onChangeFn, type, width }) {
+export default function StyledInput({ ph, val, onChangeFn, OKD, type, width }) {
   const { style } = useContext(StyleContext);
   const { secondaryColor } = style;
+
+  const handleKeyDown = (e) => e.keyCode === 13 && OKD(e);
+
   return (
     <Input
       min="0"
       onChange={(e) => onChangeFn(e)}
+      onKeyDown={OKD ? (e) => handleKeyDown(e) : () => {}}
       placeholder={ph}
       secondary={secondaryColor}
       type={type || "text"}

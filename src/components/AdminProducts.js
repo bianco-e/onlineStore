@@ -12,6 +12,7 @@ import firebase from "../firebase/client.js";
 export default function AdminProducts() {
   const [allProducts, setAllProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({});
+  const [editingProduct, setEditingProduct] = useState(undefined);
   const [showProductForm, setShowProductForm] = useState(false);
   const [images, setImages] = useState([{ pvw: addPhoto }]);
   const [stock, setStock] = useState({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
@@ -37,6 +38,8 @@ export default function AdminProducts() {
 
   const editProduct = (product) => {
     const { colors, id, imgs, stock, prom } = product;
+    const productToEdit = allProducts.find((prod) => prod.id == id);
+    setEditingProduct(productToEdit);
     setAllProducts(allProducts.filter((prod) => prod.id != id));
     setShowProductForm(true);
     setColores(colors);
@@ -48,6 +51,9 @@ export default function AdminProducts() {
     });
     setImages(mappedImages);
   };
+
+  const returnEditingProductToList = () =>
+    editingProduct && setAllProducts(allProducts.concat(editingProduct));
 
   return (
     <Container>
@@ -74,6 +80,7 @@ export default function AdminProducts() {
               setNewProduct={setNewProduct}
               promProduct={promProduct}
               setPromProduct={setPromProduct}
+              returnEditingProductToList={returnEditingProductToList}
               trigger={triggerShowForm}
             />
           )}

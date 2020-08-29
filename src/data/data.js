@@ -58,7 +58,7 @@ export class Config {
   }
 }
 
-export const contactInputs = ["Nombre", "Email", "Teléfono"];
+export const contactInputs = ["Nombre", "Email", "Celular"];
 
 export const sections = [
   {

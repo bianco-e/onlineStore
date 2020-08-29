@@ -16,21 +16,6 @@ export default function Login() {
 
   const { login } = useContext(AdminContext);
 
-  const inputsData = [
-    {
-      ph: "Usuario",
-      fn: (e) => setUser(e.target.value),
-      val: user,
-      type: "text",
-    },
-    {
-      ph: "Contraseña",
-      fn: (e) => setPassword(e.target.value),
-      val: password,
-      type: "password",
-    },
-  ];
-
   const handleLogin = () => {
     firebase
       .login(user, password, login)
@@ -44,6 +29,23 @@ export default function Login() {
     setUser("");
   };
 
+  const inputsData = [
+    {
+      ph: "Usuario",
+      fn: (e) => setUser(e.target.value),
+      okd: false,
+      val: user,
+      type: "text",
+    },
+    {
+      ph: "Contraseña",
+      fn: (e) => setPassword(e.target.value),
+      okd: handleLogin,
+      val: password,
+      type: "password",
+    },
+  ];
+
   return (
     <Wrapper>
       {!login ? (
@@ -53,9 +55,10 @@ export default function Login() {
           <Title>Iniciar sesión</Title>
           {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
           {inputsData.map((data) => {
-            const { fn, ph, type, val } = data;
+            const { fn, okd, ph, type, val } = data;
             return (
               <StyledInput
+                OKD={okd}
                 key={ph}
                 onChangeFn={fn}
                 ph={ph}

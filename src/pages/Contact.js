@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import PageTitle from "../components/PageTitle";
@@ -7,34 +7,75 @@ import TopBar from "../components/TopBar";
 import StyledButton from "../components/StyledButton";
 import StyledInput from "../components/StyledInput";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
+import LoadingSpinner from "../components/LoadingSpinner";
+import FeedbackMessage from "../components/FeedbackMessage";
 
 import { contactInputs } from "../data/data.js";
 
 import StyleContext from "../context/StyleContext";
+import firebase from "../firebase/client.js";
 
 export default function Contact() {
+  const [message, setMessage] = useState({});
+  const [feedbackMsg, setFeedbackMsg] = useState(undefined);
+  const [errorMsg, setErrorMsg] = useState(undefined);
+
   const { style } = useContext(StyleContext);
   const { secondaryColor } = style;
 
-  const confirmForm = () => {};
+  const confirmForm = () => {
+    setFeedbackMsg(undefined);
+    setErrorMsg(undefined);
+    if (message.nombre && (message.email || message.celular) && message.text) {
+      firebase.addNewDoc(false, "messages", message);
+      setMessage({});
+      setFeedbackMsg("Gracias por contactarnos.");
+    } else setErrorMsg("Algunos campos están incompletos.");
+  };
 
   return (
     <Wrapper>
       <TopBar />
-      <Container>
-        <PageTitle text="Contacto" />
-        <Text>Por consultas, dudas o cambios no dudes en contactarte</Text>
-      </Container>
-      <ContactForm>
-        {contactInputs.map((ph) => {
-          return (
-            <StyledInput key={ph} onChangeFn={() => {}} ph={ph} width={"30%"} />
-          );
-        })}
-        <TextArea placeholder="Mensaje" secondary={secondaryColor} />
-        <StyledButton onClickFn={confirmForm} title="ENVIAR" />
-      </ContactForm>
-      <BottomBar />
+      {!secondaryColor ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {" "}
+          <Container>
+            <PageTitle text="Contacto" />
+            <Text>Por consultas, dudas o cambios no dudes en contactarte</Text>
+          </Container>
+          <ContactForm>
+            {contactInputs.map((ph) => {
+              return (
+                <StyledInput
+                  key={ph}
+                  onChangeFn={(e) =>
+                    setMessage({
+                      ...message,
+                      [ph.toLowerCase()]: e.target.value,
+                    })
+                  }
+                  val={message[ph.toLowerCase()]}
+                  ph={ph}
+                  width={"30%"}
+                />
+              );
+            })}
+            <TextArea
+              placeholder="Mensaje"
+              val={message.text}
+              onChange={(e) => setMessage({ ...message, text: e.target.value })}
+              secondary={secondaryColor}
+            />
+            {feedbackMsg && <FeedbackMessage type="ok" msg={feedbackMsg} />}
+            {errorMsg && <FeedbackMessage type="err" msg={errorMsg} />}
+            <StyledButton onClickFn={confirmForm} title="ENVIAR" />
+          </ContactForm>
+          <BottomBar />
+        </>
+      )}
+
       <WhatsappFloatButton />
     </Wrapper>
   );

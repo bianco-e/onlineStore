@@ -25,26 +25,28 @@ export default function AdminCategories() {
   }, []);
 
   const addCategory = () => {
-    if (
-      categoryName &&
-      categoryImg.pvw !== addPhoto &&
-      !allCategories.find(
-        (cat) => cat.name.toLowerCase() == categoryName.toLowerCase()
-      )
-    ) {
-      errorMsg && setErrorMsg(undefined);
-      const ga = `p${allCategories.length + 1}`;
-      const endpoint = categoryName.toLowerCase().split(" ").join("-");
-      const cat = { endpoint, ga, img: categoryImg, name: categoryName };
+    if (allCategories.length < 8) {
+      if (
+        categoryName &&
+        categoryImg.pvw !== addPhoto &&
+        !allCategories.find(
+          (cat) => cat.name.toLowerCase() == categoryName.toLowerCase()
+        )
+      ) {
+        errorMsg && setErrorMsg(undefined);
+        const ga = `p${allCategories.length + 1}`;
+        const endpoint = categoryName.toLowerCase().split(" ").join("-");
+        const cat = { endpoint, ga, img: categoryImg, name: categoryName };
 
-      setAllCategories(allCategories.concat(cat));
+        setAllCategories(allCategories.concat(cat));
 
-      setCategoryName("");
-      setCategoryImg({ pvw: addPhoto });
-    } else
-      setErrorMsg(
-        "La categoría debe tener imágen y nombre. Los nombres no pueden repetirse"
-      );
+        setCategoryName("");
+        setCategoryImg({ pvw: addPhoto });
+      } else
+        setErrorMsg(
+          "La categoría debe tener imágen y nombre. Los nombres no pueden repetirse"
+        );
+    } else setErrorMsg("El máximo de categorías es 8");
   };
 
   const deleteCategory = (name) => {

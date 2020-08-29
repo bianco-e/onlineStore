@@ -8,6 +8,7 @@ export default function PrivateRoute({ render, ...otherProps }) {
     <Route
       {...otherProps}
       render={() => (admin ? render() : <Redirect to="/" />)}
+      // render={() => render()}
     />
   );
 }
