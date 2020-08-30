@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import WhatsappSvg from "./svg/WhatsappSvg";
 
+import StyleContext from "../context/StyleContext";
+
 export default function WhatsappFloatButton() {
-  const num = "11111";
+  const { style } = useContext(StyleContext);
+  const { whatsapp } = style;
   return (
-    <FloatButton href={`http://wa.me/${num}`}>
+    <FloatButton href={`http://wa.me/${whatsapp}`}>
       <WhatsappSvg fill="white" width={22} />
     </FloatButton>
   );

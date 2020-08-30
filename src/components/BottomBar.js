@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import InstagramSvg from "../components/svg/InstagramSvg";
 import EmailSvg from "../components/svg/EmailSvg";
-import WhatsappSvg from "../components/svg/WhatsappSvg";
+import FacebookSvg from "../components/svg/FacebookSvg";
 import { sections } from "../data/data.js";
 
 import StyleContext from "../context/StyleContext";
@@ -11,7 +11,7 @@ import StyleContext from "../context/StyleContext";
 export default function BottomBar() {
   const history = useHistory();
   const { style } = useContext(StyleContext);
-  const { instagram, whatsapp, email, primaryColor, secondaryColor } = style;
+  const { instagram, facebook, email, primaryColor, secondaryColor } = style;
 
   const contactData = [
     {
@@ -19,8 +19,8 @@ export default function BottomBar() {
       SVG: InstagramSvg,
     },
     {
-      link: whatsapp,
-      SVG: WhatsappSvg,
+      link: facebook,
+      SVG: FacebookSvg,
     },
     {
       link: email,

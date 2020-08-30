@@ -4,15 +4,15 @@ import styled from "styled-components";
 export default function Messages({ msgs }) {
   return (
     <Wrapper>
-      {msgs.map(({ nombre, celular, email, text }) => {
+      {msgs.map(({ id, nombre, celular, email, text }, idx) => {
         return (
-          <Wrapper>
+          <Wrapper key={id}>
             <Container>
               <Text fWeight="bold">{nombre}</Text>
-              <Text>{email && `Email: ${email}`}</Text>
-              <Text>{celular && `Celular: ${celular}`}</Text>
+              <Text fSize="13px">{email && `Email: ${email}`}</Text>
+              <Text fSize="13px">{celular && `Celular: ${celular}`}</Text>
             </Container>
-            <Text fSize="13px">{text}</Text>
+            <Text fSize="11px">{text}</Text>
           </Wrapper>
         );
       })}
@@ -27,6 +27,7 @@ const Wrapper = styled.div({
   width: "80%",
 });
 const Container = styled.div({
+  alignItems: "center",
   border: "1px solid #EEE",
   borderRadius: "10px",
   display: "flex",

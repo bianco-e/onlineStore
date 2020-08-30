@@ -23,4 +23,5 @@ const SlideWrapper = styled.section({
   alignItems: "center",
   height: "400px",
   justifyContent: "center",
+  width: "300px",
 });

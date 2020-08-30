@@ -52,7 +52,7 @@ export default function BuyingProduct() {
           <Container>
             <ImageSlider
               images={product.imgs.map((img) => {
-                return { original: img };
+                return { original: img, originalClass: "sliderImg" };
               })}
             />
 
@@ -112,7 +112,9 @@ const Wrapper = styled.div({
 });
 const Container = styled.div({
   display: "flex",
+  justifyContent: "space-evenly",
   margin: "120px 0",
+  padding: "20px 0",
   width: "90%",
 });
 const DetailsWrapper = styled.div({
