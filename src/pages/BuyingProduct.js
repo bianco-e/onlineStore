@@ -19,6 +19,7 @@ export default function BuyingProduct() {
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
   const [product, setProduct] = useState(undefined);
+  const [availableStock, setAvailableStock] = useState(undefined);
   const { addProductToCart } = useContext(CartContext);
   const { style } = useContext(StyleContext);
   const { primaryColor } = style;
@@ -28,6 +29,15 @@ export default function BuyingProduct() {
   useEffect(() => {
     firebase.getDocByID(id, "products").then((prod) => setProduct(prod));
   }, []);
+
+  useEffect(() => {
+    product &&
+      setAvailableStock(
+        Object.values(product.stock).reduce(
+          (acc, current) => parseInt(acc) + parseInt(current)
+        )
+      );
+  }, [product]);
 
   const handleAddToCartButton = () => {
     if (color && color != "Color" && size && size != "Color") {
@@ -62,6 +72,7 @@ export default function BuyingProduct() {
                 primary={primaryColor}
                 fSize="15px"
               >{`$${product.price.toFixed(2)}`}</Text>
+              {availableStock < 1 && <Text>SIN STOCK</Text>}
               <PayFormsContainer>
                 <CardSvg width={20} />
                 <DetailsText>{`3 cuotas sin interés de $${(
@@ -73,6 +84,7 @@ export default function BuyingProduct() {
                 <DetailsText>{`En efectivo 10% de descuento`}</DetailsText>
               </PayFormsContainer>
               <Select
+                disabled={availableStock < 1 && true}
                 options={[{ val: "Color" }].concat(
                   product.colors.map((color) => {
                     return { val: color };
@@ -81,6 +93,7 @@ export default function BuyingProduct() {
                 onChangeFn={selectColor}
               />
               <Select
+                disabled={availableStock < 1 && true}
                 options={[{ val: "Talle" }].concat(
                   Object.keys(product.stock)
                     .filter((k) => product.stock[k] != 0)

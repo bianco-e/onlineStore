@@ -142,52 +142,47 @@ export default function NewProductForm({
   const handleAddProduct = () => {
     setErrorMsg(undefined);
     setFeedbackMsg(undefined);
-    if (
-      newProduct.name &&
-      newProduct.price &&
-      newProduct.category != "-" &&
-      images.length &&
-      colores.length
-    ) {
+    const productToUpload = {
+      ...newProduct,
+      price: parseFloat(newProduct.price),
+      prom: promProduct,
+      stock,
+      colors: colores,
+    };
+    const { name, price, category, id } = newProduct;
+
+    if (name && price && category != "-" && images.length && colores.length) {
       if (images.some((img) => img.file)) {
         const imagesToUpload = images.map((img) => {
           return firebase.addImage("products", img.file).then((imgUrl) => {
             return imgUrl;
           });
         });
-        if (!newProduct.id) {
-          Promise.all(imagesToUpload).then((uploadedImages) => {
-            firebase.addNewDoc(false, "products", {
-              ...newProduct,
-              price: parseFloat(newProduct.price),
-              imgs: uploadedImages,
-              prom: promProduct,
-              stock,
-              colors: colores,
-            });
-          });
-        } else {
-          Promise.all(imagesToUpload).then((uploadedImages) => {
-            firebase.editDoc(false, "products", newProduct.id, {
-              ...newProduct,
-              price: parseFloat(newProduct.price),
-              imgs: uploadedImages,
-              prom: promProduct,
-              stock,
-              colors: colores,
-            });
-          });
-        }
+        !id
+          ? Promise.all(imagesToUpload).then((uploadedImages) => {
+              firebase
+                .addNewDoc(false, "products", {
+                  ...productToUpload,
+                  imgs: uploadedImages,
+                })
+                .then(getProducts);
+            })
+          : Promise.all(imagesToUpload)
+              .then((uploadedImages) => {
+                firebase.editDoc(false, "products", id, {
+                  ...productToUpload,
+                  imgs: uploadedImages,
+                });
+              })
+              .then(getProducts);
       } else {
         const imagesToUpload = images.map((img) => img.pvw);
-        firebase.editDoc(false, "products", newProduct.id, {
-          ...newProduct,
-          price: parseFloat(newProduct.price),
-          imgs: imagesToUpload,
-          prom: promProduct,
-          stock,
-          colors: colores,
-        });
+        firebase
+          .editDoc(false, "products", id, {
+            ...productToUpload,
+            imgs: imagesToUpload,
+          })
+          .then(getProducts);
       }
       setNewProduct({});
       setImages({ pvw: addPhoto });
@@ -195,7 +190,6 @@ export default function NewProductForm({
       setStock({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
       setFeedbackMsg("Producto agregado correctamente");
       trigger();
-      getProducts();
     } else setErrorMsg("Todos los campos deben estar completos");
   };
 

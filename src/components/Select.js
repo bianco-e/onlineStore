@@ -3,12 +3,14 @@ import styled from "styled-components";
 
 import StyleContext from "../context/StyleContext";
 
-export default function Select({ options, onChangeFn, width }) {
+export default function Select({ disabled, options, onChangeFn, width }) {
   const { style } = useContext(StyleContext);
   const { secondaryColor } = style;
 
   return (
     <SelectButton
+      cursor={disabled ? "not-allowed" : "pointer"}
+      disabled={disabled ? true : false}
       onChange={(e) => onChangeFn(e)}
       secondary={secondaryColor}
       width={width ? width : undefined}
@@ -28,7 +30,7 @@ const SelectButton = styled.select({
   border: (props) => `1px solid ${props.secondary}`,
   borderRadius: "9999px",
   backgroundColor: "transparent",
-  cursor: "pointer",
+  cursor: (props) => props.cursor,
   fontSize: "15px",
   padding: "8px 30px",
   textAlign: "center",
