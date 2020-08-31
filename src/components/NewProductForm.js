@@ -15,6 +15,7 @@ import StarButton from "./StarButton";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
+import { emptyStock } from "../data/data.js";
 
 export default function NewProductForm({
   getProducts,
@@ -51,7 +52,7 @@ export default function NewProductForm({
     setNewProduct({});
     setImages([{ pvw: addPhoto }]);
     setColores([]);
-    setStock({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+    setStock(emptyStock);
   };
 
   const setValue = (e, property) =>
@@ -128,13 +129,7 @@ export default function NewProductForm({
     },
     {
       text: "Stock de talles",
-      element: (
-        <MultipleChoice
-          options={["S", "M", "L", "XL", "XXL"]}
-          stock={stock}
-          setStock={setStock}
-        />
-      ),
+      element: <MultipleChoice stock={stock} setStock={setStock} />,
     },
     {
       text: "Colores disponibles",

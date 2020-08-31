@@ -5,9 +5,11 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import NewProductForm from "./NewProductForm";
 import StyledButton from "./StyledButton";
 import AllProductsViewer from "./AllProductsViewer";
+import ConfirmModal from "./ConfirmModal";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
+import { emptyStock } from "../data/data.js";
 
 export default function AdminProducts() {
   const [allProducts, setAllProducts] = useState([]);
@@ -16,9 +18,11 @@ export default function AdminProducts() {
   const [editingProduct, setEditingProduct] = useState(undefined);
   const [showProductForm, setShowProductForm] = useState(false);
   const [images, setImages] = useState([{ pvw: addPhoto }]);
-  const [stock, setStock] = useState({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+  const [stock, setStock] = useState(emptyStock);
   const [promProduct, setPromProduct] = useState(false);
   const [colores, setColores] = useState([]);
+  const [idToDelete, setIdToDelete] = useState(undefined);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const getProducts = () => {
     firebase
@@ -46,9 +50,15 @@ export default function AdminProducts() {
 
   const triggerShowForm = () => setShowProductForm(!showProductForm);
 
-  const deleteProduct = (id) => {
-    firebase.deleteDoc("products", id);
+  const deleteProduct = () => {
+    firebase.deleteDoc("products", idToDelete);
     getProducts();
+    setIdToDelete(undefined);
+  };
+
+  const confirmToDeleteProduct = (id) => {
+    setIdToDelete(id);
+    setShowConfirmModal(true);
   };
 
   const editProduct = (product) => {
@@ -78,6 +88,13 @@ export default function AdminProducts() {
   return (
     <Container>
       <Title>Productos</Title>
+      {showConfirmModal && (
+        <ConfirmModal
+          callback={deleteProduct}
+          setIdToDelete={setIdToDelete}
+          setShowModal={setShowConfirmModal}
+        />
+      )}
       {!allProducts.length ? (
         <LoadingSpinner />
       ) : (
@@ -107,7 +124,7 @@ export default function AdminProducts() {
 
           <AllProductsViewer
             editProduct={editProduct}
-            deleteProduct={deleteProduct}
+            deleteProduct={confirmToDeleteProduct}
             products={allProducts}
             setAllProducts={setAllProducts}
             categoriesNames={categoriesNames}
@@ -126,6 +143,7 @@ const Container = styled.div({
   justifyContent: "flex-start",
   marginTop: "50px",
   minHeight: "100vh",
+  position: "relative",
   width: "80%",
 });
 const Title = styled.h2({});

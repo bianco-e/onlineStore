@@ -48,7 +48,6 @@ export default function Products() {
         <LoadingSpinner />
       ) : (
         <>
-          {" "}
           <TopBar />
           <Container margin="150px 0 0 0">
             <PageTitle text="Productos" />
@@ -65,15 +64,7 @@ export default function Products() {
           </Container>
           <ProductsWrapper>
             {productsToShow.map((prod) => {
-              const { id, imgs, name, price } = prod;
-              return (
-                <ProductThumbnail
-                  id={id}
-                  img={imgs[0]}
-                  name={name}
-                  price={price}
-                />
-              );
+              return <ProductThumbnail key={prod.id} product={prod} />;
             })}
           </ProductsWrapper>
           <BottomBar />

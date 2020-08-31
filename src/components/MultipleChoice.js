@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import StyledInput from "./StyledInput";
 
-export default function MultipleChoice({ options, stock, setStock }) {
+const sortStockBySizes = (stock) => stock.sort((a, b) => a.pos > b.pos);
+
+export default function MultipleChoice({ stock, setStock }) {
+  const handleChange = (e, opt) => {
+    const option = stock.find((element) => element.size == opt.size);
+    setStock(
+      stock
+        .filter((element) => element.size != opt.size)
+        .concat({ ...option, items: parseInt(e.target.value) })
+    );
+  };
+
   return (
     <Wrapper>
-      {options.map((opt) => {
+      {sortStockBySizes(stock).map((opt) => {
         return (
           <>
-            <Text>{opt}</Text>
+            <Text>{opt.size}</Text>
             <StyledInput
-              onChangeFn={(e) => setStock({ ...stock, [opt]: e.target.value })}
+              onChangeFn={(e) => handleChange(e, opt)}
               type="number"
-              val={stock[opt]}
+              val={opt.items}
               width="35px"
             />
           </>

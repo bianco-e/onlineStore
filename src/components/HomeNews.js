@@ -10,16 +10,7 @@ export default function HomeNews({ products }) {
       </NameContainer>
       <ProductsContainer>
         {products.map((prod) => {
-          const { id, imgs, name, price } = prod;
-          return (
-            <ProductThumbnail
-              id={id}
-              key={name}
-              img={imgs[0]}
-              name={name}
-              price={price}
-            />
-          );
+          return <ProductThumbnail key={prod.id} product={prod} />;
         })}
       </ProductsContainer>
     </Wrapper>

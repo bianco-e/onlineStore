@@ -44,13 +44,8 @@ export default function BuyingProduct() {
       addProductToCart({ ...product, color, size, img: product.imgs[0] });
     }
   };
-
-  const selectColor = (e) => {
-    setColor(e.target.value);
-  };
-  const selectSize = (e) => {
-    setSize(e.target.value);
-  };
+  const selectColor = (e) => setColor(e.target.value);
+  const selectSize = (e) => setSize(e.target.value);
 
   return (
     <Wrapper>

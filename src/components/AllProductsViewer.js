@@ -39,7 +39,7 @@ export default function AllProductsViewer({
         <THead>
           <TR bgColor="#FFBA9F">
             {tHeaders.map((h) => (
-              <TD>{h}</TD>
+              <TD key={h}>{h}</TD>
             ))}
           </TR>
         </THead>

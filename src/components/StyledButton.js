@@ -6,9 +6,15 @@ import StyleContext from "../context/StyleContext";
 export default function StyledButton({ inverted, onClickFn, title }) {
   const { style } = useContext(StyleContext);
   const { primaryColor, secondaryColor } = style;
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onClickFn();
+  };
+
   return (
     <Button
-      onClick={() => onClickFn()}
+      onClick={(e) => handleClick(e)}
       primary={inverted ? secondaryColor : primaryColor}
     >
       {title}

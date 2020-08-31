@@ -11,6 +11,7 @@ export default function Select({ disabled, options, onChangeFn, width }) {
     <SelectButton
       cursor={disabled ? "not-allowed" : "pointer"}
       disabled={disabled ? true : false}
+      onClick={(e) => e.stopPropagation()}
       onChange={(e) => onChangeFn(e)}
       secondary={secondaryColor}
       width={width ? width : undefined}

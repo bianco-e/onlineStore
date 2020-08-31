@@ -91,3 +91,11 @@ export const services = [
     SVG: ContactSvg,
   },
 ];
+
+export const emptyStock = [
+  { size: "S", items: 0, pos: 1 },
+  { size: "M", items: 0, pos: 2 },
+  { size: "L", items: 0, pos: 3 },
+  { size: "XL", items: 0, pos: 4 },
+  { size: "XXL", items: 0, pos: 5 },
+];

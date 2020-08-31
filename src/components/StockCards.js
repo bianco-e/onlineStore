@@ -1,23 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function StockCards({ stock }) {
-  const colors = {
-    out: "rgba(152, 0, 11, .5)",
-    low: "rgba(247, 129, 40, .5)",
-    ok: "#EEE",
-  };
+const colors = {
+  out: "rgba(152, 0, 11, .5)",
+  low: "rgba(247, 129, 40, .5)",
+  ok: "#EEE",
+};
 
+const sortStockBySizes = (stock) => stock.sort((a, b) => a.pos > b.pos);
+
+export default function StockCards({ stock }) {
   return (
     <Container>
-      {Object.entries(stock).map(([key, value]) => {
+      {sortStockBySizes(stock).map(({ size, items }) => {
+        const { out, low, ok } = colors;
         return (
           <Card
-            bgColor={
-              value < 1 ? colors.out : value < 3 ? colors.low : colors.ok
-            }
-            key={key}
-          >{`${value} ${key}`}</Card>
+            bgColor={items < 1 ? out : items < 3 ? low : ok}
+            key={size}
+          >{`${items} ${size}`}</Card>
         );
       })}
     </Container>
