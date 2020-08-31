@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import StyledButton from "./StyledButton";
 import StyledInput from "./StyledInput";
+import StyledTextArea from "../components/StyledTextArea";
 import FormOption from "./FormOption";
 import Select from "./Select";
 import MultipleChoice from "./MultipleChoice";
@@ -46,6 +47,13 @@ export default function NewProductForm({
     });
   }, []);
 
+  const resetForm = () => {
+    setNewProduct({});
+    setImages([{ pvw: addPhoto }]);
+    setColores([]);
+    setStock({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+  };
+
   const setValue = (e, property) =>
     setNewProduct({ ...newProduct, [property]: e.target.value });
 
@@ -83,6 +91,17 @@ export default function NewProductForm({
           val={newProduct["name"]}
           ph="Ej: Remera de algodón"
           width="180px"
+        />
+      ),
+    },
+    {
+      text: "Descripción",
+      element: (
+        <StyledTextArea
+          onChangeFn={(e) => setValue(e, "description")}
+          val={newProduct["description"]}
+          ph="Ej: Remera 100% algodón con costuras reforzadas"
+          width="50%"
         />
       ),
     },
@@ -149,9 +168,16 @@ export default function NewProductForm({
       stock,
       colors: colores,
     };
-    const { name, price, category, id } = newProduct;
+    const { name, price, category, description, id } = newProduct;
 
-    if (name && price && category != "-" && images.length && colores.length) {
+    if (
+      name &&
+      price &&
+      description &&
+      category != "-" &&
+      images.length &&
+      colores.length
+    ) {
       if (images.some((img) => img.file)) {
         const imagesToUpload = images.map((img) => {
           return firebase.addImage("products", img.file).then((imgUrl) => {
@@ -184,10 +210,7 @@ export default function NewProductForm({
           })
           .then(getProducts);
       }
-      setNewProduct({});
-      setImages({ pvw: addPhoto });
-      setColores([]);
-      setStock({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+      resetForm();
       setFeedbackMsg("Producto agregado correctamente");
       trigger();
     } else setErrorMsg("Todos los campos deben estar completos");
@@ -196,6 +219,7 @@ export default function NewProductForm({
   const handleClose = () => {
     trigger();
     returnEditingProductToList();
+    resetForm();
   };
 
   return (
@@ -212,7 +236,11 @@ export default function NewProductForm({
       {colores && (
         <ColorsCards button colors={colores} setColors={setColores} />
       )}
-      <StarButton button onClickFn={() => setPromProduct(!promProduct)} />
+      <StarButton
+        button
+        color={promProduct}
+        onClickFn={() => setPromProduct(!promProduct)}
+      />
       {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
       {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
       <StyledButton

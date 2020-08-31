@@ -70,9 +70,10 @@ export default function BuyingProduct() {
               <Text>{product.name}</Text>
               <Text
                 primary={primaryColor}
-                fSize="15px"
+                fSize="16px"
               >{`$${product.price.toFixed(2)}`}</Text>
               {availableStock < 1 && <Text>SIN STOCK</Text>}
+              <DetailsText margin="0">{product.description}</DetailsText>
               <PayFormsContainer>
                 <CardSvg width={20} />
                 <DetailsText>{`3 cuotas sin interés de $${(
@@ -148,5 +149,5 @@ const PayFormsContainer = styled.div({
 });
 const DetailsText = styled.p({
   fontSize: "14px",
-  margin: "0 5px",
+  margin: (props) => props.margin || "0 5px",
 });

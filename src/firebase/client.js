@@ -101,18 +101,13 @@ class Firebase {
       );
   };
 
-  login = (username, password, callback) => {
-    return this.db
-      .collection("accounts")
-      .get()
-      .then((snapshot) =>
-        snapshot.docs.find((doc) => {
-          const { pw, user } = doc.data();
-          callback();
-          return username === user && password === pw;
-        })
-      )
-      .catch((err) => console.log(err));
+  login = (email, password, callback) => {
+    return this.auth
+      .signInWithEmailAndPassword(email, password)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => console.log(e.code));
   };
 }
 

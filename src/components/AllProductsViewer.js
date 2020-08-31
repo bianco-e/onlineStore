@@ -4,6 +4,8 @@ import IconButton from "./IconButton";
 import ColorsCards from "./ColorsCards";
 import StockCards from "./StockCards";
 import StarButton from "./StarButton";
+import SortButton from "./SortButton";
+import FilterButton from "./FilterButton";
 
 const tHeaders = [" ", "Producto", "Stock", "Precio", " "];
 
@@ -17,71 +19,92 @@ export default function AllProductsViewer({
   deleteProduct,
   editProduct,
   products,
+  setAllProducts,
+  categoriesNames,
+  filterByCategory,
 }) {
   return (
-    <Table>
-      <THead>
-        <TR bgColor="#FFBA9F">
-          {tHeaders.map((h) => (
-            <TD>{h}</TD>
-          ))}
-        </TR>
-      </THead>
-      <TBody>
-        {products.map((product, idx) => {
-          const {
-            category,
-            colors,
-            id,
-            imgs,
-            name,
-            price,
-            prom,
-            stock,
-          } = product;
-          return (
-            <TR bgColor={idx % 2 == 0 ? "#FFF" : "#FFBA9F"} key={id}>
-              <TD width="5%">
-                <StarButton color={prom} />
-              </TD>
-              <TD width="45%">
-                <ProductContainer>
-                  <ThumbnailsContainer>
-                    {imgs.map((img) => (
-                      <ImgThumbnail src={img} />
-                    ))}
-                  </ThumbnailsContainer>
-                  <DetailsContainer>
-                    <Text color="#777" fSize="10px">
-                      {category}
-                    </Text>
-                    <Text
-                      color={idx % 2 == 0 ? "#FFBA9F" : "#FFF"}
-                      fSize="15px"
-                    >
-                      {name}
-                    </Text>
-                    <ColorsCards colors={colors} />
-                  </DetailsContainer>
-                </ProductContainer>
-              </TD>
-              <TD width="23%">
-                <StockCards stock={stock} />
-              </TD>
-              <TD width="15%">{`$${price.toFixed(2)}`}</TD>
-              <TD width="12%">
-                <IconButton link onClickFn={() => copyProductLink(id)} />
-                <IconButton edit onClickFn={() => editProduct(product)} />
-                <IconButton onClickFn={() => deleteProduct(id)} />
-              </TD>
-            </TR>
-          );
-        })}
-      </TBody>
-    </Table>
+    <>
+      <ButtonsGroup>
+        <FilterButton
+          categoriesNames={categoriesNames}
+          filterByCategory={filterByCategory}
+        />
+        <SortButton
+          productsToShow={products}
+          setProductsToShow={setAllProducts}
+        />
+      </ButtonsGroup>
+      <Table>
+        <THead>
+          <TR bgColor="#FFBA9F">
+            {tHeaders.map((h) => (
+              <TD>{h}</TD>
+            ))}
+          </TR>
+        </THead>
+        <TBody>
+          {products.map((product, idx) => {
+            const {
+              category,
+              colors,
+              id,
+              imgs,
+              name,
+              price,
+              prom,
+              stock,
+            } = product;
+            return (
+              <TR bgColor={idx % 2 == 0 ? "#FFF" : "#FFBA9F"} key={id}>
+                <TD width="5%">
+                  <StarButton color={prom} />
+                </TD>
+                <TD width="45%">
+                  <ProductContainer>
+                    <ThumbnailsContainer>
+                      {imgs.map((img) => (
+                        <ImgThumbnail src={img} />
+                      ))}
+                    </ThumbnailsContainer>
+                    <DetailsContainer>
+                      <Text color="#777" fSize="10px">
+                        {category}
+                      </Text>
+                      <Text
+                        color={idx % 2 == 0 ? "#FFBA9F" : "#FFF"}
+                        fSize="15px"
+                      >
+                        {name}
+                      </Text>
+                      <ColorsCards colors={colors} />
+                    </DetailsContainer>
+                  </ProductContainer>
+                </TD>
+                <TD width="23%">
+                  <StockCards stock={stock} />
+                </TD>
+                <TD width="15%">{`$${price.toFixed(2)}`}</TD>
+                <TD width="12%">
+                  <IconButton link onClickFn={() => copyProductLink(id)} />
+                  <IconButton edit onClickFn={() => editProduct(product)} />
+                  <IconButton onClickFn={() => deleteProduct(id)} />
+                </TD>
+              </TR>
+            );
+          })}
+        </TBody>
+      </Table>
+    </>
   );
 }
-
+const ButtonsGroup = styled.div({
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "space-evenly",
+  margin: "5px 0",
+  width: "100%",
+});
 const Table = styled.table({
   border: "1px solid #EEE",
   borderCollapse: "collapse",

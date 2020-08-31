@@ -6,6 +6,7 @@ import BottomBar from "../components/BottomBar";
 import TopBar from "../components/TopBar";
 import StyledButton from "../components/StyledButton";
 import StyledInput from "../components/StyledInput";
+import StyledTextArea from "../components/StyledTextArea";
 import WhatsappFloatButton from "../components/WhatsappFloatButton";
 import LoadingSpinner from "../components/LoadingSpinner";
 import FeedbackMessage from "../components/FeedbackMessage";
@@ -21,7 +22,6 @@ export default function Contact() {
   const [errorMsg, setErrorMsg] = useState(undefined);
 
   const { style } = useContext(StyleContext);
-  const { secondaryColor } = style;
 
   const confirmForm = () => {
     setFeedbackMsg(undefined);
@@ -36,7 +36,7 @@ export default function Contact() {
   return (
     <Wrapper>
       <TopBar />
-      {!secondaryColor ? (
+      {!style ? (
         <LoadingSpinner />
       ) : (
         <>
@@ -62,11 +62,10 @@ export default function Contact() {
                 />
               );
             })}
-            <TextArea
-              placeholder="Mensaje"
+            <StyledTextArea
+              ph="Mensaje"
               val={message.text}
               onChange={(e) => setMessage({ ...message, text: e.target.value })}
-              secondary={secondaryColor}
             />
             {feedbackMsg && <FeedbackMessage type="ok" msg={feedbackMsg} />}
             {errorMsg && <FeedbackMessage type="err" msg={errorMsg} />}
@@ -104,17 +103,5 @@ const ContactForm = styled.section({
   width: "90%",
 });
 const Text = styled.p({
-  textAlign: "center",
-});
-const TextArea = styled.textarea({
-  backgroundColor: "transparent",
-  border: (props) => `1px solid ${props.secondary}`,
-  borderRadius: "15px",
-  fontFamily: "ubuntu",
-  maxHeight: "80px",
-  maxWidth: "80%",
-  minHeight: "80px",
-  minWidth: "80%",
-  padding: "5px 12px",
   textAlign: "center",
 });

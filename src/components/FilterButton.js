@@ -3,6 +3,7 @@ import Select from "./Select";
 
 export default function FilterButton({ categoriesNames, filterByCategory }) {
   const filterOptions = [{ val: "Filtrar por categoría", fn: () => {} }];
+
   const getCategories = () => {
     return filterOptions.concat(
       categoriesNames.map((cat) => {

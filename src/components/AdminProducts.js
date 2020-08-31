@@ -11,6 +11,7 @@ import firebase from "../firebase/client.js";
 
 export default function AdminProducts() {
   const [allProducts, setAllProducts] = useState([]);
+  const [categoriesNames, setCategoriesNames] = useState([]);
   const [newProduct, setNewProduct] = useState({});
   const [editingProduct, setEditingProduct] = useState(undefined);
   const [showProductForm, setShowProductForm] = useState(false);
@@ -29,6 +30,20 @@ export default function AdminProducts() {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    firebase
+      .getDocByID("categories", "categories")
+      .then((categs) =>
+        setCategoriesNames(categs.categories.map((cat) => cat.name))
+      );
+  }, []);
+
+  const filterByCategory = (category) => {
+    firebase
+      .getProductsByCategory(category)
+      .then((prods) => setAllProducts(prods));
+  };
+
   const triggerShowForm = () => setShowProductForm(!showProductForm);
 
   const deleteProduct = (id) => {
@@ -46,14 +61,19 @@ export default function AdminProducts() {
     setPromProduct(prom);
     setStock(stock);
     setNewProduct(product);
-    const mappedImages = imgs.map((img) => {
-      return { pvw: img };
-    });
-    setImages(mappedImages);
+    setImages(
+      imgs.map((img) => {
+        return { pvw: img };
+      })
+    );
   };
 
-  const returnEditingProductToList = () =>
-    editingProduct && setAllProducts(allProducts.concat(editingProduct));
+  const returnEditingProductToList = () => {
+    if (editingProduct) {
+      setAllProducts(allProducts.concat(editingProduct));
+      setEditingProduct(undefined);
+    }
+  };
 
   return (
     <Container>
@@ -89,6 +109,9 @@ export default function AdminProducts() {
             editProduct={editProduct}
             deleteProduct={deleteProduct}
             products={allProducts}
+            setAllProducts={setAllProducts}
+            categoriesNames={categoriesNames}
+            filterByCategory={filterByCategory}
           />
         </>
       )}
