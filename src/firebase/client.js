@@ -92,7 +92,6 @@ class Firebase {
     return this.db
       .collection("products")
       .where("prom", "==", true)
-      .limit(3)
       .get()
       .then((snapshot) =>
         snapshot.docs.map((product) => {

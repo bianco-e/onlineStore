@@ -13,12 +13,12 @@ import SettableImageThumbnail from "./SettableImageThumbnail";
 import CloseButton from "./CloseButton";
 import StarButton from "./StarButton";
 
-import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
-import { emptyStock } from "../data/data.js";
 
 export default function NewProductForm({
-  getProducts,
+  addProductToFirebase,
+  setPromProductsList,
+  resetForm,
   images,
   setImages,
   stock,
@@ -34,7 +34,6 @@ export default function NewProductForm({
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
   const [errorMsg, setErrorMsg] = useState(undefined);
-  const [feedbackMsg, setFeedbackMsg] = useState(undefined);
 
   useEffect(() => {
     firebase.getDocsFromCollection("categories").then((categs) => {
@@ -47,13 +46,6 @@ export default function NewProductForm({
       );
     });
   }, []);
-
-  const resetForm = () => {
-    setNewProduct({});
-    setImages([{ pvw: addPhoto }]);
-    setColores([]);
-    setStock(emptyStock);
-  };
 
   const setValue = (e, property) =>
     setNewProduct({ ...newProduct, [property]: e.target.value });
@@ -155,7 +147,6 @@ export default function NewProductForm({
 
   const handleAddProduct = () => {
     setErrorMsg(undefined);
-    setFeedbackMsg(undefined);
     const productToUpload = {
       ...newProduct,
       price: parseFloat(newProduct.price),
@@ -163,52 +154,16 @@ export default function NewProductForm({
       stock,
       colors: colores,
     };
-    const { name, price, category, description, id } = newProduct;
-
-    if (
-      name &&
-      price &&
-      description &&
-      category != "-" &&
-      images.length &&
-      colores.length
-    ) {
-      if (images.some((img) => img.file)) {
-        const imagesToUpload = images.map((img) => {
-          return firebase.addImage("products", img.file).then((imgUrl) => {
-            return imgUrl;
-          });
-        });
-        !id
-          ? Promise.all(imagesToUpload).then((uploadedImages) => {
-              firebase
-                .addNewDoc(false, "products", {
-                  ...productToUpload,
-                  imgs: uploadedImages,
-                })
-                .then(getProducts);
-            })
-          : Promise.all(imagesToUpload)
-              .then((uploadedImages) => {
-                firebase.editDoc(false, "products", id, {
-                  ...productToUpload,
-                  imgs: uploadedImages,
-                });
-              })
-              .then(getProducts);
-      } else {
-        const imagesToUpload = images.map((img) => img.pvw);
-        firebase
-          .editDoc(false, "products", id, {
-            ...productToUpload,
-            imgs: imagesToUpload,
-          })
-          .then(getProducts);
-      }
-      resetForm();
-      setFeedbackMsg("Producto agregado correctamente");
-      trigger();
-    } else setErrorMsg("Todos los campos deben estar completos");
+    if (promProduct) {
+      firebase.getPromotedProducts().then((prods) => {
+        if (
+          prods.length > 2 &&
+          !prods.find((prod) => prod.id == productToUpload.id)
+        ) {
+          setPromProductsList(prods);
+        } else addProductToFirebase(productToUpload, setErrorMsg);
+      });
+    } else addProductToFirebase(productToUpload, setErrorMsg);
   };
 
   const handleClose = () => {
@@ -237,7 +192,6 @@ export default function NewProductForm({
         onClickFn={() => setPromProduct(!promProduct)}
       />
       {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
-      {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
       <StyledButton
         title="Agregar producto"
         onClickFn={() => handleAddProduct()}

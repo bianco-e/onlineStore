@@ -6,6 +6,7 @@ import NewProductForm from "./NewProductForm";
 import StyledButton from "./StyledButton";
 import AllProductsViewer from "./AllProductsViewer";
 import ConfirmModal from "./ConfirmModal";
+import ChoosePromModal from "./ChoosePromModal";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
@@ -23,6 +24,7 @@ export default function AdminProducts() {
   const [colores, setColores] = useState([]);
   const [idToDelete, setIdToDelete] = useState(undefined);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [promProductsList, setPromProductsList] = useState(undefined);
 
   const getProducts = () => {
     firebase
@@ -85,6 +87,69 @@ export default function AdminProducts() {
     }
   };
 
+  const resetForm = () => {
+    setNewProduct({});
+    setImages([{ pvw: addPhoto }]);
+    setColores([]);
+    setStock(emptyStock);
+  };
+
+  const addProductToFirebase = (
+    product = {
+      ...newProduct,
+      price: parseFloat(newProduct.price),
+      prom: promProduct,
+      stock,
+      colors: colores,
+    },
+    setErrorMsg = () => {}
+  ) => {
+    const { name, price, category, description, id } = product;
+    if (
+      name &&
+      price &&
+      description &&
+      category != "-" &&
+      images.length &&
+      colores.length
+    ) {
+      if (images.some((img) => img.file)) {
+        const imagesToUpload = images.map((img) => {
+          return firebase.addImage("products", img.file).then((imgUrl) => {
+            return imgUrl;
+          });
+        });
+        !id
+          ? Promise.all(imagesToUpload).then((uploadedImages) => {
+              firebase
+                .addNewDoc(false, "products", {
+                  ...product,
+                  imgs: uploadedImages,
+                })
+                .then(getProducts);
+            })
+          : Promise.all(imagesToUpload)
+              .then((uploadedImages) => {
+                firebase.editDoc(false, "products", id, {
+                  ...product,
+                  imgs: uploadedImages,
+                });
+              })
+              .then(getProducts);
+      } else {
+        const imagesToUpload = images.map((img) => img.pvw);
+        firebase
+          .editDoc(false, "products", id, {
+            ...product,
+            imgs: imagesToUpload,
+          })
+          .then(getProducts);
+      }
+      resetForm();
+      triggerShowForm();
+    } else setErrorMsg("Todos los campos deben estar completos");
+  };
+
   return (
     <Container>
       <Title>Productos</Title>
@@ -93,6 +158,13 @@ export default function AdminProducts() {
           callback={deleteProduct}
           setIdToDelete={setIdToDelete}
           setShowModal={setShowConfirmModal}
+        />
+      )}
+      {promProductsList && (
+        <ChoosePromModal
+          callback={addProductToFirebase}
+          promProducts={promProductsList}
+          setShowModal={setPromProductsList}
         />
       )}
       {!allProducts.length ? (
@@ -106,7 +178,9 @@ export default function AdminProducts() {
             />
           ) : (
             <NewProductForm
-              getProducts={getProducts}
+              addProductToFirebase={addProductToFirebase}
+              setPromProductsList={setPromProductsList}
+              resetForm={resetForm}
               images={images}
               setImages={setImages}
               stock={stock}

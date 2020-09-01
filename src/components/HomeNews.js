@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import ProductThumbnail from "./ProductThumbnail";
 
+import StyleContext from "../context/StyleContext";
+
 export default function HomeNews({ products }) {
+  const { style } = useContext(StyleContext);
+  const { promText } = style;
+
   return (
     <Wrapper>
       <NameContainer>
-        <SectionName>Nuevo</SectionName>
+        <SectionName>{promText || "Nuevo"}</SectionName>
       </NameContainer>
       <ProductsContainer>
         {products.map((prod) => {
@@ -28,12 +33,17 @@ const ProductsContainer = styled.div({
   alignItems: "center",
   display: "flex",
   justifyContent: "space-between",
+  width: "80%",
 });
 const NameContainer = styled.div({
+  alignItems: "center",
   backgroundColor: "#111",
-  padding: "140px 120px 80px 40px",
-  textAlign: "center",
+  display: "flex",
+  justifyContent: "flex-end",
+  height: "260px",
+  width: "20%",
 });
 const SectionName = styled.h1({
   color: "white",
+  marginRight: "10%",
 });

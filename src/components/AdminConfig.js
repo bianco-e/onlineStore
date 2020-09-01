@@ -21,6 +21,7 @@ export default function AdminConfig() {
     storeName,
     storeLogo,
     primaryColor,
+    promText,
     secondaryColor,
   } = style;
 
@@ -74,6 +75,16 @@ export default function AdminConfig() {
         <StyledInput
           onChangeFn={(e) => setValue(e, "homeTitle")}
           val={homeTitle}
+          width="180px"
+        />
+      )
+    ),
+    new Config(
+      "Texto de promocionados",
+      (
+        <StyledInput
+          onChangeFn={(e) => setValue(e, "promText")}
+          val={promText}
           width="180px"
         />
       )
