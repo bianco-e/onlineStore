@@ -72,7 +72,7 @@ export default function AdminProducts() {
     setColores(colors);
     setPromProduct(prom);
     setStock(stock);
-    setNewProduct(product);
+    setNewProduct({ ...product, colors: undefined });
     setImages(
       imgs.map((img) => {
         return { pvw: img };
