@@ -5,6 +5,7 @@ import Products from "./pages/Products";
 import BuyingProduct from "./pages/BuyingProduct";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import Admin from "./pages/Admin";
 import AdminCategories from "./components/AdminCategories";
 import AdminClients from "./components/AdminClients";
@@ -39,6 +40,7 @@ export default function App() {
             />
             <AdminContextProvider>
               <Route exact path="/login" render={() => <Login />} />
+              <Route exact path="/signup" render={() => <SignUp />} />
               <PrivateRoute exact path="/admin" render={() => <Admin />} />
               <PrivateRoute
                 exact

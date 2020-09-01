@@ -10,31 +10,36 @@ import AdminContext from "../context/AdminContext";
 
 export default function Login() {
   const history = useHistory();
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
   const { login } = useContext(AdminContext);
 
+  const cleanInputs = () => {
+    setPassword("");
+    setEmail("");
+  };
+
   const handleLogin = () => {
     firebase
-      .login(user, password, login)
+      .login(email, password)
       .then((res) => {
-        if (res) {
+        if (typeof res == "object") {
+          login(res);
           history.push("/admin");
-        } else setErrorMsg("Los datos ingresados son incorrectos");
+        } else setErrorMsg("Los datos ingresados no son válidos");
       })
-      .catch((err) => console.error(err));
-    setPassword("");
-    setUser("");
+      .catch((err) => console.log(err));
+    cleanInputs();
   };
 
   const inputsData = [
     {
       ph: "Usuario",
-      fn: (e) => setUser(e.target.value),
+      fn: (e) => setEmail(e.target.value),
       okd: false,
-      val: user,
+      val: email,
       type: "text",
     },
     {
@@ -68,10 +73,16 @@ export default function Login() {
               />
             );
           })}
-          <StyledButton
-            onClickFn={() => handleLogin()}
-            title="INICIAR SESIÓN"
-          />
+          <ButtonsGroup>
+            <StyledButton
+              onClickFn={() => handleLogin()}
+              title="INICIAR SESIÓN"
+            />
+            <StyledButton
+              onClickFn={() => history.push("/signup")}
+              title="CREAR CUENTA"
+            />
+          </ButtonsGroup>
         </Container>
       )}
     </Wrapper>
@@ -90,6 +101,11 @@ const Container = styled.div({
   height: "70vh",
   justifyContent: "space-between",
   width: "90%",
+});
+const ButtonsGroup = styled.div({
+  display: "flex",
+  justifyContent: "space-evenly",
+  width: "40%",
 });
 const Title = styled.h1({
   margin: "0",

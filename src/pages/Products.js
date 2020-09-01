@@ -19,6 +19,11 @@ export default function Products() {
 
   let { endpoint } = useParams();
 
+  const getAllProducts = () =>
+    firebase
+      .getDocsFromCollection("products")
+      .then((prods) => setProductsToShow(prods));
+
   useEffect(() => {
     firebase.getDocByID("categories", "categories").then((categs) => {
       const names = categs.categories.map((cat) => cat.name);
@@ -28,11 +33,7 @@ export default function Products() {
           (cat) => cat.toLowerCase().split(" ").join("-") == endpoint
         );
         filterByCategory(category);
-      } else {
-        firebase
-          .getDocsFromCollection("products")
-          .then((prods) => setProductsToShow(prods));
-      }
+      } else getAllProducts();
     });
   }, []);
 
@@ -56,6 +57,7 @@ export default function Products() {
             <FilterButton
               categoriesNames={categoriesNames}
               filterByCategory={filterByCategory}
+              reset={getAllProducts}
             />
             <SortButton
               productsToShow={productsToShow}

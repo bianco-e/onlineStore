@@ -33,9 +33,9 @@ export default function BuyingProduct() {
   useEffect(() => {
     product &&
       setAvailableStock(
-        Object.values(product.stock).reduce(
-          (acc, current) => parseInt(acc) + parseInt(current)
-        )
+        product.stock
+          .map((option) => option.items)
+          .reduce((acc, current) => parseInt(acc) + parseInt(current))
       );
   }, [product]);
 
@@ -91,10 +91,10 @@ export default function BuyingProduct() {
               <Select
                 disabled={availableStock < 1 && true}
                 options={[{ val: "Talle" }].concat(
-                  Object.keys(product.stock)
-                    .filter((k) => product.stock[k] != 0)
-                    .map((s) => {
-                      return { val: s };
+                  product.stock
+                    .filter((opt) => opt.items != 0)
+                    .map((opt) => {
+                      return { val: opt.size };
                     })
                 )}
                 onChangeFn={selectSize}

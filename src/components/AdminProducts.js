@@ -126,6 +126,7 @@ export default function AdminProducts() {
             editProduct={editProduct}
             deleteProduct={confirmToDeleteProduct}
             products={allProducts}
+            reset={getProducts}
             setAllProducts={setAllProducts}
             categoriesNames={categoriesNames}
             filterByCategory={filterByCategory}

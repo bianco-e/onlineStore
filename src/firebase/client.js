@@ -101,13 +101,20 @@ class Firebase {
       );
   };
 
-  login = (email, password, callback) => {
+  signUp = (email, password) => {
+    return this.auth
+      .createUserWithEmailAndPassword(email, password)
+      .catch((err) => {
+        const errCode = err.code;
+        const errMessage = err.message;
+      });
+  };
+
+  login = (email, password) => {
     return this.auth
       .signInWithEmailAndPassword(email, password)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((e) => console.log(e.code));
+      .then((res) => res)
+      .catch((err) => err.code);
   };
 }
 

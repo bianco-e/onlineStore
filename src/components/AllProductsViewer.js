@@ -19,6 +19,7 @@ export default function AllProductsViewer({
   deleteProduct,
   editProduct,
   products,
+  reset,
   setAllProducts,
   categoriesNames,
   filterByCategory,
@@ -29,6 +30,7 @@ export default function AllProductsViewer({
         <FilterButton
           categoriesNames={categoriesNames}
           filterByCategory={filterByCategory}
+          reset={reset}
         />
         <SortButton
           productsToShow={products}
