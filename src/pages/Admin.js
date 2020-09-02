@@ -15,8 +15,9 @@ export default function Admin({ Child }) {
 }
 
 const Wrapper = styled.div({
-  alignItems: "center",
+  alignItems: "flex-start",
   display: "flex",
   justifyContent: "flex-start",
+  minHeight: "100vh",
   width: "100%",
 });

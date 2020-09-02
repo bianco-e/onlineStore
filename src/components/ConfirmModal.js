@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ConfirmModal({
   callback,
   setIdToDelete,
+  setProductsInACategory,
   setShowModal,
+  data,
 }) {
   const handleConfirmation = () => {
     callback();
@@ -13,20 +16,28 @@ export default function ConfirmModal({
 
   const handleCancel = () => {
     setIdToDelete(undefined);
+    setProductsInACategory && setProductsInACategory(undefined);
     setShowModal(false);
   };
+
   return (
     <Wrapper>
-      <Title>¿Seguro que deseas eliminar este producto?</Title>
-      <Text>Una vez confirmado el producto será eliminado por completo.</Text>
-      <Container>
-        <Button color="darkgreen" onClick={() => handleConfirmation()}>
-          Confirmar
-        </Button>
-        <Button color="red" onClick={() => handleCancel()}>
-          Cancelar
-        </Button>
-      </Container>
+      {!data.text ? (
+        <LoadingSpinner small />
+      ) : (
+        <>
+          <Title>{data.title}</Title>
+          <Text>{data.text}</Text>
+          <Container>
+            <Button color="darkgreen" onClick={() => handleConfirmation()}>
+              Confirmar
+            </Button>
+            <Button color="red" onClick={() => handleCancel()}>
+              Cancelar
+            </Button>
+          </Container>
+        </>
+      )}
     </Wrapper>
   );
 }

@@ -16,7 +16,7 @@ const copyProductLink = (id) => {
 };
 
 export default function AllProductsViewer({
-  deleteProduct,
+  confirmToDeleteProduct,
   editProduct,
   products,
   reset,
@@ -90,7 +90,9 @@ export default function AllProductsViewer({
                 <TD width="12%">
                   <IconButton link onClickFn={() => copyProductLink(id)} />
                   <IconButton edit onClickFn={() => editProduct(product)} />
-                  <IconButton onClickFn={() => deleteProduct(id)} />
+                  <IconButton
+                    onClickFn={() => confirmToDeleteProduct(id, name)}
+                  />
                 </TD>
               </TR>
             );

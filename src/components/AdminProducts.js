@@ -23,6 +23,7 @@ export default function AdminProducts() {
   const [promProduct, setPromProduct] = useState(false);
   const [colores, setColores] = useState([]);
   const [idToDelete, setIdToDelete] = useState(undefined);
+  const [nameToDelete, setNameToDelete] = useState(undefined);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [promProductsList, setPromProductsList] = useState(undefined);
 
@@ -56,10 +57,12 @@ export default function AdminProducts() {
     firebase.deleteDoc("products", idToDelete);
     getProducts();
     setIdToDelete(undefined);
+    setNameToDelete(undefined);
   };
 
-  const confirmToDeleteProduct = (id) => {
+  const confirmToDeleteProduct = (id, name) => {
     setIdToDelete(id);
+    setNameToDelete(name);
     setShowConfirmModal(true);
   };
 
@@ -150,12 +153,18 @@ export default function AdminProducts() {
     } else setErrorMsg("Todos los campos deben estar completos");
   };
 
+  const deleteProductModalData = {
+    title: `¿Seguro que deseas eliminar el producto ${nameToDelete}?`,
+    text: `Una vez confirmado, ${nameToDelete} será eliminado por completo.`,
+  };
+
   return (
     <Container>
       <Title>Productos</Title>
       {showConfirmModal && (
         <ConfirmModal
           callback={deleteProduct}
+          data={deleteProductModalData}
           setIdToDelete={setIdToDelete}
           setShowModal={setShowConfirmModal}
         />
@@ -198,7 +207,7 @@ export default function AdminProducts() {
 
           <AllProductsViewer
             editProduct={editProduct}
-            deleteProduct={confirmToDeleteProduct}
+            confirmToDeleteProduct={confirmToDeleteProduct}
             products={allProducts}
             reset={getProducts}
             setAllProducts={setAllProducts}

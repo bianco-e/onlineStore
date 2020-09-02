@@ -5,7 +5,7 @@ import SettableImageThumbnail from "./SettableImageThumbnail";
 
 export default function CategoryThumbnail({
   draggable,
-  deleteFn,
+  confirmToDeleteCategory,
   img,
   imgOnChangeFn,
   inputOnChangeFn,
@@ -32,7 +32,7 @@ export default function CategoryThumbnail({
         value={inputVal}
       />
       {draggable && (
-        <RemoveButton onClick={() => deleteFn(inputVal)}>
+        <RemoveButton onClick={() => confirmToDeleteCategory(inputVal)}>
           <DeleteSvg width={17} />
         </RemoveButton>
       )}

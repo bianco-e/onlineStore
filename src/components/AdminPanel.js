@@ -8,7 +8,7 @@ import StyleContext from "../context/StyleContext";
 export default function AdminPanel() {
   const history = useHistory();
   const { style } = useContext(StyleContext);
-  const { storeName, primaryColor, secondaryColor } = style;
+  const { storeName, storeLogo, primaryColor, secondaryColor } = style;
 
   const renderPanelSections = (arr) => {
     return arr.map(({ endpoint, Logo, title }) => {
@@ -34,7 +34,10 @@ export default function AdminPanel() {
 
   return (
     <Wrapper primary={primaryColor}>
-      <Title>{storeName}</Title>
+      <Container>
+        <Image src={storeLogo} />
+        <Title>{storeName}</Title>
+      </Container>
       {renderPanelSections(buttons)}
     </Wrapper>
   );
@@ -44,13 +47,20 @@ const Wrapper = styled.div({
   boxShadow: (props) => `inset -5px 0 20px ${props.primary}`,
   display: "flex",
   flexDirection: "column",
-  height: "100vh",
+  minHeight: "100vh",
   justifyContent: "flex-start",
   padding: "10px 20px",
   width: "195px",
 });
+const Container = styled.div({
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "space-between",
+  margin: "60px 0px 25px 5px",
+  width: "60%",
+});
 const Title = styled.h3({
-  margin: "50px 0 14px 0",
+  margin: "0",
 });
 const PanelTitle = styled.div({
   alignItems: "center",
@@ -69,4 +79,8 @@ const Button = styled.button({
   ["&:hover"]: {
     color: (props) => props.primary,
   },
+});
+const Image = styled.img({
+  height: "25px",
+  width: "25px",
 });

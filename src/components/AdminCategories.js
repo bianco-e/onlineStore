@@ -6,6 +6,7 @@ import CategoryThumbnail from "./CategoryThumbnail";
 import CategoriesDisplayThumbnail from "./CategoriesDisplayThumbnail";
 import FeedbackMessage from "../components/FeedbackMessage";
 import StyledButton from "../components/StyledButton";
+import ConfirmModal from "../components/ConfirmModal";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
@@ -17,12 +18,25 @@ export default function AdminCategories() {
   const [draggedVal, setDraggedVal] = useState(undefined);
   const [errorMsg, setErrorMsg] = useState(undefined);
   const [feedbackMsg, setFeedbackMsg] = useState(undefined);
+  const [nameToDelete, setNameToDelete] = useState(undefined);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [productsInACategory, setProductsInACategory] = useState(undefined);
+  const [containingProductsToDelete, setContainingProductsToDelete] = useState(
+    []
+  );
 
   useEffect(() => {
     firebase.getDocsFromCollection("categories").then((categories) => {
       setAllCategories(categories[0].categories);
     });
   }, []);
+
+  useEffect(() => {
+    nameToDelete &&
+      firebase
+        .getProductsByCategory(nameToDelete)
+        .then((prods) => setProductsInACategory(prods));
+  }, [nameToDelete]);
 
   const addCategory = () => {
     if (allCategories.length < 8) {
@@ -49,9 +63,16 @@ export default function AdminCategories() {
     } else setErrorMsg("El máximo de categorías es 8");
   };
 
-  const deleteCategory = (name) => {
+  const confirmToDeleteCategory = (name) => {
+    setNameToDelete(name);
+    setShowConfirmModal(true);
+  };
+
+  const deleteCategory = () => {
     const lastGa = `p${allCategories.length}`;
-    const categoryToDelete = allCategories.find((cat) => cat.name == name);
+    const categoryToDelete = allCategories.find(
+      (cat) => cat.name == nameToDelete
+    );
     const greatestGaCategory = allCategories.find((cat) => cat.ga == lastGa);
 
     if (categoryToDelete == greatestGaCategory) {
@@ -68,6 +89,11 @@ export default function AdminCategories() {
         });
       setAllCategories(newCategories);
     }
+    setNameToDelete(undefined);
+    setContainingProductsToDelete(
+      containingProductsToDelete.concat(productsInACategory)
+    );
+    setProductsInACategory(undefined);
   };
 
   const editCategoryName = (e) => {};
@@ -82,6 +108,11 @@ export default function AdminCategories() {
   };
 
   const saveChanges = () => {
+    if (containingProductsToDelete.length) {
+      containingProductsToDelete.forEach((prod) =>
+        firebase.deleteDoc("products", prod.id)
+      );
+    }
     const mappedArr = allCategories.map((cat) => {
       return cat.img.file
         ? firebase.addImage("categories", cat.img.file).then((imgUrl) => {
@@ -97,9 +128,31 @@ export default function AdminCategories() {
     });
   };
 
+  const getModalData = () => {
+    let text;
+    if (productsInACategory) {
+      text = productsInACategory.length
+        ? `${nameToDelete} contiene ${productsInACategory.length} productos. Al guardar los cambios, todos los productos contenidos serán eliminados.`
+        : `${nameToDelete} no contiene productos.`;
+    }
+    return {
+      title: `¿Seguro que deseas eliminar la categoría ${nameToDelete}?`,
+      text,
+    };
+  };
+
   return (
     <Container>
       <Title>Categorías</Title>
+      {showConfirmModal && (
+        <ConfirmModal
+          callback={deleteCategory}
+          setIdToDelete={setNameToDelete}
+          setProductsInACategory={setProductsInACategory}
+          setShowModal={setShowConfirmModal}
+          data={getModalData()}
+        />
+      )}
       {!allCategories ? (
         <LoadingSpinner />
       ) : (
@@ -118,7 +171,7 @@ export default function AdminCategories() {
             return (
               <CategoryThumbnail
                 draggable
-                deleteFn={deleteCategory}
+                confirmToDeleteCategory={confirmToDeleteCategory}
                 key={name}
                 img={img.pvw || img}
                 imgOnChangeFn={editImgOnClickFn}

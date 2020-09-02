@@ -27,6 +27,7 @@ const Input = styled.input({
   backgroundColor: "transparent",
   border: (props) => `1px solid ${props.secondary}`,
   borderRadius: "9999px",
+  fontSize: "15px",
   padding: "8px 12px",
   textAlign: "center",
   width: (props) => props.width,
