@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import Button from "./Button";
 import SideMenuModal from "./SideMenuModal";
+import StyledInput from "./StyledInput";
+import { useHistory } from "react-router-dom";
 
 export default function SearchAndMenu() {
+  const history = useHistory();
   const [showSideMenu, setShowSideMenu] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  const onChangeInputFn = (e) => setSearchValue(e.target.value);
+
+  const handleSearch = () => history.push(`/busqueda/${searchValue}`);
+
   return (
     <>
       {showSideMenu && (
@@ -14,14 +22,13 @@ export default function SearchAndMenu() {
         />
       )}
       <Button fn={() => setShowSideMenu(!showSideMenu)}>≡</Button>
-      <SearchInput placeholder="Buscar" />
+      <StyledInput
+        ph="Búsqueda"
+        val={searchValue}
+        onChangeFn={onChangeInputFn}
+        OKD={handleSearch}
+        width={"55%"}
+      />
     </>
   );
 }
-const SearchInput = styled.input({
-  borderRadius: "9999px",
-  backgroundColor: "transparent",
-  border: "1px solid black",
-  padding: "5px 12px",
-  width: "60%",
-});

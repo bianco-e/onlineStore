@@ -14,10 +14,10 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import firebase from "../firebase/client.js";
 
 export default function Products() {
-  const [productsToShow, setProductsToShow] = useState([]);
+  const [productsToShow, setProductsToShow] = useState(undefined);
   const [categoriesNames, setCategoriesNames] = useState([]);
 
-  let { endpoint } = useParams();
+  let { endpoint, keyword } = useParams();
 
   const getAllProducts = () =>
     firebase
@@ -28,12 +28,17 @@ export default function Products() {
     firebase.getDocByID("categories", "categories").then((categs) => {
       const names = categs.categories.map((cat) => cat.name);
       setCategoriesNames(names);
-      if (endpoint) {
-        const category = names.find(
-          (cat) => cat.toLowerCase().split(" ").join("-") == endpoint
+      if (endpoint)
+        filterByCategory(
+          names.find(
+            (cat) => cat.toLowerCase().split(" ").join("-") == endpoint
+          )
         );
-        filterByCategory(category);
-      } else getAllProducts();
+      if (keyword)
+        firebase
+          .getProductsByName(keyword)
+          .then((prods) => setProductsToShow(prods));
+      if (!keyword && !endpoint) getAllProducts();
     });
   }, []);
 
@@ -45,7 +50,7 @@ export default function Products() {
 
   return (
     <Wrapper>
-      {!productsToShow.length ? (
+      {!productsToShow ? (
         <LoadingSpinner />
       ) : (
         <>
@@ -64,11 +69,15 @@ export default function Products() {
               setProductsToShow={setProductsToShow}
             />
           </Container>
-          <ProductsWrapper>
-            {productsToShow.map((prod) => {
-              return <ProductThumbnail key={prod.id} product={prod} />;
-            })}
-          </ProductsWrapper>
+          {!productsToShow.length ? (
+            <Text>No se encontraron resultados.</Text>
+          ) : (
+            <ProductsWrapper>
+              {productsToShow.map((prod) => {
+                return <ProductThumbnail key={prod.id} product={prod} />;
+              })}
+            </ProductsWrapper>
+          )}
           <BottomBar />
         </>
       )}
@@ -81,6 +90,7 @@ const Wrapper = styled.div({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",
+  minHeight: "100vh",
   position: "relative",
   width: "100%",
 });
@@ -98,3 +108,4 @@ const ProductsWrapper = styled.section({
   marginBottom: "120px",
   width: "90%",
 });
+const Text = styled.p({});

@@ -18,7 +18,7 @@ export default function ProductThumbnail({ product }) {
   };
 
   return (
-    <WrapperButton onClick={() => history.push(`/productos/${product.id}`)}>
+    <WrapperButton onClick={() => history.push(`/producto/${product.id}`)}>
       {showBuying && (
         <BuyingProductThumbnail
           product={product}

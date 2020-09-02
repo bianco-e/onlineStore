@@ -88,6 +88,18 @@ class Firebase {
       );
   };
 
+  getProductsByName = (name) => {
+    return this.db
+      .collection("products")
+      .where("name", "==", name)
+      .get()
+      .then((snapshot) =>
+        snapshot.docs.map((product) => {
+          return { id: product.id, ...product.data() };
+        })
+      );
+  };
+
   getPromotedProducts = () => {
     return this.db
       .collection("products")
