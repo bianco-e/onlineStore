@@ -29,7 +29,7 @@ const Wrapper = styled.div({
   gridGap: "20px",
   gridTemplateAreas: (props) => props.grid.gta,
   gridTemplateColumns: (props) => props.grid.gtc,
-  gridTemplateRows: "repeat(2, 1fr)",
+  gridTemplateRows: (props) => props.grid.gtr || "repeat(2, 1fr)",
   height: "450px",
   padding: "20px 0",
   width: "90%",

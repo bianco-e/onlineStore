@@ -58,7 +58,7 @@ const Wrapper = styled.div({
   display: "grid",
   gridTemplateAreas: (props) => props.grid.gta,
   gridTemplateColumns: (props) => props.grid.gtc,
-  gridTemplateRows: "repeat(2, 1fr)",
+  gridTemplateRows: (props) => props.grid.gtr || "repeat(2, 1fr)",
   gridGap: "2px",
   height: "100px",
   marginBottom: "15px",

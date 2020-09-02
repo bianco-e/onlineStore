@@ -39,7 +39,7 @@ export default function AdminCategories() {
   }, [nameToDelete]);
 
   const addCategory = () => {
-    if (allCategories.length < 8) {
+    if (allCategories.length < 9) {
       if (
         categoryName &&
         categoryImg.pvw !== addPhoto &&

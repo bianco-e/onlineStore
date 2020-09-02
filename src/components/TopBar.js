@@ -6,11 +6,12 @@ import SideCartModal from "./SideCartModal";
 import { useHistory } from "react-router-dom";
 
 import StyleContext from "../context/StyleContext";
+import BagSvg from "./svg/BagSvg";
 
 export default function TopBar() {
   const [showCartModal, setShowCartModal] = useState(false);
   const { style } = useContext(StyleContext);
-  const { storeLogo, primaryColor } = style;
+  const { storeLogo, primaryColor, secondaryColor } = style;
 
   const history = useHistory();
 
@@ -23,7 +24,7 @@ export default function TopBar() {
         />
       )}
       <Container>
-        <SearchAndMenu />
+        <SearchAndMenu secondaryColor={secondaryColor} />
       </Container>
       <Container>
         <Button fn={() => history.push("/#")}>
@@ -31,7 +32,9 @@ export default function TopBar() {
         </Button>
       </Container>
       <Container>
-        <Button fn={() => setShowCartModal(!showCartModal)}>🛍</Button>
+        <Button fn={() => setShowCartModal(!showCartModal)}>
+          <BagSvg fill={secondaryColor} height={25} width={27} />
+        </Button>
       </Container>
     </Wrapper>
   );

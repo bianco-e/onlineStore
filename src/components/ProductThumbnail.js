@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import BuyingProductThumbnail from "./BuyingProductThumbnail";
+import BagSvg from "./svg/BagSvg";
 
 import StyleContext from "../context/StyleContext";
 
@@ -27,7 +28,7 @@ export default function ProductThumbnail({ product }) {
       )}
       <Image src={product.imgs[0]} />
       <Button onClick={(e) => handleClick(e)} primary={primaryColor}>
-        🛍
+        <BagSvg fill={secondaryColor} />
       </Button>
       <Name secondary={secondaryColor}>{product.name}</Name>
       <Price primary={primaryColor}>{`$${product.price.toFixed(2)}`}</Price>

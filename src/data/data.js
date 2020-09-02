@@ -48,6 +48,11 @@ export const gridOptions = [
     gta: "'p1 p2 p3 p4' 'p5 p6 p7 p8'",
     gtc: "repeat(4, 1fr)",
   },
+  {
+    gta: "'p1 p2 p3' 'p4 p5 p6' 'p7 p8 p9'",
+    gtc: "repeat(3, 1fr)",
+    gtr: "repeat(3, 1fr)",
+  },
 ];
 
 export class Config {

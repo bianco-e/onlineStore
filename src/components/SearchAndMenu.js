@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+
 import Button from "./Button";
 import SideMenuModal from "./SideMenuModal";
 import StyledInput from "./StyledInput";
-import { useHistory } from "react-router-dom";
+import MenuIcon from "./svg/MenuIcon";
 
-export default function SearchAndMenu() {
+export default function SearchAndMenu({ secondaryColor }) {
   const history = useHistory();
   const [showSideMenu, setShowSideMenu] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -21,7 +24,9 @@ export default function SearchAndMenu() {
           setShowModal={setShowSideMenu}
         />
       )}
-      <Button fn={() => setShowSideMenu(!showSideMenu)}>≡</Button>
+      <Button fn={() => setShowSideMenu(!showSideMenu)}>
+        <MenuIcon fill={secondaryColor} />
+      </Button>
       <StyledInput
         ph="Búsqueda"
         val={searchValue}
@@ -32,3 +37,8 @@ export default function SearchAndMenu() {
     </>
   );
 }
+
+const Container = styled.div({
+  alignItems: "center",
+  display: "flex",
+});

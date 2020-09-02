@@ -46,11 +46,14 @@ export default function BottomBar() {
       </Container>
       <Container primary={primaryColor}>
         {style &&
-          contactData.map((via) => {
+          contactData.map((via, idx) => {
             const { link, SVG } = via;
             return (
               <Link key={link} href={link} target="blank">
-                <SVG />
+                <SVG
+                  fill={idx != 2 ? secondaryColor : "none"}
+                  stroke={idx == 2 ? secondaryColor : "none"}
+                />
               </Link>
             );
           })}
