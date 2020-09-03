@@ -28,6 +28,10 @@ export default function AdminCategories() {
   );
 
   useEffect(() => {
+    console.log(editingCategory);
+  }, [editingCategory]);
+
+  useEffect(() => {
     firebase.getDocsFromCollection("categories").then((categories) => {
       setAllCategories(categories[0].categories);
     });
@@ -50,19 +54,27 @@ export default function AdminCategories() {
         )
       ) {
         errorMsg && setErrorMsg(undefined);
+        if (editingCategory && editingCategory.name != categoryName) {
+          firebase.getProductsByCategory(editingCategory.name).then((prods) => {
+            prods.forEach((prod) =>
+              firebase.editDoc(false, "products", prod.id, {
+                ...prod,
+                category: categoryName,
+              })
+            );
+          });
+        }
         const ga = `p${allCategories.length + 1}`;
         const endpoint = categoryName.toLowerCase().split(" ").join("-");
         const cat = { endpoint, ga, img: categoryImg, name: categoryName };
-
         setAllCategories(allCategories.concat(cat));
-
         setCategoryName("");
         setCategoryImg({ url: addPhoto });
       } else
         setErrorMsg(
           "La categoría debe tener imágen y nombre. Los nombres no pueden repetirse"
         );
-    } else setErrorMsg("El máximo de categorías es 8");
+    } else setErrorMsg("El máximo de categorías es 9");
   };
 
   const confirmToDeleteCategory = (name) => {
@@ -102,7 +114,6 @@ export default function AdminCategories() {
 
   const setCategoryToEdit = (name) => {
     const categoryToEdit = allCategories.find((cat) => cat.name == name);
-    console.log(categoryToEdit);
     setEditingCategory(categoryToEdit);
     setCategoryImg(
       !categoryToEdit.img.url ? { url: categoryToEdit.img } : categoryToEdit.img
