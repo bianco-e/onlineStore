@@ -65,7 +65,9 @@ export default function Contact() {
             <StyledTextArea
               ph="Mensaje"
               val={message.text}
-              onChange={(e) => setMessage({ ...message, text: e.target.value })}
+              onChangeFn={(e) =>
+                setMessage({ ...message, text: e.target.value })
+              }
             />
             {feedbackMsg && <FeedbackMessage type="ok" msg={feedbackMsg} />}
             {errorMsg && <FeedbackMessage type="err" msg={errorMsg} />}

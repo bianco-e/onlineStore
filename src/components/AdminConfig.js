@@ -125,7 +125,7 @@ export default function AdminConfig() {
   ];
 
   return (
-    <Container>
+    <>
       <Title>Configuración</Title>
 
       {!style.storeLogo ? (
@@ -146,19 +146,10 @@ export default function AdminConfig() {
           />
         </>
       )}
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  marginTop: "50px",
-  minHeight: "100vh",
-  width: "80%",
-});
 const Title = styled.h2({});
 const ColorInput = styled.input({
   background: "none",

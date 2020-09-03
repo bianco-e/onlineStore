@@ -33,7 +33,7 @@ const SelectButton = styled.select({
   backgroundColor: "transparent",
   cursor: (props) => props.cursor,
   fontSize: "15px",
-  padding: "7px 30px",
+  padding: "5px 30px",
   textAlign: "center",
   width: (props) => props.width,
   mozAppearance: "none",

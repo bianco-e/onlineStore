@@ -51,7 +51,7 @@ const Wrapper = styled.div({
   flexDirection: "column",
   height: "200px",
   justifyContent: "space-between",
-  padding: "10px",
+  padding: "5px 0 15px 0",
   position: "absolute",
   top: "30%",
   width: "360px",
@@ -78,5 +78,6 @@ const Title = styled.h4({
   textAlign: "center",
 });
 const Text = styled.p({
+  fontSize: "14px",
   textAlign: "center",
 });

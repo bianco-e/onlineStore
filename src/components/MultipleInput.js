@@ -5,7 +5,7 @@ import StyledInput from "./StyledInput";
 
 const sortStockBySizes = (stock) => stock.sort((a, b) => a.pos > b.pos);
 
-export default function MultipleChoice({ stock, setStock }) {
+export default function MultipleInput({ stock, setStock }) {
   const handleChange = (e, opt) => {
     const option = stock.find((element) => element.size == opt.size);
     setStock(
@@ -25,7 +25,7 @@ export default function MultipleChoice({ stock, setStock }) {
               onChangeFn={(e) => handleChange(e, opt)}
               type="number"
               val={opt.items}
-              width="35px"
+              width="31px"
             />
           </>
         );

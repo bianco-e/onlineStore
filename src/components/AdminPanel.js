@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
+import { getRGBAFromHex } from "../utils/utils.js";
 import { buttons } from "../data/data.js";
 import StyleContext from "../context/StyleContext";
 
@@ -33,7 +34,7 @@ export default function AdminPanel() {
   };
 
   return (
-    <Wrapper primary={primaryColor}>
+    <Wrapper bg={primaryColor && getRGBAFromHex(primaryColor)}>
       <Container>
         <Image src={storeLogo} />
         <Title>{storeName}</Title>
@@ -43,24 +44,27 @@ export default function AdminPanel() {
   );
 }
 const Wrapper = styled.div({
+  backgroundColor: (props) => props.bg,
   alignItems: "flex-start",
-  boxShadow: (props) => `inset -5px 0 20px ${props.primary}`,
   display: "flex",
   flexDirection: "column",
   minHeight: "100vh",
   justifyContent: "flex-start",
   padding: "10px 20px",
-  width: "195px",
+  position: "fixed",
+  top: "0",
+  left: "0",
+  width: "160px",
 });
 const Container = styled.div({
   alignItems: "center",
   display: "flex",
-  justifyContent: "space-between",
-  margin: "60px 0px 25px 5px",
-  width: "60%",
+  justifyContent: "flex-start",
+  margin: "60px 0 25px 0",
+  width: "100%",
 });
 const Title = styled.h3({
-  margin: "0",
+  margin: "0 0 0 3px",
 });
 const PanelTitle = styled.div({
   alignItems: "center",

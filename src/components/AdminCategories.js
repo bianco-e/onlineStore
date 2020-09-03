@@ -140,7 +140,7 @@ export default function AdminCategories() {
         ? firebase.addImage("categories", cat.img.file).then((imgUrl) => {
             return { ...cat, img: imgUrl };
           })
-        : cat.img.file
+        : cat.img.url
         ? { ...cat, img: cat.img.url }
         : cat;
     });
@@ -166,7 +166,7 @@ export default function AdminCategories() {
   };
 
   return (
-    <Container>
+    <>
       <Title>Categorías</Title>
       {showConfirmModal && (
         <ConfirmModal
@@ -217,19 +217,9 @@ export default function AdminCategories() {
           />
         </>
       )}
-    </Container>
+    </>
   );
 }
-
-const Container = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  marginTop: "50px",
-  minHeight: "100vh",
-  width: "80%",
-});
 const Wrapper = styled.div({
   display: "flex",
   justifyContent: "space-between",

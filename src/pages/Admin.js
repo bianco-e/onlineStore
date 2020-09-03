@@ -9,7 +9,7 @@ export default function Admin({ Child }) {
     <Wrapper>
       <AdminPanel />
       <AdminTopBar />
-      {Child ? <Child /> : <AdminHome />}
+      <Container>{Child ? <Child /> : <AdminHome />}</Container>
     </Wrapper>
   );
 }
@@ -19,5 +19,15 @@ const Wrapper = styled.div({
   display: "flex",
   justifyContent: "flex-start",
   minHeight: "100vh",
+  width: "100%",
+});
+const Container = styled.div({
+  alignItems: "center",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-start",
+  margin: "50px 10px 0 210px",
+  minHeight: "100vh",
+  position: "relative",
   width: "100%",
 });

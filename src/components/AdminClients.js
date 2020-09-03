@@ -17,7 +17,7 @@ export default function AdminClients() {
   }, []);
 
   return (
-    <Container>
+    <>
       <Title>Clientes</Title>
       <StyledButton
         title="Ver mensajes"
@@ -29,18 +29,9 @@ export default function AdminClients() {
         ) : (
           <Messages msgs={messages} />
         ))}
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  marginTop: "50px",
-  minHeight: "100vh",
-  width: "80%",
-});
 const Title = styled.h2({});
 const Text = styled.p({});

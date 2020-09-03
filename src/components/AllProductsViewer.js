@@ -7,7 +7,7 @@ import StarButton from "./StarButton";
 import SortButton from "./SortButton";
 import FilterButton from "./FilterButton";
 
-const tHeaders = [" ", "Producto", "Stock", "Precio", " "];
+const tHeaders = ["", "Producto", "Stock", "Precio", " "];
 
 const copyProductLink = (id) => {
   // replace localhost:3000 with actual name

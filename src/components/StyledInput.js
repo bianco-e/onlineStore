@@ -29,7 +29,7 @@ const Input = styled.input({
   borderRadius: "9999px",
   color: (props) => props.secondary,
   fontSize: "15px",
-  padding: "8px 12px",
+  padding: "6px 12px",
   textAlign: "center",
   width: (props) => props.width,
 });

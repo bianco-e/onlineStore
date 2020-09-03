@@ -159,7 +159,7 @@ export default function AdminProducts() {
   };
 
   return (
-    <Container>
+    <>
       <Title>Productos</Title>
       {showConfirmModal && (
         <ConfirmModal
@@ -216,18 +216,8 @@ export default function AdminProducts() {
           />
         </>
       )}
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  marginTop: "50px",
-  minHeight: "100vh",
-  position: "relative",
-  width: "80%",
-});
 const Title = styled.h2({});

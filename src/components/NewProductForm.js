@@ -6,12 +6,13 @@ import StyledInput from "./StyledInput";
 import StyledTextArea from "../components/StyledTextArea";
 import FormOption from "./FormOption";
 import Select from "./Select";
-import MultipleChoice from "./MultipleChoice";
+import MultipleInput from "./MultipleInput";
 import FeedbackMessage from "./FeedbackMessage";
 import ColorsCards from "./ColorsCards";
 import SettableImageThumbnail from "./SettableImageThumbnail";
 import CloseButton from "./CloseButton";
 import StarButton from "./StarButton";
+import Checkboxes from "./Checkboxes";
 
 import firebase from "../firebase/client.js";
 
@@ -69,6 +70,7 @@ export default function NewProductForm({
       element: images.map((img) => {
         return (
           <SettableImageThumbnail
+            key={img}
             multiple
             src={img.pvw}
             onChangeFn={(e) => handleAddImage(e)}
@@ -120,8 +122,13 @@ export default function NewProductForm({
       ),
     },
     {
+      text: "Forma de pago",
+      element: <Checkboxes onChangeFn={(e) => setValue(e, "payment")} />,
+      minHeight: "90px",
+    },
+    {
       text: "Stock de talles",
-      element: <MultipleChoice stock={stock} setStock={setStock} />,
+      element: <MultipleInput stock={stock} setStock={setStock} />,
     },
     {
       text: "Colores disponibles",
@@ -176,21 +183,24 @@ export default function NewProductForm({
     <Wrapper>
       <CloseButton onClickFn={() => handleClose()} corner="right" />
       <Title>Nuevo producto</Title>
-      {inputsData.map(({ text, element }) => {
+      {inputsData.map(({ text, element, minHeight }) => {
         return (
-          <FormOption key={text} text={text}>
+          <FormOption key={text} text={text} minHeight={minHeight}>
             {element}
           </FormOption>
         );
       })}
-      {colores && (
-        <ColorsCards button colors={colores} setColors={setColores} />
-      )}
+      <Container>
+        {colores && (
+          <ColorsCards button colors={colores} setColors={setColores} />
+        )}
+      </Container>
       <StarButton
         button
         color={promProduct}
         onClickFn={() => setPromProduct(!promProduct)}
       />
+      <Container></Container>
       {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
       <StyledButton
         title="Agregar producto"
@@ -209,7 +219,10 @@ const Wrapper = styled.div({
   position: "relative",
   width: "100%",
 });
-const Title = styled.h3({
+const Container = styled.div({
+  minHeight: "25px",
+});
+const Title = styled.h4({
   margin: "0",
   textDecoration: "underline",
 });
