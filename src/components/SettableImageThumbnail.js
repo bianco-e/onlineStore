@@ -17,7 +17,7 @@ export default function SettableImageThumbnail({ onChangeFn, src, multiple }) {
 const Label = styled.label({
   cursor: "pointer",
   display: "grid",
-  height: "85%",
+  height: "90%",
   placeItems: "center",
   width: "35px",
 });

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 import CategoryThumbnail from "./CategoryThumbnail";
+import CategoryInput from "./CategoryInput";
 import CategoriesDisplayThumbnail from "./CategoriesDisplayThumbnail";
 import FeedbackMessage from "../components/FeedbackMessage";
 import StyledButton from "../components/StyledButton";
@@ -13,7 +14,8 @@ import firebase from "../firebase/client.js";
 
 export default function AdminCategories() {
   const [allCategories, setAllCategories] = useState(undefined);
-  const [categoryImg, setCategoryImg] = useState({ pvw: addPhoto });
+  const [editingCategory, setEditingCategory] = useState(undefined);
+  const [categoryImg, setCategoryImg] = useState({ url: addPhoto });
   const [categoryName, setCategoryName] = useState("");
   const [draggedVal, setDraggedVal] = useState(undefined);
   const [errorMsg, setErrorMsg] = useState(undefined);
@@ -42,7 +44,7 @@ export default function AdminCategories() {
     if (allCategories.length < 9) {
       if (
         categoryName &&
-        categoryImg.pvw !== addPhoto &&
+        categoryImg.url != addPhoto &&
         !allCategories.find(
           (cat) => cat.name.toLowerCase() == categoryName.toLowerCase()
         )
@@ -55,7 +57,7 @@ export default function AdminCategories() {
         setAllCategories(allCategories.concat(cat));
 
         setCategoryName("");
-        setCategoryImg({ pvw: addPhoto });
+        setCategoryImg({ url: addPhoto });
       } else
         setErrorMsg(
           "La categoría debe tener imágen y nombre. Los nombres no pueden repetirse"
@@ -68,10 +70,10 @@ export default function AdminCategories() {
     setShowConfirmModal(true);
   };
 
-  const deleteCategory = () => {
+  const deleteCategory = (name) => {
     const lastGa = `p${allCategories.length}`;
     const categoryToDelete = allCategories.find(
-      (cat) => cat.name == nameToDelete
+      (cat) => cat.name == (name || nameToDelete)
     );
     const greatestGaCategory = allCategories.find((cat) => cat.ga == lastGa);
 
@@ -90,21 +92,30 @@ export default function AdminCategories() {
       setAllCategories(newCategories);
     }
     setNameToDelete(undefined);
-    setContainingProductsToDelete(
-      containingProductsToDelete.concat(productsInACategory)
-    );
-    setProductsInACategory(undefined);
+    if (productsInACategory) {
+      setContainingProductsToDelete(
+        containingProductsToDelete.concat(productsInACategory)
+      );
+      setProductsInACategory(undefined);
+    }
   };
 
-  const editCategoryName = (e) => {};
-
-  const editImgOnClickFn = (file) => {};
+  const setCategoryToEdit = (name) => {
+    const categoryToEdit = allCategories.find((cat) => cat.name == name);
+    console.log(categoryToEdit);
+    setEditingCategory(categoryToEdit);
+    setCategoryImg(
+      !categoryToEdit.img.url ? { url: categoryToEdit.img } : categoryToEdit.img
+    );
+    setCategoryName(name);
+    deleteCategory(name);
+  };
 
   const newCategoryName = (e) => setCategoryName(e.target.value);
 
   const newImgOnClickFn = (file) => {
     const url = URL.createObjectURL(file);
-    setCategoryImg({ pvw: url, file });
+    setCategoryImg({ url, file });
   };
 
   const saveChanges = () => {
@@ -118,6 +129,8 @@ export default function AdminCategories() {
         ? firebase.addImage("categories", cat.img.file).then((imgUrl) => {
             return { ...cat, img: imgUrl };
           })
+        : cat.img.file
+        ? { ...cat, img: cat.img.url }
         : cat;
     });
     Promise.all(mappedArr).then((solvedArr) => {
@@ -158,11 +171,11 @@ export default function AdminCategories() {
       ) : (
         <>
           <Wrapper>
-            <CategoryThumbnail
-              img={categoryImg.pvw}
-              inputOnChangeFn={newCategoryName}
-              inputVal={categoryName}
+            <CategoryInput
+              img={categoryImg.url}
               imgOnChangeFn={newImgOnClickFn}
+              inputVal={categoryName}
+              inputOnChangeFn={newCategoryName}
             />
             <StyledButton title="✙" onClickFn={() => addCategory()} />
           </Wrapper>
@@ -170,14 +183,12 @@ export default function AdminCategories() {
           {allCategories.map(({ img, name }) => {
             return (
               <CategoryThumbnail
-                draggable
                 confirmToDeleteCategory={confirmToDeleteCategory}
                 key={name}
-                img={img.pvw || img}
-                imgOnChangeFn={editImgOnClickFn}
-                inputVal={name}
-                inputOnChangeFn={editCategoryName}
+                img={img.url || img}
+                name={name}
                 setDraggedVal={setDraggedVal}
+                setCategoryToEdit={setCategoryToEdit}
               />
             );
           })}

@@ -1,41 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import DeleteSvg from "./svg/DeleteSvg";
-import SettableImageThumbnail from "./SettableImageThumbnail";
+import IconButton from "./IconButton";
 
 export default function CategoryThumbnail({
-  draggable,
   confirmToDeleteCategory,
   img,
-  imgOnChangeFn,
-  inputOnChangeFn,
-  inputVal,
+  name,
   setDraggedVal,
+  setCategoryToEdit,
 }) {
   return (
-    <Container
-      draggable={draggable && "true"}
-      onDragStart={() => setDraggedVal(inputVal)}
-    >
-      {draggable && (
-        <TricolonSpan title="Arrastrá la categoría hasta el recuadro del banner que elijas">
-          ⁝
-        </TricolonSpan>
-      )}
-      <SettableImageThumbnail
-        src={img}
-        onChangeFn={(e) => imgOnChangeFn(e.target.files[0])}
-      />
-      <Input
-        onChange={(e) => inputOnChangeFn(e, inputVal)}
-        placeholder="Agregar nombre"
-        value={inputVal}
-      />
-      {draggable && (
-        <RemoveButton onClick={() => confirmToDeleteCategory(inputVal)}>
-          <DeleteSvg width={17} />
-        </RemoveButton>
-      )}
+    <Container draggable onDragStart={() => setDraggedVal(name)}>
+      <Tricolon title="Arrastrá la categoría hasta el recuadro del banner que elijas">
+        ⁝
+      </Tricolon>
+      <Image src={img} />
+      <Name>{name}</Name>
+      <IconButton onClickFn={() => confirmToDeleteCategory(name)} />
+      <IconButton edit onClickFn={() => setCategoryToEdit(name)} />
     </Container>
   );
 }
@@ -46,21 +28,24 @@ const Container = styled.div({
   display: "flex",
   height: "35px",
   marginBottom: "12px",
+  padding: "1px",
+  position: "relative",
 });
-const Input = styled.input({
-  cursor: "pointer",
+const Name = styled.span({
+  alignItems: "center",
+  display: "flex",
   fontSize: "14px",
   height: "100%",
-  width: "230px",
+  marginLeft: "10px",
+  width: "210px",
 });
-const TricolonSpan = styled.span({
+const Tricolon = styled.span({
   cursor: "grabbing",
   fontWeight: "750",
   fontSize: "18px",
   padding: "0 10px",
 });
-const RemoveButton = styled.button({
-  background: "none",
-  border: "0",
-  cursor: "pointer",
+const Image = styled.img({
+  height: "100%",
+  width: "40px",
 });
