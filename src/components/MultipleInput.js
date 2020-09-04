@@ -19,15 +19,15 @@ export default function MultipleInput({ stock, setStock }) {
     <Wrapper>
       {sortStockBySizes(stock).map((opt) => {
         return (
-          <>
-            <Text>{opt.size}</Text>
+          <Label>
+            {opt.size}
             <StyledInput
               onChangeFn={(e) => handleChange(e, opt)}
               type="number"
               val={opt.items}
               width="31px"
             />
-          </>
+          </Label>
         );
       })}
     </Wrapper>
@@ -37,8 +37,11 @@ export default function MultipleInput({ stock, setStock }) {
 const Wrapper = styled.div({
   display: "flex",
   justifyContent: "space-between",
+  width: "60%",
 });
-const Text = styled.p({
-  fontSize: "10px",
-  margin: "0",
+const Label = styled.label({
+  alignItems: "center",
+  display: "flex",
+  flexDirection: "column",
+  fontSize: "11px",
 });

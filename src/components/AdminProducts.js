@@ -10,7 +10,7 @@ import ChoosePromModal from "./ChoosePromModal";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
-import { emptyStock } from "../data/data.js";
+import { emptyStock, emptyPayment } from "../data/data.js";
 
 export default function AdminProducts() {
   const [allProducts, setAllProducts] = useState([]);
@@ -26,6 +26,7 @@ export default function AdminProducts() {
   const [nameToDelete, setNameToDelete] = useState(undefined);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [promProductsList, setPromProductsList] = useState(undefined);
+  const [payment, setPayment] = useState(emptyPayment);
 
   const getProducts = () => {
     firebase
@@ -67,7 +68,7 @@ export default function AdminProducts() {
   };
 
   const editProduct = (product) => {
-    const { colors, id, imgs, stock, prom } = product;
+    const { colors, id, imgs, stock, payment, prom } = product;
     const productToEdit = allProducts.find((prod) => prod.id == id);
     setEditingProduct(productToEdit);
     setAllProducts(allProducts.filter((prod) => prod.id != id));
@@ -75,6 +76,7 @@ export default function AdminProducts() {
     setColores(colors);
     setPromProduct(prom);
     setStock(stock);
+    setPayment(payment);
     setNewProduct({ ...product, colors: undefined });
     setImages(
       imgs.map((img) => {
@@ -95,11 +97,22 @@ export default function AdminProducts() {
     setImages([{ pvw: addPhoto }]);
     setColores([]);
     setStock(emptyStock);
+    setPayment(emptyPayment);
   };
+
+  const closeForm = () => {
+    triggerShowForm();
+    returnEditingProductToList();
+    resetForm();
+  };
+
+  const checkIfPaymentModeIsSetted = () =>
+    Object.values(payment).some((option) => option != false);
 
   const addProductToFirebase = (
     product = {
       ...newProduct,
+      payment,
       price: parseFloat(newProduct.price),
       prom: promProduct,
       stock,
@@ -113,6 +126,7 @@ export default function AdminProducts() {
       price &&
       description &&
       category != "-" &&
+      checkIfPaymentModeIsSetted() &&
       images.length &&
       colores.length
     ) {
@@ -189,7 +203,7 @@ export default function AdminProducts() {
             <NewProductForm
               addProductToFirebase={addProductToFirebase}
               setPromProductsList={setPromProductsList}
-              resetForm={resetForm}
+              closeForm={closeForm}
               images={images}
               setImages={setImages}
               stock={stock}
@@ -198,10 +212,10 @@ export default function AdminProducts() {
               setColores={setColores}
               newProduct={newProduct}
               setNewProduct={setNewProduct}
+              payment={payment}
+              setPayment={setPayment}
               promProduct={promProduct}
               setPromProduct={setPromProduct}
-              returnEditingProductToList={returnEditingProductToList}
-              trigger={triggerShowForm}
             />
           )}
 

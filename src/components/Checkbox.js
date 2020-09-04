@@ -5,17 +5,17 @@ import CheckMarkSvg from "./svg/CheckMarkSvg";
 
 import StyleContext from "../context/StyleContext";
 
-export default function Checkbox({ title, val, onCheck }) {
-  const [checked, setChecked] = useState("#FFF");
+export default function Checkbox({ title, checked, onCheck }) {
+  const [bgColor, setBgColor] = useState("#FFF");
   const { style } = useContext(StyleContext);
   const { primaryColor, secondaryColor } = style;
 
   useEffect(() => {
-    val ? setChecked(primaryColor) : setChecked("#FFF");
-  }, [val]);
+    checked ? setBgColor(primaryColor) : setBgColor("#FFF");
+  }, [checked]);
 
   const handleCheck = (title) => {
-    setChecked(checked == "#FFF" ? primaryColor : "#FFF");
+    setBgColor(bgColor == "#FFF" ? primaryColor : "#FFF");
     onCheck(title);
   };
 
@@ -23,11 +23,11 @@ export default function Checkbox({ title, val, onCheck }) {
     <Label>
       {title}
       <Box
-        bgColor={checked}
+        bgColor={bgColor}
         secondary={secondaryColor}
         onClick={() => handleCheck(title)}
       >
-        {checked == primaryColor && <CheckMarkSvg fill={secondaryColor} />}
+        {bgColor == primaryColor && <CheckMarkSvg fill={secondaryColor} />}
       </Box>
     </Label>
   );

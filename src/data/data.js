@@ -104,3 +104,9 @@ export const emptyStock = [
   { size: "XL", items: 0, pos: 4 },
   { size: "XXL", items: 0, pos: 5 },
 ];
+
+export const emptyPayment = {
+  cash: false,
+  card: false,
+  mercadopago: false,
+};

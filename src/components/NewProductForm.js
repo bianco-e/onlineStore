@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import StyledButton from "./StyledButton";
 import StyledInput from "./StyledInput";
-import StyledTextArea from "../components/StyledTextArea";
+import StyledTextArea from "./StyledTextArea";
 import FormOption from "./FormOption";
 import Select from "./Select";
 import MultipleInput from "./MultipleInput";
@@ -19,7 +19,7 @@ import firebase from "../firebase/client.js";
 export default function NewProductForm({
   addProductToFirebase,
   setPromProductsList,
-  resetForm,
+  closeForm,
   images,
   setImages,
   stock,
@@ -28,10 +28,10 @@ export default function NewProductForm({
   setColores,
   newProduct,
   setNewProduct,
+  payment,
+  setPayment,
   promProduct,
   setPromProduct,
-  returnEditingProductToList,
-  trigger,
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
   const [errorMsg, setErrorMsg] = useState(undefined);
@@ -124,7 +124,7 @@ export default function NewProductForm({
     },
     {
       text: "Forma de pago",
-      element: <Checkboxes onChangeFn={(e) => setValue(e, "payment")} />,
+      element: <Checkboxes payment={payment} setPayment={setPayment} />,
       minHeight: "90px",
     },
     {
@@ -157,6 +157,7 @@ export default function NewProductForm({
     setErrorMsg(undefined);
     const productToUpload = {
       ...newProduct,
+      payment,
       price: parseFloat(newProduct.price),
       prom: promProduct,
       stock,
@@ -174,15 +175,9 @@ export default function NewProductForm({
     } else addProductToFirebase(productToUpload, setErrorMsg);
   };
 
-  const handleClose = () => {
-    trigger();
-    returnEditingProductToList();
-    resetForm();
-  };
-
   return (
     <Wrapper>
-      <CloseButton onClickFn={() => handleClose()} corner="right" />
+      <CloseButton onClickFn={() => closeForm()} corner="right" />
       <Title>Nuevo producto</Title>
       {inputsData.map(({ text, element, minHeight }) => {
         return (
