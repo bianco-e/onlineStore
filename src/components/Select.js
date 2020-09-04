@@ -3,7 +3,13 @@ import styled from "styled-components";
 
 import StyleContext from "../context/StyleContext";
 
-export default function Select({ disabled, options, onChangeFn, width }) {
+export default function Select({
+  initialVal,
+  disabled,
+  options,
+  onChangeFn,
+  width,
+}) {
   const { style } = useContext(StyleContext);
   const { secondaryColor } = style;
 
@@ -18,7 +24,11 @@ export default function Select({ disabled, options, onChangeFn, width }) {
     >
       {options.map((opt) => {
         return (
-          <option key={opt.val} value={opt.val}>
+          <option
+            selected={initialVal == opt.val && true}
+            key={opt.val}
+            value={opt.val}
+          >
             {opt.val}
           </option>
         );

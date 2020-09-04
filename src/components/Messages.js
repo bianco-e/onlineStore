@@ -1,13 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Messages({ msgs }) {
+import IconButton from "./IconButton";
+
+export default function Messages({ deleteMessage, msgs }) {
   return (
     <Wrapper>
-      {msgs.map(({ id, nombre, celular, email, text }, idx) => {
+      {msgs.map(({ id, nombre, celular, email, text }) => {
         return (
           <Wrapper key={id}>
             <Container>
+              <IconButton onClickFn={() => deleteMessage(id)} />
               <Text fWeight="bold">{nombre}</Text>
               <Text fSize="13px">{email && `Email: ${email}`}</Text>
               <Text fSize="13px">{celular && `Celular: ${celular}`}</Text>
@@ -33,6 +36,7 @@ const Container = styled.div({
   display: "flex",
   justifyContent: "space-evenly",
   marginTop: "20px",
+  position: "relative",
   width: "90%",
 });
 const Text = styled.p({

@@ -115,6 +115,7 @@ export default function NewProductForm({
       text: "Categoría",
       element: (
         <Select
+          initialVal={newProduct.category}
           options={categoriesNames}
           onChangeFn={(e) => setValue(e, "category")}
           width="205px"

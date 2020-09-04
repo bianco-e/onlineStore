@@ -10,11 +10,19 @@ export default function AdminClients() {
   const [messages, setMessages] = useState([]);
   const [showMessages, setShowMessages] = useState(false);
 
-  useEffect(() => {
+  const getMessages = () => {
     firebase
       .getDocsFromCollection("messages")
       .then((msgs) => setMessages(msgs));
+  };
+
+  useEffect(() => {
+    getMessages();
   }, []);
+
+  const deleteMessage = (id) => {
+    firebase.deleteDoc("messages", id).then(getMessages);
+  };
 
   return (
     <>
@@ -27,7 +35,7 @@ export default function AdminClients() {
         (!messages.length ? (
           <Text>No hay mensajes</Text>
         ) : (
-          <Messages msgs={messages} />
+          <Messages deleteMessage={deleteMessage} msgs={messages} />
         ))}
     </>
   );

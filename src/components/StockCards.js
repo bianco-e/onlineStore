@@ -29,7 +29,7 @@ const Container = styled.div({
   alignItems: "center",
   display: "flex",
   flexWrap: "wrap",
-  justifyContent: "flex-start",
+  justifyContent: "space-between",
 });
 const Card = styled.span({
   background: (props) => props.bgColor,

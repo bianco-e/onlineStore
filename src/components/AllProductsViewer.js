@@ -62,7 +62,7 @@ export default function AllProductsViewer({
                 <TD width="5%">
                   <StarButton color={prom} />
                 </TD>
-                <TD width="45%">
+                <TD width="50%">
                   <ProductContainer>
                     <ThumbnailsContainer>
                       {imgs.map((img) => (
@@ -83,11 +83,11 @@ export default function AllProductsViewer({
                     </DetailsContainer>
                   </ProductContainer>
                 </TD>
-                <TD width="23%">
+                <TD width="20%">
                   <StockCards stock={stock} />
                 </TD>
                 <TD width="15%">{`$${price.toFixed(2)}`}</TD>
-                <TD width="12%">
+                <TD width="10%">
                   <IconButton link onClickFn={() => copyProductLink(id)} />
                   <IconButton edit onClickFn={() => editProduct(product)} />
                   <IconButton
