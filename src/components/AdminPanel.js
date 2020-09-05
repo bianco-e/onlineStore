@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
@@ -10,6 +10,11 @@ export default function AdminPanel() {
   const history = useHistory();
   const { style } = useContext(StyleContext);
   const { storeName, storeLogo, primaryColor, secondaryColor } = style;
+  const [titleBold, setTitleBold] = useState("");
+
+  useEffect(() => {
+    setTitleBold(window.location.pathname);
+  }, []);
 
   const renderPanelSections = (arr) => {
     return arr.map(({ endpoint, Logo, title }) => {
@@ -23,6 +28,8 @@ export default function AdminPanel() {
       }
       return (
         <Button
+          color={titleBold == endpoint ? primaryColor : "black"}
+          fWeight={titleBold == endpoint ? "bold" : "regular"}
           key={title}
           onClick={() => history.push(endpoint)}
           primary={primaryColor}
@@ -52,8 +59,8 @@ const Wrapper = styled.div({
   justifyContent: "flex-start",
   padding: "10px 20px",
   position: "fixed",
-  top: "0",
   left: "0",
+  top: "0",
   width: "160px",
 });
 const Container = styled.div({
@@ -75,9 +82,10 @@ const PanelTitle = styled.div({
 const Button = styled.button({
   background: "none",
   border: "0",
-  color: "black",
+  color: (props) => props.color,
   cursor: "pointer",
   fontSize: "16px",
+  fontWeight: (props) => props.fWeight,
   padding: "8px 0 0 25px",
   transition: "color .4s ease",
   ["&:hover"]: {
