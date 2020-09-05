@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import Checkboxes from "./Checkboxes";
+import CloseButton from "./CloseButton";
+import ColorsCards from "./ColorsCards";
+import FeedbackMessage from "./FeedbackMessage";
+import FormOption from "./FormOption";
+import MultipleInput from "./MultipleInput";
+import Select from "./Select";
+import SettableImageThumbnail from "./SettableImageThumbnail";
+import StarButton from "./StarButton";
 import StyledButton from "./StyledButton";
 import StyledInput from "./StyledInput";
 import StyledTextArea from "./StyledTextArea";
-import FormOption from "./FormOption";
-import Select from "./Select";
-import MultipleInput from "./MultipleInput";
-import FeedbackMessage from "./FeedbackMessage";
-import ColorsCards from "./ColorsCards";
-import SettableImageThumbnail from "./SettableImageThumbnail";
-import CloseButton from "./CloseButton";
-import StarButton from "./StarButton";
-import Checkboxes from "./Checkboxes";
 
 import firebase from "../firebase/client.js";
 

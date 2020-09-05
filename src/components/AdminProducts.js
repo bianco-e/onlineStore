@@ -6,7 +6,7 @@ import NewProductForm from "./NewProductForm";
 import StyledButton from "./StyledButton";
 import AllProductsViewer from "./AllProductsViewer";
 import ConfirmModal from "./ConfirmModal";
-import ChoosePromModal from "./ChoosePromModal";
+import PromProductsViewer from "./PromProductsViewer";
 
 import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
@@ -172,6 +172,11 @@ export default function AdminProducts() {
     text: `Una vez confirmado, ${nameToDelete} será eliminado por completo.`,
   };
 
+  const promProductsModalData = {
+    title: "Ya existen 3 productos promocionados",
+    text: "Para agregar este producto deberías sacar uno.",
+  };
+
   return (
     <>
       <Title>Productos</Title>
@@ -184,11 +189,13 @@ export default function AdminProducts() {
         />
       )}
       {promProductsList && (
-        <ChoosePromModal
+        <ConfirmModal
           callback={addProductToFirebase}
-          promProducts={promProductsList}
+          data={promProductsModalData}
           setShowModal={setPromProductsList}
-        />
+        >
+          <PromProductsViewer promProducts={promProductsList} />
+        </ConfirmModal>
       )}
       {!allProducts.length ? (
         <LoadingSpinner />

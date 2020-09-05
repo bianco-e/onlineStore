@@ -4,6 +4,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ConfirmModal({
   callback,
+  children,
   setIdToDelete,
   setProductsInACategory,
   setShowModal,
@@ -15,33 +16,47 @@ export default function ConfirmModal({
   };
 
   const handleCancel = () => {
-    setIdToDelete(undefined);
+    setIdToDelete && setIdToDelete(undefined);
     setProductsInACategory && setProductsInACategory(undefined);
     setShowModal(false);
   };
 
   return (
-    <Wrapper>
-      {!data.text ? (
-        <LoadingSpinner small />
-      ) : (
-        <>
-          <Title>{data.title}</Title>
-          <Text>{data.text}</Text>
-          <Container>
-            <Button color="darkgreen" onClick={() => handleConfirmation()}>
-              Confirmar
-            </Button>
-            <Button color="red" onClick={() => handleCancel()}>
-              Cancelar
-            </Button>
-          </Container>
-        </>
-      )}
-    </Wrapper>
+    <BackScreen>
+      <Wrapper>
+        {!data.text ? (
+          <LoadingSpinner small />
+        ) : (
+          <>
+            <Title>{data.title}</Title>
+            <Text>{data.text}</Text>
+            {children}
+            <Container>
+              <Button color="darkgreen" onClick={() => handleConfirmation()}>
+                Confirmar
+              </Button>
+              <Button color="red" onClick={() => handleCancel()}>
+                Cancelar
+              </Button>
+            </Container>
+          </>
+        )}
+      </Wrapper>
+    </BackScreen>
   );
 }
 
+const BackScreen = styled.div({
+  background: "rgba(50, 50, 50, 0.3)",
+  display: "grid",
+  height: "100%",
+  placeItems: "center",
+  position: "absolute",
+  left: "0",
+  top: "0",
+  width: "100%",
+  zIndex: "3",
+});
 const Wrapper = styled.div({
   background: "#FFF",
   alignItems: "center",
@@ -49,13 +64,10 @@ const Wrapper = styled.div({
   borderRadius: "10px",
   display: "flex",
   flexDirection: "column",
-  height: "200px",
+  minHeight: "200px",
   justifyContent: "space-between",
-  padding: "5px 5px 15px 5px",
-  position: "absolute",
-  top: "30%",
-  width: "360px",
-  zIndex: "3",
+  padding: "5px 15px 15px 15px",
+  width: "370px",
 });
 const Container = styled.div({
   display: "flex",
