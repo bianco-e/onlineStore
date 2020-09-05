@@ -63,6 +63,27 @@ export default function AdminCategories() {
     });
   };
 
+  const addEditedNameToList = () => {
+    if (categoriesNames[editingCategory.name]) {
+      setCategoriesNames({
+        ...categoriesNames,
+        [editingCategory.name]: categoriesNames[editingCategory.name].concat(
+          categoryName
+        ),
+      });
+    } else {
+      for (let prop in categoriesNames) {
+        categoriesNames[prop].find(
+          (catName) => catName == editingCategory.name
+        ) &&
+          setCategoriesNames({
+            ...categoriesNames,
+            [prop]: categoriesNames[prop].concat(categoryName),
+          });
+      }
+    }
+  };
+
   const addCategory = () => {
     if (allCategories.length < 9) {
       if (
@@ -74,24 +95,8 @@ export default function AdminCategories() {
       ) {
         errorMsg && setErrorMsg(undefined);
         if (editingCategory && editingCategory.name != categoryName) {
-          if (categoriesNames[editingCategory.name]) {
-            setCategoriesNames({
-              ...categoriesNames,
-              [editingCategory.name]: categoriesNames[
-                editingCategory.name
-              ].concat(categoryName),
-            });
-          } else {
-            for (let prop in categoriesNames) {
-              categoriesNames[prop].find(
-                (catName) => catName == editingCategory.name
-              ) &&
-                setCategoriesNames({
-                  ...categoriesNames,
-                  [prop]: categoriesNames[prop].concat(categoryName),
-                });
-            }
-          }
+          addEditedNameToList();
+          setEditingCategory(undefined);
         }
         const ga = `p${allCategories.length + 1}`;
         const endpoint = categoryName.toLowerCase().split(" ").join("-");

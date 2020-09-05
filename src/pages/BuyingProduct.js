@@ -47,6 +47,10 @@ export default function BuyingProduct() {
   const selectColor = (e) => setColor(e.target.value);
   const selectSize = (e) => setSize(e.target.value);
 
+  const getFinalPrice = (price, extra, dues) => {
+    return ((price + (price * extra) / 100) / dues).toFixed(2);
+  };
+
   return (
     <Wrapper>
       {!product ? (
@@ -68,17 +72,29 @@ export default function BuyingProduct() {
                 fSize="16px"
               >{`$${product.price.toFixed(2)}`}</Text>
               {availableStock < 1 && <Text>SIN STOCK</Text>}
+
               <DetailsText margin="0">{product.description}</DetailsText>
-              <PayFormsContainer>
-                <CardSvg width={20} />
-                <DetailsText>{`3 cuotas sin interés de $${(
-                  product.price / 3
-                ).toFixed(2)}`}</DetailsText>
-              </PayFormsContainer>
-              <PayFormsContainer>
-                <CashSvg width={22} />
-                <DetailsText>{`En efectivo 10% de descuento`}</DetailsText>
-              </PayFormsContainer>
+
+              {product.payment.card && (
+                <PayFormsContainer>
+                  <CardSvg width={20} />
+                  <DetailsText>{`${product.payment.card.dues} cuotas ${
+                    product.payment.card.extra == 0 ? "sin interés" : ""
+                  } de $${getFinalPrice(
+                    product.price,
+                    product.payment.card.extra,
+                    product.payment.card.dues
+                  )}`}</DetailsText>
+                </PayFormsContainer>
+              )}
+
+              {product.payment.cash && product.payment.cash.off > 0 && (
+                <PayFormsContainer>
+                  <CashSvg width={22} />
+                  <DetailsText>{`En efectivo ${product.payment.cash.off}% de descuento`}</DetailsText>
+                </PayFormsContainer>
+              )}
+
               <Select
                 disabled={availableStock < 1 && true}
                 options={[{ val: "Color" }].concat(
