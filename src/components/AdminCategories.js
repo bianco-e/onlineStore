@@ -26,14 +26,22 @@ export default function AdminCategories() {
   const [containingProductsToDelete, setContainingProductsToDelete] = useState(
     []
   );
+  const [categoriesNames, setCategoriesNames] = useState({});
 
   useEffect(() => {
-    console.log(editingCategory);
-  }, [editingCategory]);
-
-  useEffect(() => {
-    firebase.getDocsFromCollection("categories").then((categories) => {
-      setAllCategories(categories[0].categories);
+    firebase.getDocsFromCollection("categories").then((cats) => {
+      const categories = cats[0].categories;
+      setAllCategories(cats[0].categories);
+      setCategoriesNames(
+        categories
+          .map((cat) => cat.name)
+          .reduce((obj, item) => {
+            return {
+              ...obj,
+              [item]: [],
+            };
+          }, {})
+      );
     });
   }, []);
 
@@ -43,6 +51,17 @@ export default function AdminCategories() {
         .getProductsByCategory(nameToDelete)
         .then((prods) => setProductsInACategory(prods));
   }, [nameToDelete]);
+
+  const editCategoryNameInProducts = (oldName, newName) => {
+    firebase.getProductsByCategory(oldName).then((prods) => {
+      prods.forEach((prod) =>
+        firebase.editDoc(false, "products", prod.id, {
+          ...prod,
+          category: newName,
+        })
+      );
+    });
+  };
 
   const addCategory = () => {
     if (allCategories.length < 9) {
@@ -55,14 +74,24 @@ export default function AdminCategories() {
       ) {
         errorMsg && setErrorMsg(undefined);
         if (editingCategory && editingCategory.name != categoryName) {
-          firebase.getProductsByCategory(editingCategory.name).then((prods) => {
-            prods.forEach((prod) =>
-              firebase.editDoc(false, "products", prod.id, {
-                ...prod,
-                category: categoryName,
-              })
-            );
-          });
+          if (categoriesNames[editingCategory.name]) {
+            setCategoriesNames({
+              ...categoriesNames,
+              [editingCategory.name]: categoriesNames[
+                editingCategory.name
+              ].concat(categoryName),
+            });
+          } else {
+            for (let prop in categoriesNames) {
+              categoriesNames[prop].find(
+                (catName) => catName == editingCategory.name
+              ) &&
+                setCategoriesNames({
+                  ...categoriesNames,
+                  [prop]: categoriesNames[prop].concat(categoryName),
+                });
+            }
+          }
         }
         const ga = `p${allCategories.length + 1}`;
         const endpoint = categoryName.toLowerCase().split(" ").join("-");
@@ -72,7 +101,7 @@ export default function AdminCategories() {
         setCategoryImg({ url: addPhoto });
       } else
         setErrorMsg(
-          "La categoría debe tener imágen y nombre. Los nombres no pueden repetirse"
+          "Los nombres no pueden repetirse y la categoría debe tener imágen y nombre."
         );
     } else setErrorMsg("El máximo de categorías es 9");
   };
@@ -134,6 +163,12 @@ export default function AdminCategories() {
       containingProductsToDelete.forEach((prod) =>
         firebase.deleteDoc("products", prod.id)
       );
+    }
+    for (let prop in categoriesNames) {
+      if (categoriesNames[prop].length) {
+        const lastPos = categoriesNames[prop][categoriesNames[prop].length - 1];
+        editCategoryNameInProducts(prop, lastPos);
+      }
     }
     const mappedArr = allCategories.map((cat) => {
       return cat.img.file

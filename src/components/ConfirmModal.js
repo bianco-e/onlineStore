@@ -51,7 +51,7 @@ const Wrapper = styled.div({
   flexDirection: "column",
   height: "200px",
   justifyContent: "space-between",
-  padding: "5px 0 15px 0",
+  padding: "5px 5px 15px 5px",
   position: "absolute",
   top: "30%",
   width: "360px",
