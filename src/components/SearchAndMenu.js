@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import Button from "./Button";
-import SideMenuModal from "./SideMenuModal";
+import SideMenu from "./SideMenu";
+import SideTab from "./SideTab";
 import StyledInput from "./StyledInput";
 import MenuIcon from "./svg/MenuIcon";
 
@@ -19,10 +19,13 @@ export default function SearchAndMenu({ secondaryColor }) {
   return (
     <>
       {showSideMenu && (
-        <SideMenuModal
-          showModal={showSideMenu}
-          setShowModal={setShowSideMenu}
-        />
+        <SideTab
+          showTab={showSideMenu}
+          setShowTab={setShowSideMenu}
+          side="left"
+        >
+          <SideMenu />
+        </SideTab>
       )}
       <Button fn={() => setShowSideMenu(!showSideMenu)}>
         <MenuIcon fill={secondaryColor} />
@@ -32,13 +35,8 @@ export default function SearchAndMenu({ secondaryColor }) {
         val={searchValue}
         onChangeFn={onChangeInputFn}
         OKD={handleSearch}
-        width={"55%"}
+        width={"60%"}
       />
     </>
   );
 }
-
-const Container = styled.div({
-  alignItems: "center",
-  display: "flex",
-});

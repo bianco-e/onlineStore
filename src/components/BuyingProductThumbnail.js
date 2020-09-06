@@ -70,5 +70,5 @@ const Wrapper = styled.div({
   justifyContent: "space-around",
   padding: "10px 15px",
   position: "absolute",
-  top: "10px",
+  top: "15px",
 });

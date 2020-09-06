@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import Media from "react-media";
+
 export default function ProductBanner({ name, ga, img, endpoint }) {
   const history = useHistory();
   return (
@@ -9,7 +11,22 @@ export default function ProductBanner({ name, ga, img, endpoint }) {
       ga={ga}
       onClick={() => history.push(`/categoria/${endpoint}`)}
     >
-      <ButtonTitle>{name}</ButtonTitle>
+      <Media
+        queries={{
+          small: "(max-width: 500px)",
+          medium: "(min-width: 501px) and (max-width: 780px)",
+        }}
+      >
+        {({ small, medium }) => (
+          <Fragment>
+            <ButtonTitle>
+              <Span fSize={small ? "17px" : medium ? "22px" : "32px"}>
+                {name}
+              </Span>
+            </ButtonTitle>
+          </Fragment>
+        )}
+      </Media>
     </WrapperButton>
   );
 }
@@ -22,14 +39,22 @@ const WrapperButton = styled.button({
   border: "none",
   cursor: "pointer",
   gridArea: (props) => props.ga,
-  padding: "10px",
   transition: "all .8s ease",
   ["&:hover"]: {
     transform: "scale(1.03)",
-    opacity: ".8",
+    opacity: ".7",
   },
 });
-const ButtonTitle = styled.h1({
+const ButtonTitle = styled.div({
+  alignItems: "center",
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+});
+const Span = styled.span({
   color: "rgba(255, 255, 255, .8)",
+  fontSize: (props) => props.fSize,
+  fontWeight: "bold",
+  margin: "0",
   textAlign: "center",
 });

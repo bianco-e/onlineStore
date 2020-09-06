@@ -2,14 +2,15 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import SearchAndMenu from "./SearchAndMenu";
-import SideCartModal from "./SideCartModal";
+import SideTab from "./SideTab";
+import Cart from "./Cart";
 import { useHistory } from "react-router-dom";
 
 import StyleContext from "../context/StyleContext";
 import BagSvg from "./svg/BagSvg";
 
 export default function TopBar() {
-  const [showCartModal, setShowCartModal] = useState(false);
+  const [showCartTab, setShowCartTab] = useState(false);
   const { style } = useContext(StyleContext);
   const { storeLogo, primaryColor, secondaryColor } = style;
 
@@ -17,11 +18,10 @@ export default function TopBar() {
 
   return (
     <Wrapper primary={primaryColor}>
-      {showCartModal && (
-        <SideCartModal
-          showModal={showCartModal}
-          setShowModal={setShowCartModal}
-        />
+      {showCartTab && (
+        <SideTab showTab={showCartTab} setShowTab={setShowCartTab} side="right">
+          <Cart />
+        </SideTab>
       )}
       <Container>
         <SearchAndMenu secondaryColor={secondaryColor} />
@@ -32,7 +32,7 @@ export default function TopBar() {
         </Button>
       </Container>
       <Container>
-        <Button fn={() => setShowCartModal(!showCartModal)}>
+        <Button fn={() => setShowCartTab(!showCartTab)}>
           <BagSvg fill={secondaryColor} height={25} width={27} />
         </Button>
       </Container>
@@ -44,7 +44,7 @@ const Wrapper = styled.div({
   alignItems: "center",
   backgroundColor: (props) => props.primary,
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "space-evenly",
   padding: "5px 0",
   position: "fixed",
   top: "0",
@@ -52,7 +52,6 @@ const Wrapper = styled.div({
   zIndex: "5",
 });
 const Image = styled.img({
-  borderRadius: "50%",
   height: "50px",
   width: "50px",
 });

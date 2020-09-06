@@ -5,16 +5,9 @@ import StyledButton from "./StyledButton";
 import CloseButton from "./CloseButton";
 import IconButton from "./IconButton";
 
-export default function SideCartModal({ showModal, setShowModal }) {
+export default function Cart() {
   const { cart, removeProductFromCart } = useContext(CartContext);
   const [total, setTotal] = useState("");
-
-  useEffect(() => {
-    showModal && document.addEventListener("click", handleModal);
-    return () => {
-      document.removeEventListener("click", handleModal);
-    };
-  }, [showModal]);
 
   useEffect(() => {
     cart.length &&
@@ -23,14 +16,11 @@ export default function SideCartModal({ showModal, setShowModal }) {
       );
   }, [cart]);
 
-  const handleModal = () => setShowModal(!showModal);
-
   return (
-    <Wrapper>
-      <CloseButton onClickFn={() => setShowModal(!showModal)} corner="left" />
+    <>
       <Title>Carrito</Title>
       {cart.length < 1 ? (
-        <Title>Tu carrito está vacío.</Title>
+        <Title fSize="16px">Tu carrito está vacío.</Title>
       ) : (
         <>
           {cart.map((product) => {
@@ -57,26 +47,14 @@ export default function SideCartModal({ showModal, setShowModal }) {
           />
         </>
       )}
-    </Wrapper>
+    </>
   );
 }
-
-const Wrapper = styled.div({
-  alignItems: "center",
-  backgroundColor: "#FFA07A",
-  borderRadius: "20px",
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-  justifyContent: "flex-start",
-  padding: "20px",
-  position: "fixed",
-  right: "0",
-  top: "0",
-  width: "335px",
-  zIndex: "100",
+const Title = styled.h3({
+  marginTop: "60px",
+  fontSize: (props) => props.fSize,
+  textAlign: "center",
 });
-const Title = styled.h3({});
 const ProductDetailsContainer = styled.div({
   display: "flex",
   flexDirection: "column",

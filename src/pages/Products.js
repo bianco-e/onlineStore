@@ -55,10 +55,8 @@ export default function Products() {
       ) : (
         <>
           <TopBar />
-          <Container margin="150px 0 0 0">
-            <PageTitle text="Productos" />
-          </Container>
-          <Container margin="10px 0">
+          <PageTitle text="Productos" />
+          <Container>
             <FilterButton
               categoriesNames={categoriesNames}
               filterByCategory={filterByCategory}
@@ -97,7 +95,7 @@ const Wrapper = styled.div({
 const Container = styled.section({
   display: "flex",
   justifyContent: "space-evenly",
-  margin: (props) => props.margin,
+  margin: "10px 0",
   width: "90%",
 });
 const ProductsWrapper = styled.section({

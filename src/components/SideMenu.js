@@ -1,24 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { sections } from "../data/data.js";
 import { useHistory } from "react-router-dom";
-import CloseButton from "./CloseButton";
 
-export default function SideMenuModal({ showModal, setShowModal }) {
-  useEffect(() => {
-    showModal && document.addEventListener("click", handleModal);
-    return () => {
-      document.removeEventListener("click", handleModal);
-    };
-  }, [showModal]);
-
-  const handleModal = () => setShowModal(!showModal);
+export default function SideMenu() {
   const history = useHistory();
   return (
-    <Wrapper>
-      <CloseButton onClickFn={() => setShowModal(!showModal)} corner="right" />
-      {sections.map((sec, i) => {
-        const { endpoint, name } = sec;
+    <>
+      {sections.map((section, i) => {
+        const { endpoint, name } = section;
         return (
           <LinkButton
             borTop={i < 1 && "1px solid #000"}
@@ -32,25 +22,10 @@ export default function SideMenuModal({ showModal, setShowModal }) {
       <LoginButton onClick={() => history.push("/login")}>
         Iniciar sesión
       </LoginButton>
-    </Wrapper>
+    </>
   );
 }
 
-const Wrapper = styled.div({
-  alignItems: "center",
-  backgroundColor: "#FFA07A",
-  borderRadius: "20px",
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-  justifyContent: "center",
-  left: "0",
-  padding: "20px",
-  position: "fixed",
-  top: "0",
-  width: "335px",
-  zIndex: "100",
-});
 const LinkButton = styled.button({
   background: "none",
   border: "0",

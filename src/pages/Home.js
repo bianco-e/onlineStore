@@ -33,9 +33,7 @@ export default function Home() {
       ) : (
         <>
           <TopBar />
-          <Container>
-            <PageTitle text={homeTitle} />
-          </Container>
+          <PageTitle text={homeTitle} />
           <Services />
           {categories && <HomeBanners categories={categories} />}
           {products && <HomeNews products={products} />}
@@ -53,7 +51,4 @@ const Wrapper = styled.div({
   flexDirection: "column",
   position: "relative",
   width: "100%",
-});
-const Container = styled.div({
-  marginTop: "120px",
 });

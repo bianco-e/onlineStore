@@ -26,10 +26,11 @@ export default function CategoryInput({
 const Container = styled.div({
   alignItems: "center",
   border: "1px solid #DDD",
+  borderRadius: "10px",
   display: "flex",
   height: "35px",
   marginBottom: "12px",
-  padding: "1px",
+  padding: "1px 2px",
   position: "relative",
 });
 const Input = styled.input({

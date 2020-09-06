@@ -26,7 +26,7 @@ export default function HomeBanners({ categories }) {
 
 const Wrapper = styled.div({
   display: "grid",
-  gridGap: "20px",
+  gridGap: "10px",
   gridTemplateAreas: (props) => props.grid.gta,
   gridTemplateColumns: (props) => props.grid.gtc,
   gridTemplateRows: (props) => props.grid.gtr || "repeat(2, 1fr)",

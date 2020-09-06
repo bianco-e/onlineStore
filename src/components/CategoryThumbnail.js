@@ -25,6 +25,7 @@ export default function CategoryThumbnail({
 const Container = styled.div({
   alignItems: "center",
   border: "1px solid #DDD",
+  borderRadius: "10px",
   display: "flex",
   height: "35px",
   marginBottom: "12px",
@@ -37,7 +38,7 @@ const Name = styled.span({
   fontSize: "14px",
   height: "100%",
   marginLeft: "10px",
-  width: "210px",
+  minWidth: "264px",
 });
 const Tricolon = styled.span({
   cursor: "grabbing",

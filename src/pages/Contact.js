@@ -40,11 +40,8 @@ export default function Contact() {
         <LoadingSpinner />
       ) : (
         <>
-          {" "}
-          <Container>
-            <PageTitle text="Contacto" />
-            <Text>Por consultas, dudas o cambios no dudes en contactarte</Text>
-          </Container>
+          <PageTitle text="Contacto" />
+          <Text>Por consultas, dudas o cambios no dudes en contactarte</Text>
           <ContactForm>
             {contactInputs.map((ph) => {
               return (
@@ -58,7 +55,7 @@ export default function Contact() {
                   }
                   val={message[ph.toLowerCase()]}
                   ph={ph}
-                  width={"30%"}
+                  width={"40%"}
                 />
               );
             })}
@@ -88,11 +85,6 @@ const Wrapper = styled.div({
   flexDirection: "column",
   position: "relative",
   width: "100%",
-});
-const Container = styled.section({
-  marginTop: "150px",
-  position: "relative",
-  width: "90%",
 });
 const ContactForm = styled.section({
   alignItems: "center",
