@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import StyleContext from "../context/StyleContext";
 
-export default function StyledButton({ inverted, onClickFn, title }) {
+export default function StyledButton({ inverted, onClickFn, title, width }) {
   const { style } = useContext(StyleContext);
   const { primaryColor, secondaryColor } = style;
 
@@ -16,6 +16,7 @@ export default function StyledButton({ inverted, onClickFn, title }) {
     <Button
       onClick={(e) => handleClick(e)}
       primary={inverted ? secondaryColor : primaryColor}
+      width={width || undefined}
     >
       {title}
     </Button>
@@ -31,6 +32,7 @@ const Button = styled.button({
   fontSize: "11px",
   marginBottom: "15px",
   padding: "8px 20px",
+  width: (props) => props.width,
   transition: "all .6s ease",
   ["&:hover"]: {
     backgroundColor: "rgba(250, 250, 250, .7)",

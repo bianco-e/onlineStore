@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import Media from "react-media";
 
 import BuyingProductThumbnail from "./BuyingProductThumbnail";
+import Price from "./Price";
 import BagSvg from "./svg/BagSvg";
 
 import StyleContext from "../context/StyleContext";
@@ -47,9 +48,7 @@ export default function ProductThumbnail({ product }) {
             >
               {product.name}
             </Name>
-            <Price primary={primaryColor}>{`$${product.price.toFixed(
-              2
-            )}`}</Price>
+            <Price color={primaryColor} price={product.price} />
           </Fragment>
         )}
       </Media>
@@ -91,17 +90,9 @@ const Image = styled.img({
 const Name = styled.h4({
   color: "black",
   fontSize: (props) => props.fSize,
-  margin: "5px 0",
+  margin: "5px",
   transition: "all .4s ease",
   ["&:hover"]: {
     color: (props) => props.secondary,
   },
-});
-const Price = styled.span({
-  backgroundColor: "rgba(240, 240, 240, .6)",
-  borderRadius: "10px",
-  color: (props) => props.primary,
-  fontSize: "14px",
-  margin: "10px 0",
-  padding: "5px 15px",
 });

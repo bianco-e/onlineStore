@@ -45,5 +45,7 @@ export default function SortButton({ productsToShow, setProductsToShow }) {
     return selectedOption.fn();
   };
 
-  return <Select onChangeFn={handleSelect} options={sortOptions} />;
+  return (
+    <Select onChangeFn={handleSelect} options={sortOptions} width="180px" />
+  );
 }

@@ -96,7 +96,7 @@ const Container = styled.section({
   display: "flex",
   justifyContent: "space-evenly",
   margin: "10px 0",
-  width: "90%",
+  width: "95%",
 });
 const ProductsWrapper = styled.section({
   alignItems: "flex-start",

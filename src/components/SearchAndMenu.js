@@ -31,7 +31,7 @@ export default function SearchAndMenu({ secondaryColor }) {
         <MenuIcon fill={secondaryColor} />
       </Button>
       <StyledInput
-        ph="Búsqueda"
+        ph="Buscar"
         val={searchValue}
         onChangeFn={onChangeInputFn}
         OKD={handleSearch}

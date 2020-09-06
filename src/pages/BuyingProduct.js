@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import Media from "react-media";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 import BottomBar from "../components/BottomBar";
@@ -8,6 +9,8 @@ import TopBar from "../components/TopBar";
 import ImageSlider from "../components/ImageSlider";
 import Select from "../components/Select";
 import StyledButton from "../components/StyledButton";
+import Price from "../components/Price";
+import FeedbackMessage from "../components/FeedbackMessage";
 import CashSvg from "../components/svg/CashSvg";
 import CardSvg from "../components/svg/CardSvg";
 
@@ -20,6 +23,8 @@ export default function BuyingProduct() {
   const [color, setColor] = useState("");
   const [product, setProduct] = useState(undefined);
   const [availableStock, setAvailableStock] = useState(undefined);
+  const [selectsData, setSelectsData] = useState([]);
+  const [feedbackMsg, setFeedbackMsg] = useState(undefined);
   const { addProductToCart } = useContext(CartContext);
   const { style } = useContext(StyleContext);
   const { primaryColor } = style;
@@ -31,21 +36,41 @@ export default function BuyingProduct() {
   }, []);
 
   useEffect(() => {
-    product &&
+    if (product) {
       setAvailableStock(
         product.stock
           .map((option) => option.items)
           .reduce((acc, current) => parseInt(acc) + parseInt(current))
       );
+      setSelectsData([
+        {
+          options: [{ val: "Color" }].concat(
+            product.colors.map((color) => {
+              return { val: color };
+            })
+          ),
+          fn: (e) => setColor(e.target.value),
+        },
+        {
+          options: [{ val: "Talle" }].concat(
+            product.stock
+              .filter(({ items }) => items != 0)
+              .map(({ size }) => {
+                return { val: size };
+              })
+          ),
+          fn: (e) => setSize(e.target.value),
+        },
+      ]);
+    }
   }, [product]);
 
   const handleAddToCartButton = () => {
     if (color && color != "Color" && size && size != "Color") {
       addProductToCart({ ...product, color, size, img: product.imgs[0] });
+      setFeedbackMsg("Producto agregado");
     }
   };
-  const selectColor = (e) => setColor(e.target.value);
-  const selectSize = (e) => setSize(e.target.value);
 
   const getFinalPrice = (price, extra, dues) => {
     return ((price + (price * extra) / 100) / dues).toFixed(2);
@@ -58,69 +83,80 @@ export default function BuyingProduct() {
       ) : (
         <>
           <TopBar />
-          <Container>
-            <ImageSlider
-              images={product.imgs.map((img) => {
-                return { original: img, originalClass: "sliderImg" };
-              })}
-            />
+          <Media
+            queries={{
+              small: "(max-width: 500px)",
+              medium: "(min-width: 501px) and (max-width: 780px)",
+            }}
+          >
+            {({ small, medium }) => (
+              <Fragment>
+                <Container flexDir={small || medium ? "column" : "row"}>
+                  <ImageSlider
+                    images={product.imgs.map((img) => {
+                      return { original: img, originalClass: "sliderImg" };
+                    })}
+                  />
 
-            <DetailsWrapper>
-              <Text>{product.name}</Text>
-              <Text
-                primary={primaryColor}
-                fSize="16px"
-              >{`$${product.price.toFixed(2)}`}</Text>
-              {availableStock < 1 && <Text>SIN STOCK</Text>}
+                  <DetailsWrapper
+                    align={small || medium ? "center" : "flex-start"}
+                  >
+                    <Text>{product.name}</Text>
+                    <Price color={primaryColor} price={product.price} />
+                    {availableStock < 1 && <Text>SIN STOCK</Text>}
 
-              <DetailsText margin="0">{product.description}</DetailsText>
+                    <DetailsText margin="0">{product.description}</DetailsText>
 
-              {product.payment.card && (
-                <PayFormsContainer>
-                  <CardSvg width={20} />
-                  <DetailsText>{`${product.payment.card.dues} cuotas ${
-                    product.payment.card.extra == 0 ? "sin interés" : ""
-                  } de $${getFinalPrice(
-                    product.price,
-                    product.payment.card.extra,
-                    product.payment.card.dues
-                  )}`}</DetailsText>
-                </PayFormsContainer>
-              )}
+                    {product.payment.card && (
+                      <PayModeContainer>
+                        <CardSvg width={20} />
+                        <DetailsText>{`${product.payment.card.dues} cuotas ${
+                          product.payment.card.extra == 0 ? "sin interés" : ""
+                        } de $${getFinalPrice(
+                          product.price,
+                          product.payment.card.extra,
+                          product.payment.card.dues
+                        )}`}</DetailsText>
+                      </PayModeContainer>
+                    )}
 
-              {product.payment.cash && product.payment.cash.off > 0 && (
-                <PayFormsContainer>
-                  <CashSvg width={22} />
-                  <DetailsText>{`En efectivo ${product.payment.cash.off}% de descuento`}</DetailsText>
-                </PayFormsContainer>
-              )}
+                    {product.payment.cash && (
+                      <PayModeContainer>
+                        <CashSvg />
+                        <DetailsText>{`En efectivo ${
+                          product.payment.cash.off > 0
+                            ? `${product.payment.cash.off} % de descuento`
+                            : `al recibirlo`
+                        }`}</DetailsText>
+                      </PayModeContainer>
+                    )}
 
-              <Select
-                disabled={availableStock < 1 && true}
-                options={[{ val: "Color" }].concat(
-                  product.colors.map((color) => {
-                    return { val: color };
-                  })
-                )}
-                onChangeFn={selectColor}
-              />
-              <Select
-                disabled={availableStock < 1 && true}
-                options={[{ val: "Talle" }].concat(
-                  product.stock
-                    .filter((opt) => opt.items != 0)
-                    .map((opt) => {
-                      return { val: opt.size };
-                    })
-                )}
-                onChangeFn={selectSize}
-              />
-              <StyledButton
-                onClickFn={() => handleAddToCartButton()}
-                title="AGREGAR AL CARRITO"
-              />
-            </DetailsWrapper>
-          </Container>
+                    {product.payment.mercadopago && (
+                      <DetailsText>🤝 Mercado pago</DetailsText>
+                    )}
+                    {selectsData.map(({ options, fn }) => {
+                      return (
+                        <Select
+                          disabled={availableStock < 1 && true}
+                          options={options}
+                          onChangeFn={fn}
+                          width="240px"
+                        />
+                      );
+                    })}
+                    {feedbackMsg && (
+                      <FeedbackMessage msg={feedbackMsg} type="ok" />
+                    )}
+                    <StyledButton
+                      onClickFn={() => handleAddToCartButton()}
+                      title="Agregar al carrito"
+                      width="240px"
+                    />
+                  </DetailsWrapper>
+                </Container>
+              </Fragment>
+            )}
+          </Media>
           <BottomBar />
         </>
       )}
@@ -136,23 +172,26 @@ const Wrapper = styled.div({
   width: "100%",
 });
 const Container = styled.div({
+  alignItems: "center",
   display: "flex",
+  flexDirection: (props) => props.flexDir,
   justifyContent: "space-evenly",
-  margin: "120px 0",
-  padding: "20px 0",
+  padding: "120px 0",
   width: "90%",
 });
 const DetailsWrapper = styled.div({
+  alignItems: (props) => props.align,
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  height: "380px",
+  minHeight: "380px",
 });
-const Text = styled.h2({
-  color: (props) => props.primary,
+const Text = styled.p({
   fontSize: (props) => props.fSize,
+  fontWeight: "bold",
+  margin: "8px 0",
 });
-const PayFormsContainer = styled.div({
+const PayModeContainer = styled.div({
   alignItems: "flex-start",
   display: "flex",
   justifyContent: "flex-start",

@@ -40,11 +40,7 @@ export default function Cart() {
           <Text color="#EEE" fWeight="bold">
             {`Total:   ${total}`}
           </Text>
-          <StyledButton
-            inverted
-            onClickFn={() => {}}
-            title="Confirmar compra"
-          />
+          <StyledButton inverted onClickFn={() => {}} title="Comprar" />
         </>
       )}
     </>

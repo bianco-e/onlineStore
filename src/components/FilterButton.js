@@ -6,8 +6,8 @@ export default function FilterButton({
   filterByCategory,
   reset,
 }) {
-  const filterTitle = [{ val: "Filtrar por categoría", fn: () => {} }];
-  const filterClean = { val: "Limpiar filtro", fn: () => reset() };
+  const filterTitle = [{ val: "Categoría", fn: () => {} }];
+  const filterClean = { val: "Ver todo", fn: () => reset() };
 
   const getCategories = () => {
     return filterTitle
@@ -26,5 +26,7 @@ export default function FilterButton({
     return selectedOption.fn();
   };
 
-  return <Select options={getCategories()} onChangeFn={handleSelect} />;
+  return (
+    <Select options={getCategories()} onChangeFn={handleSelect} width="180px" />
+  );
 }
