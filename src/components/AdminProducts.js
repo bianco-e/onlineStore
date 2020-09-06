@@ -27,6 +27,7 @@ export default function AdminProducts() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [promProductsList, setPromProductsList] = useState(undefined);
   const [payment, setPayment] = useState(emptyPayment);
+  const [formErrorMsg, setFormErrorMsg] = useState(undefined);
 
   const getProducts = () => {
     firebase
@@ -106,7 +107,7 @@ export default function AdminProducts() {
     resetForm();
   };
 
-  const checkIfPaymentModeIsSetted = () =>
+  const checkIfPaymentIsSetted = () =>
     Object.values(payment).some((option) => option != false);
 
   const addProductToFirebase = (
@@ -117,8 +118,7 @@ export default function AdminProducts() {
       prom: promProduct,
       stock,
       colors: colores,
-    },
-    setErrorMsg = () => {}
+    }
   ) => {
     const { name, price, category, description, id } = product;
     if (
@@ -126,7 +126,7 @@ export default function AdminProducts() {
       price &&
       description &&
       category != "-" &&
-      checkIfPaymentModeIsSetted() &&
+      checkIfPaymentIsSetted() &&
       images.length &&
       colores.length
     ) {
@@ -164,8 +164,13 @@ export default function AdminProducts() {
       }
       resetForm();
       triggerShowForm();
-    } else setErrorMsg("Todos los campos deben estar completos");
+    } else setFormErrorMsg("Todos los campos deben estar completos");
   };
+
+  const confirmPromProducts = () =>
+    promProductsList.length < 3
+      ? addProductToFirebase()
+      : setFormErrorMsg("No puede haber más de 3 productos promocionados.");
 
   const deleteProductModalData = {
     title: `¿Seguro que deseas eliminar el producto ${nameToDelete}?`,
@@ -190,7 +195,7 @@ export default function AdminProducts() {
       )}
       {promProductsList && (
         <ConfirmModal
-          callback={addProductToFirebase}
+          callback={confirmPromProducts}
           data={promProductsModalData}
           setShowModal={setPromProductsList}
         >
@@ -223,6 +228,8 @@ export default function AdminProducts() {
               setPayment={setPayment}
               promProduct={promProduct}
               setPromProduct={setPromProduct}
+              formErrorMsg={formErrorMsg}
+              setFormErrorMsg={setFormErrorMsg}
             />
           )}
 

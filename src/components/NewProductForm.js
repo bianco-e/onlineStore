@@ -32,9 +32,10 @@ export default function NewProductForm({
   setPayment,
   promProduct,
   setPromProduct,
+  formErrorMsg,
+  setFormErrorMsg,
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
-  const [errorMsg, setErrorMsg] = useState(undefined);
 
   useEffect(() => {
     firebase.getDocsFromCollection("categories").then((categs) => {
@@ -61,7 +62,7 @@ export default function NewProductForm({
         };
       });
       setImages(settedFiles);
-    } else setErrorMsg("El máximo de imágenes es 3");
+    } else setFormErrorMsg("El máximo de imágenes es 3");
   };
 
   const inputsData = [
@@ -154,7 +155,7 @@ export default function NewProductForm({
   ];
 
   const handleAddProduct = () => {
-    setErrorMsg(undefined);
+    setFormErrorMsg(undefined);
     const productToUpload = {
       ...newProduct,
       payment,
@@ -170,9 +171,9 @@ export default function NewProductForm({
           !prods.find((prod) => prod.id == productToUpload.id)
         ) {
           setPromProductsList(prods);
-        } else addProductToFirebase(productToUpload, setErrorMsg);
+        } else addProductToFirebase(productToUpload);
       });
-    } else addProductToFirebase(productToUpload, setErrorMsg);
+    } else addProductToFirebase(productToUpload);
   };
 
   return (
@@ -197,7 +198,7 @@ export default function NewProductForm({
         onClickFn={() => setPromProduct(!promProduct)}
       />
       <Container></Container>
-      {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
+      {formErrorMsg && <FeedbackMessage msg={formErrorMsg} type="err" />}
       <StyledButton
         title="Agregar producto"
         onClickFn={() => handleAddProduct()}
