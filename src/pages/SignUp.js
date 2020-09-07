@@ -1,19 +1,22 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+
+import PageStructure from "../components/PageStructure";
+import LoadingSpinner from "../components/LoadingSpinner";
 import StyledInput from "../components/StyledInput";
 import StyledButton from "../components/StyledButton";
 import FeedbackMessage from "../components/FeedbackMessage";
 
-import firebase from "../firebase/client.js";
-import { useHistory } from "react-router-dom";
 import AdminContext from "../context/AdminContext";
+import firebase from "../firebase/client.js";
 
 export default function Login() {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [feedbackMsg, setFeedbackMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState(undefined);
+  const [feedbackMsg, setFeedbackMsg] = useState(undefined);
   const [createdAccount, setCreatedAccount] = useState(undefined);
 
   const { login } = useContext(AdminContext);
@@ -55,65 +58,80 @@ export default function Login() {
   };
 
   const handleCreateAccount = () => {
-    firebase
-      .signUp(email, password)
-      .then(() => {
-        setFeedbackMsg("Cuenta creada exitosamente");
-        setCreatedAccount({ email, password });
-        setEmail("");
-        setPassword("");
-      })
-      .catch((err) => setErrorMsg(err));
+    setErrorMsg(undefined);
+    setFeedbackMsg(undefined);
+    if (email && password) {
+      firebase
+        .signUp(email, password)
+        .then(() => {
+          setFeedbackMsg("Cuenta creada exitosamente");
+          setCreatedAccount({ email, password });
+          setEmail("");
+          setPassword("");
+        })
+        .catch((err) => setErrorMsg(err));
+    } else setErrorMsg("Todos los campos deben estar completos");
   };
 
   return (
-    <Wrapper>
-      <Container>
-        <Title>Crear cuenta</Title>
-        {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
-        {feedbackMsg && <FeedbackMessage msg={feedbackMsg} type="ok" />}
-        {createdAccount ? (
-          <StyledButton onClickFn={() => handleLogin()} title="INGRESAR" />
-        ) : (
-          <>
-            {inputsData.map((data) => {
-              const { fn, okd, ph, type, val } = data;
-              return (
-                <StyledInput
-                  OKD={okd}
-                  key={ph}
-                  onChangeFn={fn}
-                  ph={ph}
-                  val={val}
-                  type={type}
-                  width="185px"
+    <>
+      {!login ? (
+        <LoadingSpinner />
+      ) : (
+        <PageStructure title="Registrarse">
+          <Container>
+            {createdAccount ? (
+              <StyledButton
+                onClickFn={() => handleLogin()}
+                title="Iniciar sesión"
+              />
+            ) : (
+              <>
+                {inputsData.map((data) => {
+                  const { fn, okd, ph, type, val } = data;
+                  return (
+                    <StyledInput
+                      OKD={okd}
+                      key={ph}
+                      onChangeFn={fn}
+                      ph={ph}
+                      val={val}
+                      type={type}
+                      width="185px"
+                    />
+                  );
+                })}
+                <FeedbackContainer>
+                  {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
+                  {feedbackMsg && (
+                    <FeedbackMessage msg={feedbackMsg} type="ok" />
+                  )}
+                </FeedbackContainer>
+                <StyledButton
+                  onClickFn={() => handleCreateAccount()}
+                  title="Registrarse"
                 />
-              );
-            })}
-            <StyledButton
-              onClickFn={() => handleCreateAccount()}
-              title="CONFIRMAR"
-            />
-          </>
-        )}
-      </Container>
-    </Wrapper>
+              </>
+            )}
+          </Container>
+        </PageStructure>
+      )}
+    </>
   );
 }
 
-const Wrapper = styled.div({
-  display: "grid",
-  height: "100vh",
-  placeItems: "center",
-});
 const Container = styled.div({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",
-  height: "70vh",
   justifyContent: "space-between",
+  marginBottom: "80px",
+  minHeight: "260px",
   width: "90%",
 });
-const Title = styled.h1({
-  margin: "0",
+const FeedbackContainer = styled.div({
+  display: "grid",
+  placeItems: "center",
+  height: "35px",
+  width: "100%",
 });

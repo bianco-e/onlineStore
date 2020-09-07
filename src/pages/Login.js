@@ -86,20 +86,20 @@ export default function Login() {
                 />
               );
             })}
-            <ButtonsGroup>
+            <ErrorContainer>
               {errorMsg && (
                 <FeedbackMessage msg={errorMsg} type="err" width="230px" />
               )}
-              {buttonsData.map(({ fn, title }) => {
-                return (
-                  <StyledButton
-                    onClickFn={() => fn()}
-                    title={title}
-                    width="150px"
-                  />
-                );
-              })}
-            </ButtonsGroup>
+            </ErrorContainer>
+            {buttonsData.map(({ fn, title }) => {
+              return (
+                <StyledButton
+                  onClickFn={() => fn()}
+                  title={title}
+                  width="150px"
+                />
+              );
+            })}
           </Container>
         </PageStructure>
       )}
@@ -111,18 +111,14 @@ const Container = styled.div({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "space-evenly",
-  height: "270px",
+  justifyContent: "space-between",
+  marginBottom: "80px",
+  minHeight: "260px",
   width: "90%",
 });
-const ButtonsGroup = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  minHeight: "110px",
-  justifyContent: "space-between",
-  width: "40%",
-});
-const Title = styled.h1({
-  margin: "0",
+const ErrorContainer = styled.div({
+  display: "grid",
+  placeItems: "center",
+  height: "35px",
+  width: "100%",
 });
