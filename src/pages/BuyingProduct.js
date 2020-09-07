@@ -25,6 +25,7 @@ export default function BuyingProduct() {
   const [availableStock, setAvailableStock] = useState(undefined);
   const [selectsData, setSelectsData] = useState([]);
   const [feedbackMsg, setFeedbackMsg] = useState(undefined);
+  const [errorMsg, setErrorMsg] = useState(undefined);
   const { addProductToCart } = useContext(CartContext);
   const { style } = useContext(StyleContext);
   const { primaryColor } = style;
@@ -66,10 +67,12 @@ export default function BuyingProduct() {
   }, [product]);
 
   const handleAddToCartButton = () => {
+    setFeedbackMsg(undefined);
+    setErrorMsg(undefined);
     if (color && color != "Color" && size && size != "Color") {
       addProductToCart({ ...product, color, size, img: product.imgs[0] });
       setFeedbackMsg("Producto agregado");
-    }
+    } else setErrorMsg("Debes seleccionar color y talle");
   };
 
   const getFinalPrice = (price, extra, dues) => {
@@ -145,7 +148,18 @@ export default function BuyingProduct() {
                       );
                     })}
                     {feedbackMsg && (
-                      <FeedbackMessage msg={feedbackMsg} type="ok" />
+                      <FeedbackMessage
+                        msg={feedbackMsg}
+                        type="ok"
+                        width="210px"
+                      />
+                    )}
+                    {errorMsg && (
+                      <FeedbackMessage
+                        msg={errorMsg}
+                        type="err"
+                        width="210px"
+                      />
                     )}
                     <StyledButton
                       onClickFn={() => handleAddToCartButton()}

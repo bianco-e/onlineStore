@@ -58,6 +58,6 @@ const Wrapper = styled.div({
   left: (props) => props.left,
   right: (props) => props.right,
   top: "0",
-  width: "30%",
+  width: "35%",
   zIndex: "10",
 });

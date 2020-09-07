@@ -7,8 +7,8 @@ export default function PrivateRoute({ render, ...otherProps }) {
   return (
     <Route
       {...otherProps}
-      render={() => (admin ? render() : <Redirect to="/" />)}
-      // render={() => render()}
+      // render={() => (admin ? render() : <Redirect to="/" />)}
+      render={() => render()}
     />
   );
 }

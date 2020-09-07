@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function FeedbackMessage({ msg, type }) {
+export default function FeedbackMessage({ msg, type, width }) {
   const options = {
     ok: {
       c: "darkgreen",
@@ -13,7 +13,11 @@ export default function FeedbackMessage({ msg, type }) {
     },
   };
 
-  return <Span colors={options[type]}>{msg}</Span>;
+  return (
+    <Span colors={options[type]} width={width ? width : undefined}>
+      {msg}
+    </Span>
+  );
 }
 
 const Span = styled.span({
@@ -23,4 +27,6 @@ const Span = styled.span({
   fontSize: "14px",
   marginBottom: "10px",
   padding: "10px 16px",
+  textAlign: "center",
+  width: (props) => props.width,
 });
