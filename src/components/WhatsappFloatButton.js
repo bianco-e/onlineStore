@@ -13,17 +13,7 @@ import WhatsappSvg from "./svg/WhatsappSvg";
 import StyleContext from "../context/StyleContext";
 
 export default function WhatsappFloatButton() {
-  const { style } = useContext(StyleContext);
-  const { whatsapp } = style;
-  const [buttonDisplay, setButtonDisplay] = useState("visible");
-
-  const buttonRef = useRef();
-
-  /* useEffect(() => {
-    buttonRef.current?.offsetTop >= document.body.scrollHeight + 46
-      ? setButtonDisplay("hidden")
-      : setButtonDisplay("visible");
-  }); */
+  const { whatsapp } = useContext(StyleContext).style;
 
   return (
     <>
@@ -35,11 +25,7 @@ export default function WhatsappFloatButton() {
       >
         {({ small, medium }) => (
           <Fragment>
-            <FloatButton
-              visibility={buttonDisplay}
-              ref={buttonRef}
-              href={`http://wa.me/${whatsapp}`}
-            >
+            <FloatButton href={`http://wa.me/${whatsapp}`}>
               <WhatsappSvg fill="white" width={22} />
             </FloatButton>
           </Fragment>
@@ -61,7 +47,6 @@ const FloatButton = styled.a({
   padding: "12px",
   position: "fixed",
   right: "30px",
-  visibility: (props) => props.visibility,
   ["&:hover"]: {
     boxShadow: "0 0 8px rgba(0, 0, 0, .6)",
   },

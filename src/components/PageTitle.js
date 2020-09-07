@@ -7,6 +7,6 @@ export default function PageTitle({ text }) {
 
 const Title = styled.h1({
   fontSize: "60px",
-  margin: "145px 0 55px 0",
+  margin: "135px 0 50px 0",
   textAlign: "center",
 });

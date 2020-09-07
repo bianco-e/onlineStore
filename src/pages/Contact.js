@@ -1,14 +1,11 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
-import PageTitle from "../components/PageTitle";
-import BottomBar from "../components/BottomBar";
-import TopBar from "../components/TopBar";
+import PageStructure from "../components/PageStructure";
+import LoadingSpinner from "../components/LoadingSpinner";
 import StyledButton from "../components/StyledButton";
 import StyledInput from "../components/StyledInput";
 import StyledTextArea from "../components/StyledTextArea";
-import WhatsappFloatButton from "../components/WhatsappFloatButton";
-import LoadingSpinner from "../components/LoadingSpinner";
 import FeedbackMessage from "../components/FeedbackMessage";
 
 import { contactInputs } from "../data/data.js";
@@ -20,7 +17,6 @@ export default function Contact() {
   const [message, setMessage] = useState({});
   const [feedbackMsg, setFeedbackMsg] = useState(undefined);
   const [errorMsg, setErrorMsg] = useState(undefined);
-
   const { style } = useContext(StyleContext);
 
   const confirmForm = () => {
@@ -34,13 +30,11 @@ export default function Contact() {
   };
 
   return (
-    <Wrapper>
-      <TopBar />
+    <>
       {!style ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <PageTitle text="Contacto" />
+        <PageStructure title="Contacto">
           <Text>Por consultas, dudas o cambios no dudes en contactarte</Text>
           <ContactForm>
             {contactInputs.map((ph) => {
@@ -70,22 +64,12 @@ export default function Contact() {
             {errorMsg && <FeedbackMessage type="err" msg={errorMsg} />}
             <StyledButton onClickFn={confirmForm} title="ENVIAR" />
           </ContactForm>
-          <BottomBar />
-        </>
+        </PageStructure>
       )}
-
-      <WhatsappFloatButton />
-    </Wrapper>
+    </>
   );
 }
 
-const Wrapper = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  position: "relative",
-  width: "100%",
-});
 const ContactForm = styled.section({
   alignItems: "center",
   display: "flex",

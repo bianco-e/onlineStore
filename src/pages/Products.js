@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 
-import PageTitle from "../components/PageTitle";
-import BottomBar from "../components/BottomBar";
-import TopBar from "../components/TopBar";
+import PageStructure from "../components/PageStructure";
+import LoadingSpinner from "../components/LoadingSpinner";
 import SortButton from "../components/SortButton";
 import FilterButton from "../components/FilterButton";
 import ProductThumbnail from "../components/ProductThumbnail";
-import WhatsappFloatButton from "../components/WhatsappFloatButton";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 import firebase from "../firebase/client.js";
 
@@ -49,13 +46,11 @@ export default function Products() {
   };
 
   return (
-    <Wrapper>
+    <>
       {!productsToShow ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <TopBar />
-          <PageTitle text="Productos" />
+        <PageStructure title="Productos">
           <Container>
             <FilterButton
               categoriesNames={categoriesNames}
@@ -76,22 +71,12 @@ export default function Products() {
               })}
             </ProductsWrapper>
           )}
-          <BottomBar />
-        </>
+        </PageStructure>
       )}
-      <WhatsappFloatButton />
-    </Wrapper>
+    </>
   );
 }
 
-const Wrapper = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  minHeight: "100vh",
-  position: "relative",
-  width: "100%",
-});
 const Container = styled.section({
   display: "flex",
   justifyContent: "space-evenly",

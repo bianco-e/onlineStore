@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import Media from "react-media";
 
+import PageStructure from "../components/PageStructure";
 import LoadingSpinner from "../components/LoadingSpinner";
-import BottomBar from "../components/BottomBar";
-import TopBar from "../components/TopBar";
 import ImageSlider from "../components/ImageSlider";
 import Select from "../components/Select";
 import StyledButton from "../components/StyledButton";
@@ -80,12 +79,11 @@ export default function BuyingProduct() {
   };
 
   return (
-    <Wrapper>
+    <>
       {!product ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <TopBar />
+        <PageStructure text={false}>
           <Media
             queries={{
               small: "(max-width: 500px)",
@@ -171,20 +169,12 @@ export default function BuyingProduct() {
               </Fragment>
             )}
           </Media>
-          <BottomBar />
-        </>
+        </PageStructure>
       )}
-    </Wrapper>
+    </>
   );
 }
 
-const Wrapper = styled.div({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-  position: "relative",
-  width: "100%",
-});
 const Container = styled.div({
   alignItems: "center",
   display: "flex",

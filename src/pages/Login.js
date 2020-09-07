@@ -1,5 +1,8 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+
+import PageStructure from "../components/PageStructure";
+import LoadingSpinner from "../components/LoadingSpinner";
 import StyledInput from "../components/StyledInput";
 import StyledButton from "../components/StyledButton";
 import FeedbackMessage from "../components/FeedbackMessage";
@@ -51,60 +54,73 @@ export default function Login() {
     },
   ];
 
+  const buttonsData = [
+    {
+      fn: handleLogin,
+      title: "Iniciar sesión",
+    },
+    {
+      fn: () => history.push("/signup"),
+      title: "Crear cuenta",
+    },
+  ];
+
   return (
-    <Wrapper>
+    <>
       {!login ? (
-        "spinner"
+        <LoadingSpinner />
       ) : (
-        <Container>
-          <Title>Iniciar sesión</Title>
-          {errorMsg && <FeedbackMessage msg={errorMsg} type="err" />}
-          {inputsData.map((data) => {
-            const { fn, okd, ph, type, val } = data;
-            return (
-              <StyledInput
-                OKD={okd}
-                key={ph}
-                onChangeFn={fn}
-                ph={ph}
-                val={val}
-                type={type}
-                width="185px"
-              />
-            );
-          })}
-          <ButtonsGroup>
-            <StyledButton
-              onClickFn={() => handleLogin()}
-              title="INICIAR SESIÓN"
-            />
-            <StyledButton
-              onClickFn={() => history.push("/signup")}
-              title="CREAR CUENTA"
-            />
-          </ButtonsGroup>
-        </Container>
+        <PageStructure title="Iniciar sesión">
+          <Container>
+            {inputsData.map((data) => {
+              const { fn, okd, ph, type, val } = data;
+              return (
+                <StyledInput
+                  OKD={okd}
+                  key={ph}
+                  onChangeFn={fn}
+                  ph={ph}
+                  val={val}
+                  type={type}
+                  width="185px"
+                />
+              );
+            })}
+            <ButtonsGroup>
+              {errorMsg && (
+                <FeedbackMessage msg={errorMsg} type="err" width="230px" />
+              )}
+              {buttonsData.map(({ fn, title }) => {
+                return (
+                  <StyledButton
+                    onClickFn={() => fn()}
+                    title={title}
+                    width="150px"
+                  />
+                );
+              })}
+            </ButtonsGroup>
+          </Container>
+        </PageStructure>
       )}
-    </Wrapper>
+    </>
   );
 }
 
-const Wrapper = styled.div({
-  display: "grid",
-  height: "100vh",
-  placeItems: "center",
-});
 const Container = styled.div({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",
-  height: "70vh",
-  justifyContent: "space-between",
+  justifyContent: "space-evenly",
+  height: "270px",
   width: "90%",
 });
 const ButtonsGroup = styled.div({
+  alignItems: "center",
   display: "flex",
-  justifyContent: "space-evenly",
+  flexDirection: "column",
+  minHeight: "110px",
+  justifyContent: "space-between",
   width: "40%",
 });
 const Title = styled.h1({

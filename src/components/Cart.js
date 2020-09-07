@@ -54,7 +54,7 @@ export default function Cart() {
                 fWeight="bold"
                 margin="1px 0 5px 0"
               >
-                {`Total:   ${total}`}
+                {`Total: ${total}`}
               </Text>
               <StyledButton inverted onClickFn={() => {}} title="Comprar" />
             </Fragment>

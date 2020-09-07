@@ -8,7 +8,7 @@ import { sections } from "../data/data.js";
 
 import StyleContext from "../context/StyleContext";
 
-export default function BottomBar() {
+export default function BottomBar({ reference }) {
   const history = useHistory();
   const { style } = useContext(StyleContext);
   const { instagram, facebook, email, primaryColor, secondaryColor } = style;
@@ -29,7 +29,7 @@ export default function BottomBar() {
   ];
 
   return (
-    <Wrapper secondary={secondaryColor}>
+    <Wrapper secondary={secondaryColor} ref={reference}>
       <Container primary={primaryColor}>
         {sections.map((sec) => {
           const { endpoint, name } = sec;

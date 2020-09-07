@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import IconButton from "./IconButton";
 import ColorsCards from "./ColorsCards";
@@ -7,11 +7,12 @@ import StarButton from "./StarButton";
 import SortButton from "./SortButton";
 import FilterButton from "./FilterButton";
 
+import StyleContext from "../context/StyleContext";
+
 const tHeaders = ["", "Producto", "Stock", "Precio", " "];
 
 const copyProductLink = (id) => {
-  // replace localhost:3000 with actual name
-  const link = `https://localhost:3000/productos/${id}`;
+  const link = `${window.location.hostname}/productos/${id}`;
   navigator.clipboard.writeText(link).then(() => {});
 };
 
@@ -24,6 +25,7 @@ export default function AllProductsViewer({
   categoriesNames,
   filterByCategory,
 }) {
+  const { primaryColor } = useContext(StyleContext).style;
   return (
     <>
       <ButtonsGroup>
@@ -39,7 +41,7 @@ export default function AllProductsViewer({
       </ButtonsGroup>
       <Table>
         <THead>
-          <TR bgColor="#FFBA9F">
+          <TR bgColor={primaryColor}>
             {tHeaders.map((h) => (
               <TD key={h}>{h}</TD>
             ))}
@@ -58,7 +60,7 @@ export default function AllProductsViewer({
               stock,
             } = product;
             return (
-              <TR bgColor={idx % 2 == 0 ? "#FFF" : "#FFBA9F"} key={id}>
+              <TR bgColor={idx % 2 == 0 ? "#FFF" : primaryColor} key={id}>
                 <TD width="5%">
                   <StarButton color={prom} />
                 </TD>
@@ -74,7 +76,7 @@ export default function AllProductsViewer({
                         {category}
                       </Text>
                       <Text
-                        color={idx % 2 == 0 ? "#FFBA9F" : "#FFF"}
+                        color={idx % 2 == 0 ? primaryColor : "#FFF"}
                         fSize="15px"
                       >
                         {name}
