@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
+import Media from "react-media";
+
 import AdminPanel from "../components/AdminPanel";
 import AdminTopBar from "../components/AdminTopBar";
 import AdminHome from "../components/AdminHome";
@@ -7,9 +9,30 @@ import AdminHome from "../components/AdminHome";
 export default function Admin({ Child }) {
   return (
     <Wrapper>
-      <AdminPanel />
-      <AdminTopBar />
-      <Container>{Child ? <Child /> : <AdminHome />}</Container>
+      <Media
+        queries={{
+          small: "(max-width: 500px)",
+          medium: "(min-width: 501px) and (max-width: 780px)",
+        }}
+      >
+        {({ small, medium }) => (
+          <Fragment>
+            {small ? (
+              <AdminTopBar>
+                <AdminPanel direction="row" />
+              </AdminTopBar>
+            ) : (
+              <>
+                <AdminPanel direction="column" />
+                <AdminTopBar />
+              </>
+            )}
+            <Container margin={small ? "50px 0 0 0" : "50px 10px 0 190px"}>
+              {Child ? <Child /> : <AdminHome />}
+            </Container>
+          </Fragment>
+        )}
+      </Media>
     </Wrapper>
   );
 }
@@ -26,7 +49,7 @@ const Container = styled.div({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
-  margin: "50px 10px 0 210px",
+  margin: (props) => props.margin,
   minHeight: "100vh",
   position: "relative",
   width: "100%",

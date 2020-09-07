@@ -1,36 +1,58 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import Media from "react-media";
 
+import LogOutSvg from "./svg/LogOutSvg";
+
+import { getRGBAFromHex } from "../utils/utils.js";
 import StyleContext from "../context/StyleContext";
 import AdminContext from "../context/AdminContext";
 
-export default function AdminTopBar() {
+export default function AdminTopBar({ children }) {
   const history = useHistory();
   const { style } = useContext(StyleContext);
   const { primaryColor, secondaryColor } = style;
   const { logout } = useContext(AdminContext);
 
   return (
-    <Wrapper primary={primaryColor}>
-      <Button
-        onClick={() => {
-          history.push("/");
-          logout();
+    <>
+      <Media
+        queries={{
+          small: "(max-width: 500px)",
+          medium: "(min-width: 501px) and (max-width: 780px)",
         }}
-        secondary={secondaryColor}
       >
-        Cerrar sesión
-      </Button>
-    </Wrapper>
+        {({ small, medium }) => (
+          <Fragment>
+            {primaryColor && (
+              <Wrapper
+                bgColor={small ? getRGBAFromHex(primaryColor) : primaryColor}
+              >
+                <Container>{children}</Container>
+                <Button
+                  onClick={() => {
+                    history.push("/");
+                    logout();
+                  }}
+                  secondary={secondaryColor}
+                >
+                  <LogOutSvg />
+                </Button>
+              </Wrapper>
+            )}
+          </Fragment>
+        )}
+      </Media>
+    </>
   );
 }
 
 const Wrapper = styled.div({
   alignItems: "center",
-  backgroundColor: (props) => props.primary,
+  backgroundColor: (props) => props.bgColor,
   display: "flex",
-  justifyContent: "flex-end",
+  justifyContent: "space-between",
   right: "0",
   padding: "5px",
   position: "fixed",
@@ -38,15 +60,13 @@ const Wrapper = styled.div({
   width: "100%",
   zIndex: "5",
 });
+const Container = styled.div({
+  position: "relative",
+  width: "85%",
+});
 const Button = styled.button({
   background: "none",
   border: "0",
-  color: "black",
   cursor: "pointer",
-  fontSize: "16px",
-  padding: "8px",
-  transition: "color .4s ease",
-  ["&:hover"]: {
-    color: (props) => props.secondary,
-  },
+  zIndex: "6",
 });
