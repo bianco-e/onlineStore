@@ -1,12 +1,16 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import styled from "styled-components";
 import Media from "react-media";
 
 import AdminPanel from "../components/AdminPanel";
 import AdminTopBar from "../components/AdminTopBar";
 import AdminHome from "../components/AdminHome";
+import SideTab from "../components/SideTab";
+
+import { getRGBAFromHex } from "../data/data.js";
 
 export default function Admin({ Child }) {
+  const [showSidePanel, setShowSidePanel] = useState(false);
   return (
     <Wrapper>
       <Media
@@ -17,14 +21,26 @@ export default function Admin({ Child }) {
       >
         {({ small, medium }) => (
           <Fragment>
+            <AdminTopBar
+              menuIcon={small ? true : false}
+              showTab={() => setShowSidePanel(true)}
+            />
             {small ? (
-              <AdminTopBar>
-                <AdminPanel direction="row" />
-              </AdminTopBar>
+              <>
+                {showSidePanel && (
+                  <SideTab
+                    bgColor="rgba(250, 250, 250, 0.5)"
+                    setShowTab={setShowSidePanel}
+                    showTab={showSidePanel}
+                    side="left"
+                  >
+                    <AdminPanel buttonsHoverColor="#FFF" />
+                  </SideTab>
+                )}
+              </>
             ) : (
               <>
-                <AdminPanel direction="column" />
-                <AdminTopBar />
+                <AdminPanel />
               </>
             )}
             <Container margin={small ? "50px 0 0 0" : "50px 10px 0 190px"}>

@@ -1,50 +1,38 @@
-import React, { Fragment, useContext } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import Media from "react-media";
 
 import LogOutSvg from "./svg/LogOutSvg";
+import MenuIcon from "./svg/MenuIcon";
 
-import { getRGBAFromHex } from "../utils/utils.js";
 import StyleContext from "../context/StyleContext";
 import AdminContext from "../context/AdminContext";
 
-export default function AdminTopBar({ children }) {
+export default function AdminTopBar({ menuIcon, showTab }) {
   const history = useHistory();
   const { style } = useContext(StyleContext);
-  const { primaryColor, secondaryColor } = style;
+  const { primaryColor } = style;
   const { logout } = useContext(AdminContext);
 
   return (
-    <>
-      <Media
-        queries={{
-          small: "(max-width: 500px)",
-          medium: "(min-width: 501px) and (max-width: 780px)",
+    <Wrapper
+      bgColor={primaryColor}
+      jContent={menuIcon ? "space-between" : "flex-end"}
+    >
+      {menuIcon && (
+        <Button onClick={() => showTab()}>
+          <MenuIcon />
+        </Button>
+      )}
+      <Button
+        onClick={() => {
+          history.push("/");
+          logout();
         }}
       >
-        {({ small, medium }) => (
-          <Fragment>
-            {primaryColor && (
-              <Wrapper
-                bgColor={small ? getRGBAFromHex(primaryColor) : primaryColor}
-              >
-                <Container>{children}</Container>
-                <Button
-                  onClick={() => {
-                    history.push("/");
-                    logout();
-                  }}
-                  secondary={secondaryColor}
-                >
-                  <LogOutSvg />
-                </Button>
-              </Wrapper>
-            )}
-          </Fragment>
-        )}
-      </Media>
-    </>
+        <LogOutSvg />
+      </Button>
+    </Wrapper>
   );
 }
 
@@ -52,7 +40,7 @@ const Wrapper = styled.div({
   alignItems: "center",
   backgroundColor: (props) => props.bgColor,
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: (props) => props.jContent,
   right: "0",
   padding: "5px",
   position: "fixed",

@@ -5,7 +5,7 @@ import CloseButton from "./CloseButton";
 
 import StyleContext from "../context/StyleContext";
 
-export default function SideTab({ side, children, setShowTab, showTab }) {
+export default function SideTab({ children, setShowTab, showTab, side }) {
   const { style } = useContext(StyleContext);
   const { primaryColor } = style;
 
