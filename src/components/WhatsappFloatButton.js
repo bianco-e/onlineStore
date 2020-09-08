@@ -1,37 +1,21 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import Media from "react-media";
 
 import WhatsappSvg from "./svg/WhatsappSvg";
 
 import StyleContext from "../context/StyleContext";
 
-export default function WhatsappFloatButton() {
+export default function WhatsappFloatButton({ reference, visibility }) {
   const { whatsapp } = useContext(StyleContext).style;
 
   return (
-    <>
-      <Media
-        queries={{
-          small: "(max-width: 550px)",
-          medium: "(min-width: 551px) and (max-width: 780px)",
-        }}
-      >
-        {({ small, medium }) => (
-          <Fragment>
-            <FloatButton href={`http://wa.me/${whatsapp}`}>
-              <WhatsappSvg fill="white" width={22} />
-            </FloatButton>
-          </Fragment>
-        )}
-      </Media>
-    </>
+    <FloatButton
+      ref={reference}
+      href={`http://wa.me/${whatsapp}`}
+      visibility={visibility}
+    >
+      <WhatsappSvg fill="white" width={22} />
+    </FloatButton>
   );
 }
 
@@ -47,6 +31,7 @@ const FloatButton = styled.a({
   padding: "12px",
   position: "fixed",
   right: "30px",
+  visibility: (props) => props.visibility,
   ["&:hover"]: {
     boxShadow: "0 0 8px rgba(0, 0, 0, .6)",
   },

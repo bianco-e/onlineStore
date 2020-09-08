@@ -10,16 +10,18 @@ import WhatsappFloatButton from "../components/WhatsappFloatButton";
 import useScrollPosition from "../hooks/useScrollPosition";
 
 export default function PageStructure({ children, title }) {
-  const [showFloatButton, setShowFloatButton] = useState(true);
-  const barRef = useRef();
+  const [floatButtonVisibility, setFloatButtonVisibility] = useState("visible");
+  const navRef = useRef();
+  const wspButtonRef = useRef();
 
   useScrollPosition(
     ({ currPos }) => {
-      if (Math.abs(currPos.y) >= barRef.current.getBoundingClientRect().top)
-        setShowFloatButton(false);
-      else setShowFloatButton(true);
+      if (Math.abs(currPos.y) >= navRef.current.getBoundingClientRect().y)
+        setFloatButtonVisibility("hidden");
+      else setFloatButtonVisibility("visible");
     },
-    [showFloatButton]
+    [floatButtonVisibility],
+    wspButtonRef
   );
 
   return (
@@ -34,8 +36,12 @@ export default function PageStructure({ children, title }) {
             <TopBar />
             {title && <PageTitle text={title} />}
             {children}
-            <BottomBar reference={barRef} />
-            {!(!showFloatButton && small) && <WhatsappFloatButton />}
+            <BottomBar reference={navRef} />
+
+            <WhatsappFloatButton
+              reference={wspButtonRef}
+              visibility={small ? floatButtonVisibility : "visible"}
+            />
           </Fragment>
         )}
       </Media>

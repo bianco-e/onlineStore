@@ -44,19 +44,18 @@ export default function TableRow({
             {`$${product.price.toFixed(2)}`}
           </Text>
         </Container>
+        <IconButton link onClickFn={() => copyProductLink(product.id)} />
+        <IconButton edit onClickFn={() => editProduct(product)} />
+        <IconButton
+          onClickFn={() => confirmToDeleteProduct(product.id, product.name)}
+        />
       </TD>
-      <IconButton link onClickFn={() => copyProductLink(product.id)} />
-      <IconButton edit onClickFn={() => editProduct(product)} />
-      <IconButton
-        onClickFn={() => confirmToDeleteProduct(product.id, product.name)}
-      />
     </Row>
   );
 }
 
 const Row = styled.tr({
   backgroundColor: (props) => props.bgColor,
-  position: "relative",
 });
 const TD = styled.td({
   alignItems: "center",
@@ -64,6 +63,7 @@ const TD = styled.td({
   flexDirection: "column",
   justifyContent: "space-between",
   padding: "5px 0",
+  position: "relative",
   width: "100%",
 });
 const Container = styled.div({
