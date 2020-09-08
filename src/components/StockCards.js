@@ -34,7 +34,7 @@ const Container = styled.div({
 const Card = styled.span({
   background: (props) => props.bgColor,
   borderRadius: "5px",
-  fontSize: "12px",
-  margin: "0 2px",
+  fontSize: "11px",
+  marginRight: "3px",
   padding: "5px",
 });

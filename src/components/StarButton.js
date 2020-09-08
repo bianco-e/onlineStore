@@ -6,12 +6,12 @@ export default function StarButton({ button, color, onClickFn }) {
   const [starColor, setStarColor] = useState("#DDD");
 
   useEffect(() => {
-    color ? setStarColor("yellow") : setStarColor("#DDD");
+    color ? setStarColor("#ffcd42") : setStarColor("#DDD");
   }, [color]);
 
   const handleClick = () => {
     onClickFn();
-    setStarColor(starColor == "yellow" ? "#DDD" : "yellow");
+    setStarColor(starColor == "#ffcd42" ? "#DDD" : "#ffcd42");
   };
 
   return (

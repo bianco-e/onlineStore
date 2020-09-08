@@ -7,16 +7,14 @@ import AdminTopBar from "../components/AdminTopBar";
 import AdminHome from "../components/AdminHome";
 import SideTab from "../components/SideTab";
 
-import { getRGBAFromHex } from "../data/data.js";
-
 export default function Admin({ Child }) {
   const [showSidePanel, setShowSidePanel] = useState(false);
   return (
     <Wrapper>
       <Media
         queries={{
-          small: "(max-width: 500px)",
-          medium: "(min-width: 501px) and (max-width: 780px)",
+          small: "(max-width: 550px)",
+          medium: "(min-width: 551px) and (max-width: 780px)",
         }}
       >
         {({ small, medium }) => (
@@ -44,7 +42,7 @@ export default function Admin({ Child }) {
               </>
             )}
             <Container margin={small ? "50px 0 0 0" : "50px 10px 0 190px"}>
-              {Child ? <Child /> : <AdminHome />}
+              {Child ? <Child small={small} /> : <AdminHome />}
             </Container>
           </Fragment>
         )}

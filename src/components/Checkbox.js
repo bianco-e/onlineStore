@@ -43,8 +43,8 @@ const Box = styled.div({
   border: (props) => `1px solid ${props.secondary}`,
   borderRadius: "5px",
   display: "grid",
+  marginLeft: "3px",
   height: "15px",
-  margin: "0 0 5px 3px",
   placeItems: "center",
   width: "15px",
 });

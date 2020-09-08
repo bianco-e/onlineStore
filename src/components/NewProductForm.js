@@ -34,6 +34,7 @@ export default function NewProductForm({
   setPromProduct,
   formErrorMsg,
   setFormErrorMsg,
+  small,
 }) {
   const [categoriesNames, setCategoriesNames] = useState([]);
 
@@ -67,7 +68,7 @@ export default function NewProductForm({
 
   const inputsData = [
     {
-      text: "Imágenes del producto",
+      text: "Imágenes",
       element: images.map((img) => {
         return (
           <SettableImageThumbnail
@@ -80,13 +81,13 @@ export default function NewProductForm({
       }),
     },
     {
-      text: "Nombre del producto",
+      text: "Nombre",
       element: (
         <StyledInput
           onChangeFn={(e) => setValue(e, "name")}
           val={newProduct["name"]}
-          ph="Ej: Remera de algodón"
-          width="180px"
+          ph="Ej: Remera lisa"
+          width={small ? "145px" : "180px"}
         />
       ),
     },
@@ -108,7 +109,7 @@ export default function NewProductForm({
           onChangeFn={(e) => setValue(e, "price")}
           val={newProduct["price"]}
           ph="Ej: 1200"
-          width="180px"
+          width={small ? "145px" : "180px"}
         />
       ),
     },
@@ -119,28 +120,28 @@ export default function NewProductForm({
           initialVal={newProduct.category}
           options={categoriesNames}
           onChangeFn={(e) => setValue(e, "category")}
-          width="205px"
+          width={small ? "170px" : "205px"}
         />
       ),
     },
     {
-      text: "Forma de pago",
+      text: "Pago",
       element: <Checkboxes payment={payment} setPayment={setPayment} />,
       minHeight: "90px",
     },
     {
-      text: "Stock de talles",
+      text: "Stock talles",
       element: <MultipleInput stock={stock} setStock={setStock} />,
     },
     {
-      text: "Colores disponibles",
+      text: "Colores",
       element: (
         <>
           <StyledInput
             onChangeFn={(e) => setValue(e, "colors")}
             val={newProduct["colors"]}
             ph="Ej: Rojo"
-            width="180px"
+            width={small ? "145px" : "180px"}
           />
           <StyledButton
             title="+"
@@ -178,11 +179,16 @@ export default function NewProductForm({
 
   return (
     <Wrapper>
-      <CloseButton onClickFn={() => closeForm()} corner="right" />
+      <CloseButton onClickFn={() => closeForm()} corner="right" top="0" />
       <Title>Nuevo producto</Title>
       {inputsData.map(({ text, element, minHeight }) => {
         return (
-          <FormOption key={text} text={text} minHeight={minHeight}>
+          <FormOption
+            key={text}
+            text={text}
+            minHeight={minHeight}
+            width={small ? "90%" : "70%"}
+          >
             {element}
           </FormOption>
         );
@@ -197,8 +203,9 @@ export default function NewProductForm({
         color={promProduct}
         onClickFn={() => setPromProduct(!promProduct)}
       />
-      <Container></Container>
-      {formErrorMsg && <FeedbackMessage msg={formErrorMsg} type="err" />}
+      <Container>
+        {formErrorMsg && <FeedbackMessage msg={formErrorMsg} type="err" />}
+      </Container>
       <StyledButton
         title="Agregar producto"
         onClickFn={() => handleAddProduct()}
@@ -217,7 +224,10 @@ const Wrapper = styled.div({
   width: "100%",
 });
 const Container = styled.div({
-  minHeight: "25px",
+  display: "grid",
+  placeItems: "center",
+  minHeight: "30px",
+  width: "100%",
 });
 const Title = styled.h4({
   margin: "0",

@@ -12,7 +12,7 @@ import addPhoto from "../images/photo.png";
 import firebase from "../firebase/client.js";
 import { emptyStock, emptyPayment } from "../data/data.js";
 
-export default function AdminProducts() {
+export default function AdminProducts({ small }) {
   const [allProducts, setAllProducts] = useState([]);
   const [categoriesNames, setCategoriesNames] = useState([]);
   const [newProduct, setNewProduct] = useState({});
@@ -230,17 +230,18 @@ export default function AdminProducts() {
               setPromProduct={setPromProduct}
               formErrorMsg={formErrorMsg}
               setFormErrorMsg={setFormErrorMsg}
+              small={small}
             />
           )}
-
           <AllProductsViewer
-            editProduct={editProduct}
+            categoriesNames={categoriesNames}
             confirmToDeleteProduct={confirmToDeleteProduct}
+            editProduct={editProduct}
+            filterByCategory={filterByCategory}
             products={allProducts}
             reset={getProducts}
             setAllProducts={setAllProducts}
-            categoriesNames={categoriesNames}
-            filterByCategory={filterByCategory}
+            small={small}
           />
         </>
       )}

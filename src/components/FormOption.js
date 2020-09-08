@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function FormOption({ text, children, minHeight }) {
+export default function FormOption({ text, children, minHeight, width }) {
   return (
-    <OptionBox minHeight={minHeight}>
+    <OptionBox minHeight={minHeight} width={width || "65%"}>
       <Text>{text}</Text>
       {children}
     </OptionBox>
@@ -15,7 +15,7 @@ const OptionBox = styled.section({
   display: "flex",
   justifyContent: "space-between",
   minHeight: (props) => props.minHeight,
-  width: "55%",
+  width: (props) => props.width,
 });
 const Text = styled.h4({
   fontSize: "14px",

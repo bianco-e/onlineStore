@@ -23,8 +23,8 @@ export default function ColorsCards({ button, setColors, colors }) {
 const Card = styled.span({
   background: "#EEE",
   borderRadius: "5px",
-  fontSize: "12px",
-  margin: "0 2px",
+  fontSize: "11px",
+  marginRight: "3px",
   padding: (props) => props.pdg,
   position: "relative",
 });

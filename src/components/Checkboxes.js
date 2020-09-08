@@ -46,7 +46,7 @@ export default function Checkboxes({ payment, setPayment }) {
       mode: "mercadopago",
     },
     {
-      title: "Tarjeta crédito",
+      title: "Tarjeta",
       box: cardInputs,
       initialVal: { dues: 0, extra: 0 },
       mode: "card",
@@ -143,5 +143,5 @@ const Label = styled.label({
 const Box = styled.div({
   display: "flex",
   justifyContent: "space-between",
-  width: "35%",
+  minWidth: "35%",
 });

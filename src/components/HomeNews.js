@@ -13,8 +13,8 @@ export default function HomeNews({ products }) {
     <>
       <Media
         queries={{
-          small: "(max-width: 500px)",
-          medium: "(min-width: 501px) and (max-width: 780px)",
+          small: "(max-width: 550px)",
+          medium: "(min-width: 551px) and (max-width: 780px)",
         }}
       >
         {({ small, medium }) => (

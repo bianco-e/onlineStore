@@ -37,7 +37,7 @@ export default function MultipleInput({ stock, setStock }) {
 const Wrapper = styled.div({
   display: "flex",
   justifyContent: "space-between",
-  width: "60%",
+  minWidth: "60%",
 });
 const Label = styled.label({
   alignItems: "center",

@@ -1,15 +1,20 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import IconButton from "./IconButton";
+
 import ColorsCards from "./ColorsCards";
+import FilterButton from "./FilterButton";
+import IconButton from "./IconButton";
 import StockCards from "./StockCards";
 import StarButton from "./StarButton";
 import SortButton from "./SortButton";
-import FilterButton from "./FilterButton";
+import TableRow from "./TableRow";
 
 import StyleContext from "../context/StyleContext";
 
-const tHeaders = ["", "Producto", "Stock", "Precio", " "];
+const headers = {
+  small: ["Producto"],
+  large: ["Producto", "Stock", "Precio", ""],
+};
 
 const copyProductLink = (id) => {
   const link = `${window.location.hostname}/productos/${id}`;
@@ -17,15 +22,16 @@ const copyProductLink = (id) => {
 };
 
 export default function AllProductsViewer({
+  categoriesNames,
   confirmToDeleteProduct,
   editProduct,
+  filterByCategory,
   products,
   reset,
   setAllProducts,
-  categoriesNames,
-  filterByCategory,
+  small,
 }) {
-  const { primaryColor } = useContext(StyleContext).style;
+  const { primaryColor, secondaryColor } = useContext(StyleContext).style;
   return (
     <>
       <ButtonsGroup>
@@ -42,9 +48,9 @@ export default function AllProductsViewer({
       <Table>
         <THead>
           <TR bgColor={primaryColor}>
-            {tHeaders.map((h) => (
-              <TD key={h}>{h}</TD>
-            ))}
+            {small
+              ? headers.small.map((h) => <TD key={h}>{h}</TD>)
+              : headers.large.map((h) => <TD key={h}>{h}</TD>)}
           </TR>
         </THead>
         <TBody>
@@ -59,25 +65,34 @@ export default function AllProductsViewer({
               prom,
               stock,
             } = product;
-            return (
+            return small ? (
+              <TableRow
+                bgColor={idx % 2 == 0 ? "#FFF" : primaryColor}
+                confirmToDeleteProduct={confirmToDeleteProduct}
+                copyProductLink={copyProductLink}
+                editProduct={editProduct}
+                key={id}
+                product={product}
+                primaryColor={primaryColor}
+                secondaryColor={secondaryColor}
+              />
+            ) : (
               <TR bgColor={idx % 2 == 0 ? "#FFF" : primaryColor} key={id}>
-                <TD width="5%">
-                  <StarButton color={prom} />
-                </TD>
-                <TD width="50%">
+                <TD width="55%">
                   <ProductContainer>
+                    <StarButton color={prom} />
                     <ThumbnailsContainer>
                       {imgs.map((img) => (
                         <ImgThumbnail src={img} />
                       ))}
                     </ThumbnailsContainer>
                     <DetailsContainer>
-                      <Text color="#777" fSize="10px">
+                      <Text color={secondaryColor} fSize="10px">
                         {category}
                       </Text>
                       <Text
                         color={idx % 2 == 0 ? primaryColor : "#FFF"}
-                        fSize="15px"
+                        fSize="14px"
                       >
                         {name}
                       </Text>
@@ -85,11 +100,15 @@ export default function AllProductsViewer({
                     </DetailsContainer>
                   </ProductContainer>
                 </TD>
-                <TD width="20%">
+                <TD width="22%">
                   <StockCards stock={stock} />
                 </TD>
-                <TD width="15%">{`$${price.toFixed(2)}`}</TD>
-                <TD width="10%">
+                <TD width="15%">
+                  <Text color={secondaryColor} fSize="12px">
+                    {`$${price.toFixed(2)}`}
+                  </Text>
+                </TD>
+                <TD width="8%">
                   <IconButton link onClickFn={() => copyProductLink(id)} />
                   <IconButton edit onClickFn={() => editProduct(product)} />
                   <IconButton
@@ -108,7 +127,7 @@ const ButtonsGroup = styled.div({
   alignItems: "center",
   display: "flex",
   justifyContent: "space-evenly",
-  margin: "5px 0",
+  margin: "20px 0",
   width: "100%",
 });
 const Table = styled.table({
@@ -116,7 +135,9 @@ const Table = styled.table({
   borderCollapse: "collapse",
   width: "100%",
 });
-const THead = styled.thead({});
+const THead = styled.thead({
+  fontWeight: "bold",
+});
 const TBody = styled.tbody({});
 const TR = styled.tr({
   backgroundColor: (props) => props.bgColor,
@@ -127,30 +148,31 @@ const TD = styled.td({
   textAlign: "center",
   width: (props) => props.width,
 });
-const ThumbnailsContainer = styled.div({
-  alignItems: "center",
-  display: "flex",
-  justifyContent: "space-between",
-  paddingRight: "40px",
-  width: "110px",
-});
-const ImgThumbnail = styled.img({
-  height: "35px",
-  width: "30px",
-});
 const Text = styled.p({
   color: (props) => props.color,
   fontSize: (props) => props.fSize,
-  margin: "0 0 2px 0",
+  margin: "0",
 });
 const ProductContainer = styled.div({
   alignItems: "center",
   display: "flex",
   justifyContent: "flex-start",
+  padding: "0 10px",
 });
 const DetailsContainer = styled.div({
   alignItems: "flex-start",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "flex-start",
+  justifyContent: "center",
+});
+const ThumbnailsContainer = styled.div({
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "space-around",
+  padding: "0 15px",
+  width: "100px",
+});
+const ImgThumbnail = styled.img({
+  height: "35px",
+  width: "30px",
 });

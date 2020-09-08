@@ -30,7 +30,6 @@ const Button = styled.button({
   color: "white",
   cursor: "pointer",
   fontSize: "11px",
-  marginBottom: "15px",
   padding: "8px 20px",
   width: (props) => props.width,
   transition: "all .6s ease",

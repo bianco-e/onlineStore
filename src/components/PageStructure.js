@@ -26,7 +26,7 @@ export default function PageStructure({ children, title }) {
     <Wrapper>
       <Media
         queries={{
-          small: "(max-width: 500px)",
+          small: "(max-width: 550px)",
         }}
       >
         {({ small }) => (

@@ -112,7 +112,7 @@ const Container = styled.div({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  marginBottom: "80px",
+  marginBottom: "95px",
   minHeight: "260px",
   width: "90%",
 });

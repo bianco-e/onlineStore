@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function CloseButton({ onClickFn, size, corner }) {
+export default function CloseButton({ onClickFn, size, corner, top }) {
   return (
     <>
       {corner === "left" ? (
-        <Button left="20px" onClick={() => onClickFn()} size={size}>
+        <Button left="20px" onClick={() => onClickFn()} size={size} top={top}>
           ✗
         </Button>
       ) : (
-        <Button right="20px" onClick={() => onClickFn()} size={size}>
+        <Button right="20px" onClick={() => onClickFn()} size={size} top={top}>
           ✗
         </Button>
       )}
@@ -26,7 +26,7 @@ const Button = styled.button({
   position: "absolute",
   left: (props) => props.left,
   right: (props) => props.right,
-  top: "20px",
+  top: (props) => props.top || "20px",
   transition: "color .4s ease",
   ["&:hover"]: {
     color: "#777",
